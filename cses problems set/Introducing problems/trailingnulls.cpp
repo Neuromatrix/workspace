@@ -21,7 +21,7 @@ constexpr char nl = '\n';
 #define fca(iterator,object) for (const auto & iterator: object)
 #define incr(i,k,n) for (int i = k; i < n; i++)
 #define decr(i,k,n) for (int i = k; i > n; i--)
-#define sortest(obj,all) sort(obj.begin(),obj.end())
+#define all(obj) obj.begin(),obj.end()
 #define F first
 #define S second
 
@@ -30,24 +30,15 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
-
-
 inline void solve(){
-    size_t n;
-    cin >> n;
-    ll _first_,another,ans=0;
-    vector <ll> base(n);
-    incr(i,0,n){
-        cin >> base[i];
-        if (i-1>=0){
-            if (base[i]<base[i-1]){
-                ans+=(base[i-1]-base[i]);
-                base[i]=base[i-1];
-            }
-        }
-    }
-    cout << ans << nl;
-    return;
+   ll n;
+   cin >> n;
+   ll res = 0;
+   while (n>0){
+       n/=5;
+       res+=n;
+   }
+   cout << res <<nl;
 }
 
 int main(){

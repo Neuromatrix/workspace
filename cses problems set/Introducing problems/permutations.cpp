@@ -33,14 +33,26 @@ inline void prepare(){
 
 
 inline void solve(){
-    
+    size_t n;
+    cin >> n;
+    if (n<=3 && n!=1) cout << "NO SOLUTION"<<nl;
+    else{
+        incr(i,2,n+1) {
+            cout << i << " ";
+            i++; 
+        }
+        incr(i,1,n+1){
+            cout << i << " ";
+            i++;    
+        }
+    }
     return;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    prepare();
+    //prepare();
     size_t tests = 1;
     //cin >> tests;
     for (int i = 0; i < tests; i++)

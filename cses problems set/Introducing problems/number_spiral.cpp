@@ -33,21 +33,27 @@ inline void prepare(){
 
 
 inline void solve(){
-    size_t n;
-    cin >> n;
-    ll _first_,another,ans=0;
-    vector <ll> base(n);
-    incr(i,0,n){
-        cin >> base[i];
-        if (i-1>=0){
-            if (base[i]<base[i-1]){
-                ans+=(base[i-1]-base[i]);
-                base[i]=base[i-1];
-            }
+    ll x, y;
+    cin >> x >> y;
+    if (x==y){
+        cout << x*x-y+1 << nl;
+    }
+    else if (x<y){
+        if (y%2==0){
+            cout << y*y-y+1-(y-x) << nl;
+        }
+        else{
+            cout << y*y-y+1+(y-x) << nl;
         }
     }
-    cout << ans << nl;
-    return;
+    else{
+        if (x%2==0){
+            cout << x*x-x+1 +(x-y) <<nl;
+        }
+        else{
+            cout << x*x-x+1 -(x-y) <<nl;
+        }
+    }
 }
 
 int main(){
@@ -55,7 +61,7 @@ int main(){
     cin.tie(NULL);
     //prepare();
     size_t tests = 1;
-    //cin >> tests;
+    cin >> tests;
     for (int i = 0; i < tests; i++)
         solve();
     return 0;

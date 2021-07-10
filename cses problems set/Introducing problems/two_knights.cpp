@@ -30,23 +30,12 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
-
-
 inline void solve(){
-    size_t n;
-    cin >> n;
-    ll _first_,another,ans=0;
-    vector <ll> base(n);
-    incr(i,0,n){
-        cin >> base[i];
-        if (i-1>=0){
-            if (base[i]<base[i-1]){
-                ans+=(base[i-1]-base[i]);
-                base[i]=base[i-1];
-            }
-        }
+    ll k;
+    cin >> k;
+    incr(i,1,k+1){
+        cout <<(i*i*(i*i-1)>>1)-4*(i-1)*(i-2)<<nl;
     }
-    cout << ans << nl;
     return;
 }
 
