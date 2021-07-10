@@ -1,9 +1,16 @@
 #include <bits\stdc++.h>
 using namespace std;
-using ll = long long int;
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+constexpr char nl = '\n';
+#define fca(a,s) for (const auto & a: s)
+#define incr(i,k,n) for (int i = k; i < n; i++)
+#define decr(i,k,n) for (int i = k; i > n; i--)
+
 inline void prepare(){
-    freopen("C:\\Users\\grivi\\vscodes\\structs\\input.txt", "r", stdin);
-    freopen("C:\\Users\\grivi\\vscodes\\structs\\output.txt", "w", stdout);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 int binPow(int a, int pow){
 	if (a == 1 || pow == 0) {
@@ -20,68 +27,52 @@ int binPow(int a, int pow){
 	}
 }
 
-int stringToInt(string a){
-	int max_pow = a.size() - 1;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += (a[i] - '0') * (binPow(10, max_pow));
-		max_pow--;
-	}
-	return res;
-}
 
-int BinToInt(vector <bool> a){
-	int max_pow = 0;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += a[i] * binPow(2, max_pow);
-		max_pow++;
-	}
-	return res;
-}
+
 int fast_powtw(int k) {
 	if (k == 0) return 1;
 	else if (k == 1) return 2;
 	else return 2 << (k - 1);
 }
 
-inline ll bfs(vector<vector<int>> pool,int target, int start){
-    int cur=start;
-    queue <int> arr;
-    arr.push(start);
-    while (arr.size()!=0){
-        cout << cur<<endl;
-        arr.pop();
-        for(int i=0;i<pool[cur].size();i++){
-            arr.push(pool[cur][i]);
+inline pair<vector <bool>,vector <int>> bfs_distance_from(vector<vector<int>> graph, int cur){
+    queue <int> q;
+    vector <int> distance(graph.size());
+    vector <bool> visited(graph.size());
+    distance[cur] = 0;
+    visited[cur] = true;
+    q.push(cur);
+    while (!q.empty()){
+        cur = q.front();
+        q.pop();
+        fca(u,graph[cur]){ // проход по всем вершинам в которые  ведут ребра
+            if(visited[u]) continue; // вершина посещена
+            visited[u] = true; 
+            distance[u] = distance[cur] + 1; // расстояние для вершины в которую ведут ребра cur увеличиваем
+            q.push(u); 
         }
-        cur=arr.front();
-        if (cur==target) return 1;
-        
     }
-    return 0;
+    return {visited, distance};
 }
 inline void solve(){
-    size_t number_h;
-    string base;
-    cin >> number_h;
-    vector<vector<int>> pool;
-    pool.resize(number_h);
-    for(int i=0;i< number_h;i++){
-        getline(cin,base);
-        for (int j=0;j<base.size();j++){
-            if (base[j]==' ') continue;
-            else if(base[j]=='-') break;
-            else pool[i].push_back(base[j]-'0');
+    //алгоритм работает в натуральной системе отсчета, т.е. вершине 1 
+    //сооствесвтует список с индексом 1, а не 0
+    int n, to_h;
+    cin >> n;cin.ignore();
+    n++;
+    vector <vector <int>> graph(n); // списки смежности
+    incr(i,1,n){
+        while(cin.peek()!=nl){
+            cin >> to_h;
+            graph[i].push_back(to_h);
         }
+        cin.ignore();
     }
-    for (int i=0;i<pool.size();i++){
-        for (int j=0;j<pool[i].size();j++){
-            cout <<i<<"--" <<pool[i][j]<<" ";
-        }
-        cout << endl;
-    }
-    cout << bfs(pool,9,1);
+    pair <vector <bool> , vector<int>> x= bfs_distance_from(graph,1);
+
+    fca(a, x.first) cout << a << " ";cout << nl; // посещены ли все деревья
+    fca(a, x.second) cout << a << " ";cout << nl; // расстояние от вершины (1) до отсальных вершин
+    return;
 }
 int main(){
     prepare();

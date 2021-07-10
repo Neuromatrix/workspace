@@ -3,6 +3,7 @@ using namespace std;
 using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
+constexpr char nl = '\n';
 #define fca(a,s) for(const auto & a: s)
 #define incr(i,k,n) for (int i = k; i < n; i++)
 #define decr(i,k,n) for (int i = k; i > n; i--)
@@ -31,34 +32,32 @@ int fast_powtw(int k) {
 	else if (k == 1) return 2;
 	else return 2 << (k - 1);
 }
+
+
+
 inline void solve(){
-	size_t n;
-	cin >> n;
-	vector <int> base(n);
-	incr(i,0,n)
-		cin >> base[i];
-	int best=0,sum=0,index_r,index_l;
-	incr(i,0,n){
-		if (sum+base[i]<base[i]){
-			index_l=i;
-		}
-		sum=max(sum+base[i],base[i]);
-		if (best <= sum){
-			index_r=i;
-		}
-		best=max(best,sum);
-	}
-	cout << best <<" " <<index_l << " " <<index_r;
-	return;
+    size_t n;
+    cin >> n;
+    vector <int> numbers(2*n);
+    int chet=0,nechet=0;
+    incr (i,0,2*n) cin >> numbers[i];
+    fca(a,numbers){
+        if(a%2==1) nechet++;
+        else chet++;
+    }
+    if (chet==nechet) cout << "YES"<<nl;
+    else cout << "NO" <<nl;
+    return;
 }
+
 
 
 int main()
 {
-    prepare();
+    //prepare();
     size_t tests;
     cin >> tests;
-    for (int i = 0; i< 1;i++){
+    for (int i = 0; i < tests;i++){
         solve();
     }
     return 0;
