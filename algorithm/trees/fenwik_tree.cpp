@@ -1,57 +1,74 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <vector>
+#include <set>
+#include <string>
+#include <algorithm>
+#include <cctype>
+#include <iterator>
+#include <climits>
+#include <complex>
+#include <list>
+#include <map>
+#include <bitset>
+#include <numeric>
+#include <deque>
+#include <stack>
 using namespace std;
-using  ll=long long int;
-using ld=long double;
-inline void prepare(){
-    freopen("C:\\Users\\grivi\\vscodes\\structs\\input.txt", "r", stdin);
-    freopen("C:\\Users\\grivi\\vscodes\\structs\\output.txt", "w", stdout);
-}
-int binPow(int a, int pow){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a;
-	} else {
-		int part = binPow(a, pow >> 1);
-		if (pow & 1) {
-			return (((part * part)) * a);
-		} else {
-			return (part * part);
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+constexpr int INF = INT_MAX-1;
+constexpr char nl = '\n';
+template <class T>
+class fenwik_tree
+{
+	private:
+		vector <T> data;
+	public:
+		void init(size_t n){
+			data.assign(n,0);
 		}
-	}
-}
+		void init(vector <T> pool){
+			init(pool.size());
+			for (int i = 0; i < pool.size(); i++){
+				inc(i,pool[i]);
+			}
+		}
+		void inc(size_t i, T new_el){
+			for(;i < data.size(); i = i | (i+1)){
+				data[i]+=new_el;
+			}
+		}
+		void print(){
+			for (const auto & it : data) cout << it << " "; cout << '\n';
+		}
+		ll sum(int r){
+			ll res = 0;
+			for (;r >= 0; r = (r&(r + 1))-1){
+				res+=data[r];
+			}
+			return res;
+		}
+		ll sum(size_t l, size_t r){
+			return sum(r) - sum(l - 1);
+		}			
+};
 
-int stringToInt(string a){
-	int max_pow = a.size() - 1;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += (a[i] - '0') * (binPow(10, max_pow));
-		max_pow--;
-	}
-	return res;
-}
 
-int BinToInt(vector <bool> a){
-	int max_pow = 0;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += a[i] * binPow(2, max_pow);
-		max_pow++;
-	}
-	return res;
-}
-int fast_powtw(int k) {
-	if (k == 0) return 1;
-	else if (k == 1) return 2;
-	else return 2 << (k - 1);
-}
 
 inline void solve(){
+	vector <int> pool = {1,2,3,4,5,6};
+	fenwik_tree <int> fen_tr;
+	fen_tr.init(pool);
+	cout << fen_tr.sum(1,3);
+	cout << fen_tr.sum(2,5);
+	fen_tr.inc(5,7);
 
 }
 
 int main(){
-    prepare();
     solve();
     return 0;
 }

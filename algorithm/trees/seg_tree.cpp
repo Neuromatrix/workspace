@@ -1,4 +1,5 @@
 #include <bits\stdc++.h>
+#include <numeric>
 using namespace std;
 using ll = long long int;
 using ld = long double;
@@ -6,98 +7,247 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int binPow(int a, int pow){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a;
-	} else {
-		int part = binPow(a, pow >> 1);
-		if (pow & 1) {
-			return (((part * part)) * a);
-		} else {
-			return (part * part);
-		}
-	}
-}
+template <typename T>
+class seg_tree
+{
+    private:
+        vector <T> data; //дерево оотрезков в виде массива
+        vector <T> inp; //исхлдный массив
+        int arr_size; // размер первого уровня листьев
+        T es;
+        bool initial = false;
+        int nulls_res(int i){ // вычисление дополнительных нулей до степени двойки
+            int pow = ceil(log2(i));
+            return 2<<(pow-1);
+        }
+        T _min_(T a,T b){
+            return min(a,b);
+        }
+        T _max_(T a,T b){
+            return max(a,b);
+        }
+        T _gcd_(T a, T b){
+           if (b==0) return a;
+           return _gcd_(b,a%b); 
+        }
+        T _lcm_ (T a, T b){
+            return (a/_gcd_(a,b))*b;
+        }
+        T _sum_(T a, T b){
+            return a + b;
+        }
+    public:
+        string type = "sum"; // какого типа будет дерево
+        seg_tree(size_t i){// конструктор размера дерева
+            data.resize(2*nulls_res(i));
+        }
+        seg_tree(){//изначальный конструктор
+            data.resize(0);
+        }
+        seg_tree(size_t i,string new_type){// конструктор размера дерева
+            data.resize(2*nulls_res(i));
+            type = new_type;
+        }
+        seg_tree(string new_type){// конструктор размера дерева
+            type = new_type;
+        }
+        void t_sum(){
+            type = "sum";
+            if (initial){
+                init(inp);
+            }
+        }
+        void t_gcd(){
+            type = "gcd";
+            if (initial){
+                init(inp);
+            }
+        }
+        void t_lcm(){
+            type = "lcm";
+            if (initial){
+                init(inp);
+            }
+        }
+        void t_min(){
+            type = "min";
+            if (initial){
+                init(inp);
+            }
+        }
+        void t_max(){
+            type = "max";
+            if (initial){
+                init(inp);
+            }
+        }
+        int size(){//размер дерева
+            return data.size();
+        }
+        void init(vector <T> gh){// инициализация дерева через вектор (численных типов)
+            inp = gh;
+            initial = true;
+            int additional_nulls=nulls_res(gh.size())-gh.size();// дополнительные нули
+            arr_size = nulls_res(gh.size()); //изменение размера листьев
+            data.resize(2*arr_size);// изменение размера дерева
+            int i = data.size()-1;// итератор
+            if (type=="lcm"){
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = 1;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _lcm_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type=="gcd"){
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = 0;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _gcd_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type == "min"){
+                es = *max(gh.begin(), gh.end())+1;
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = es;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _min_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type == "max"){
+                es = *min(gh.begin(), gh.end())-1;
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = es;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _max_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type =="sum"){
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = 0;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _sum_(data[2*i], data[2*i+1]);
+                }
+            }
+        }
+        ll sum_seg(int l, int r){// поиск суммы на отрезке a, b
+            l+=arr_size;
+            r+=arr_size;
+            ll s = 0;
+            while (l <= r){
+                if (l & 1) s=_sum_(s,data[l++]);
+                if (!(r & 1)) s=_sum_(s,data[r--]);
+                l >>= 1; r >>= 1;
+            }
+            return s;
+        }
+        ll min_seg(int l, int r){// поиск суммы на отрезке a, b
+            l+=arr_size;
+            r+=arr_size;
+            ll s = es;
+            while (l <= r){
+                if (l & 1) s=_min_(s,data[l++]);
+                if (!(r & 1)) s=_min_(s,data[r--]);
+                l >>= 1; r >>= 1;
+            }
+            return s;
+        }
+        ll max_seg(int l, int r){// поиск суммы на отрезке a, b
+            l+=arr_size;
+            r+=arr_size;
+            ll s = es;
+            while (l <= r){
+                if (l & 1) s=_max_(s,data[l++]);
+                if (!(r & 1)) s=_max_(s,data[r--]);
+                l >>= 1; r >>= 1;
+            }
+            return s;
+        }
+        ll gcd_seg(int l, int r){// поиск суммы на отрезке a, b
+            l+=arr_size;
+            r+=arr_size;
+            ll s = 0;
+            while (l <= r){
+                if (l & 1) s=_gcd_(s,data[l++]);
+                if (!(r & 1)) s=_gcd_(s,data[r--]);
+                l >>= 1; r >>= 1;
+            }
+            return s;
+        }
+        ll lcm_seg(int l, int r){// поиск суммы на отрезке a, b
+            l+=arr_size;
+            r+=arr_size;
+            ll s = 0;
+            while (l <= r){
+                if (l & 1) s=_lcm_(s,data[l++]);
+                if (!(r & 1)) s=_lcm_(s,data[r--]);
+                l >>= 1; r >>= 1;
+            }
+            return s;
+        }
+        void change(int i, T x){
+            i+=arr_size;
+            data[i] = x;
+            for (i >>= 1; i >= 1; i >>=1){
+                if (type == "sum") data[i]=_sum_(data[2*i],data[2*i+1]);
+                if (type == "min") data[i]=_min_(data[2*i],data[2*i+1]);
+                if (type == "max") data[i]=_max_(data[2*i],data[2*i+1]);
+                if (type == "gcd") data[i]=_gcd_(data[2*i],data[2*i+1]);
+                if (type == "lcm") data[i]=_lcm_(data[2*i],data[2*i+1]);
+            }
+        }
+        void print(){// выводим с пробельным сепаратором
+            for (size_t i = 1; i < data.size(); i++) cout << data[i] << " "; cout << '\n';
+            return;
+        }
+        void print(string sep){// выводим с заданным сепаратором
+            for (size_t i = 1; i < data.size(); i++) cout << data[i] << sep; cout << '\n';
+            return;
+        }
 
-int stringToInt(string a){
-	int max_pow = a.size() - 1;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += (a[i] - '0') * (binPow(10, max_pow));
-		max_pow--;
-	}
-	return res;
-}
-
-int BinToInt(vector <bool> a){
-	int max_pow = 0;
-	int res = 0;
-	for (int i = 0; i < a.size(); i++){
-		res += a[i] * binPow(2, max_pow);
-		max_pow++;
-	}
-	return res;
-}
-int fast_powtw(int k) {
-	if (k == 0) return 1;
-	else if (k == 1) return 2;
-	else return 2 << (k - 1);
-}
-int addnulls(int size){
-    int first_size=logb(size);
-    int diff=size-fast_powtw(first_size);
-    if (diff==0) return 0;
-    else if (diff>0) return fast_powtw(first_size+1)-size;
-}
-
-struct segtree{
-    vector <int> segtree;
-    ll size;
 };
 
-inline segtree makeseg(vector <int> base,int size){
-    segtree pool;
-    size_t nulls=addnulls(size);
-    int cou_nulls=nulls;
-    int controll_size= 2*(nulls +  size)-1;
-    pool.segtree.resize(controll_size);
-    for (int i = controll_size-1;i>=0;i--){
-        if (cou_nulls>0) {pool.segtree[i]=0;cou_nulls--;}
-        else{
-            if (base.size()==0){
-                i++;
-                pool.segtree[i-1]=pool.segtree[2*(i)-1]+pool.segtree[2*(i)];
-                cout << 2*i-1<<" "<<2*i<<endl;
-                i--;
-            }
-            else{
-                pool.segtree[i]=base.back();
-                base.pop_back();
-            }
-            
-        }
-    }
-    for ( const auto &a : pool.segtree){
-        cout <<a<<" ";
-    }
-
-
-    return pool;
-}
 inline void solve(){
-    int n;
-    segtree m;
-    cin >> n;
-    vector <int> roots;
-    roots.resize(n);
-    for (int i=0;i< n;i++){
-        cin>> roots[i];
-    }
-    m.segtree= roots;
-    m=makeseg(roots,n);
-    
+    seg_tree <int> pool("max");
+    vector <int> a = {1,2,3,4,5,6};
+    pool.init(a);
+    pool.print();
+    pool.t_sum();
+    pool.print();
     return;
 }
 

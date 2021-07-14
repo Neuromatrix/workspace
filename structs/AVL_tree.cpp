@@ -1,5 +1,4 @@
 #include <bits\stdc++.h>
-#include <help/instr.cpp>
 using namespace std;
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
