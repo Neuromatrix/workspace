@@ -22,10 +22,7 @@ using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
 constexpr char nl = '\n';
-inline void prepare(){
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
-}
+
 
 class hashstring
 {
@@ -61,16 +58,3 @@ class hashstring
             else return false;
         }
 };
-
-inline void solve(){
-    hashstring aps;
-    aps.init("abcdabc");
-    cout << aps.compare(1,2,5,6);
-    return;
-}
-
-int main (){
-    prepare();
-    solve();
-    return 0;
-}
