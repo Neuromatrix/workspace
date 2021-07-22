@@ -17,7 +17,6 @@
 #include <stack>
 #include <cassert>
 #include <queue>
-
 using namespace std;
 using ll = long long;
 using ull = unsigned long long;
@@ -41,62 +40,60 @@ constexpr char nl = '\n';
 #define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
-#define fca(a,s) for(const auto & a: s)
+#define fca(a,s) for(const auto & a : s)
 
-
-inline pair<vector <bool>,vector <int>> bfs_distance_from(vector<vector<int>> graph, int cur){ // работает со списком смежности
-    queue <int> q;
-    vector <int> distance(graph.size());
-    vector <bool> visited(graph.size());
-    distance[cur] = 0;
-    visited[cur] = true;
-    q.push(cur);
-    while (!q.empty()){
-        cur = q.front();
-        q.pop();
-        fca(u,graph[cur]){ // проход по всем вершинам в которые  ведут ребра
-            if(visited[u]) continue; // вершина посещена
-            visited[u] = true; 
-            distance[u] = distance[cur] + 1; // расстояние для вершины в которую ведут ребра cur увеличиваем
-            q.push(u); 
-        }
-    }
-    return {visited, distance};
-}
-inline vector <vector <int>> adjacency_lists(){
-    int n, to_h;
+inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
+    int n, to_h, W;
     cin >> n;cin.ignore();
     n++;
-    vector <vector <int>> graph(n); // списки смежности
+    vector <vector <pair <int, int>>> graph(n); // списки смежности
     for(size_t i = 1; i < n; i++){
         while(cin.peek()!=nl){ 
-            cin >> to_h;
-            graph[i].push_back(to_h);
+            cin >> to_h  >> W; // сначала вершина потом веса
+            graph[i].push_back({to_h,W}); // записываем в пару
         }
         cin.ignore();
     }
     return graph;
 }
-inline void solve(){
-    //алгоритм работает в натуральной системе отсчета, т.е. вершине 1 
-    //сооствесвтует список с индексом 1, а не 0
+
+vector <ll> Deikstra(vector <vector <pair <int, int>>> G, int start){
+    int gsize = G.size();
+    priority_queue <pair<int, int>> q;
+    vector <ll> distance(G.size());
+    vector <bool> processed(G.size());
+    for (size_t i = 1; i < G.size(); i++){
+        distance[i] = INF;
+        processed[i] = false;
+    }
+    distance[start] = 0;
+    q.push({0,start});
+    while (!q.empty()){
+        int a = q.top().second;
+        q.pop();
+        if(processed[a]) continue;
+        processed[a] = true;
+        for(const auto & u : G[a]){
+            int b =  u.first, w = u.second;
+            if (distance[a]+w < distance[b]){
+                distance[b] = distance[a] + w;
+                q.push({-distance[b],b});
+            }
+        }
+    }
+    return distance;
 }
+
+
+inline void solve(){
+    /*
+        .....
+    */
+   return;
+}
+
 int main(){
     IOS;
     solve();
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

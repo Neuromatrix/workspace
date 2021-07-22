@@ -5,10 +5,6 @@ using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
 constexpr char nl = '\n';
-#define fca(iterator,object) for (const auto & iteratot: object)
-#define incr(i,k,n) for (int i = k; i < n; i++)
-#define decr(i,k,n) for (int i = k; i > n; i--)
-#define prints(object,type,begin,end,sep) copy(begin,end,ostream_iterator<type>(cout,sep));
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
@@ -41,12 +37,12 @@ inline vector <vector <int>> adjacency_matrix(bool weight){
         cin >> n;cin.ignore();
         n++;
         vector <vector <int>> graph(n, vector<int>(n));
-        incr(i,1,n){
-            incr(j,i,n){
+        for(size_t i = 1; i < n; i++){
+            for(size_t j = i; j < n; j++){
                 graph[i][j] = 0;
             }
         }
-        incr(i,1,n){
+        for(size_t i = 1; i < n; i++){
             while(cin.peek() != nl){
                 cin >> to_h;
                 graph[i][to_h] = 1;
@@ -62,12 +58,12 @@ inline vector <vector <int>> adjacency_matrix(bool weight){
         cin >> n;cin.ignore();
         n++;
         vector <vector <int>> graph(n, vector<int>(n));
-        incr(i,1,n){
-            incr(j,i,n){
+        for(size_t i = 1; i < n; i++){
+            for(size_t j = i; i < n; j++){
                 graph[i][j] = 0;
             }
         }
-        incr(i,1,n){
+        for(size_t i = 1; i < n; i++){
             while(cin.peek() != nl){
                 cin >> to_h >> W;
                 graph[i][to_h] = W;
@@ -84,7 +80,7 @@ inline vector <vector <int>> adjacency_lists(){
     cin >> n;cin.ignore();
     n++;
     vector <vector <int>> graph(n); // списки смежности
-    incr(i,1,n){
+    for(size_t i = 1; i < n; i++){
         while(cin.peek()!=nl){ 
             cin >> to_h;
             graph[i].push_back(to_h);
@@ -98,7 +94,7 @@ inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
     cin >> n;cin.ignore();
     n++;
     vector <vector <pair <int, int>>> graph(n); // списки смежности
-    incr(i,1,n){
+    for(size_t i = 1; i < n; i++){
         while(cin.peek()!=nl){ 
             cin >> to_h  >> W; // сначала вершина потом веса
             graph[i].push_back({to_h,W}); // записываем в пару
@@ -108,13 +104,24 @@ inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
     return graph;
 }
 
-inline vector <pair <int, int>> list_of_ribs(){ // да ко их вообще юзает
+inline vector <tuple <int, int, int>> list_of_ribs(){ // да ко их вообще юзает
+    vector <tuple <int, int, int>> graph;
+    int n, to_h, W;
+    cin >> n;cin.ignore();
+    n++;
 
+    for(size_t i = 1; i < n; i++){
+        while(cin.peek()!='\n'){ 
+            cin >> to_h  >> W; // сначала вершина потом веса
+            graph.push_back(make_tuple(i,to_h,W)); // записываем в кортеж
+        }
+        cin.ignore();
+    }
+    return graph;
 }
 
 inline void solve(){
-    vector <vector <int>> G=adjacency_lists();
-    incr (i,1,G.size()) {incr(j,1,G[i].size()) cout << G[i][j] << " "; cout <<nl;}
+    
 }
 int main(){
     prepare();
