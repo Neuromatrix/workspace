@@ -42,7 +42,10 @@ constexpr char nl = '\n';
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
-
+inline void prepare(){
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+}
 vector <vector <ll>> Floyd_Warshall(vector <vector<int>> G){
     int n = G.size(); // работает в натуральной нумерации
     vector <vector <ll>> distance(n,vector<ll> (n));

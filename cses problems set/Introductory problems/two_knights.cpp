@@ -19,8 +19,8 @@ constexpr int INF = INT_MAX-1;
 constexpr char nl = '\n';
 
 #define fca(iterator,object) for (const auto & iterator: object)
-#define incr(i,k,n) for (int i = k; i < n; i++)
-#define decr(i,k,n) for (int i = k; i > n; i--)
+#define incr(i,k,n) for (ll i = k; i < n; i++)
+#define decr(i,k,n) for (ll i = k; i > n; i--)
 #define sortest(obj,all) sort(obj.begin(),obj.end())
 #define F first
 #define S second

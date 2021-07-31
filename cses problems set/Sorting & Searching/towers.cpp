@@ -46,52 +46,27 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline vector <tuple <int, int, int>> list_of_ribs(){//сканирование в список ребер
-    vector <tuple <int, int, int>> graph;
-    int n, to_h, W;
-    cin >> n;cin.ignore();// размер графа
-    n++;
-    for(size_t i = 1; i < n; i++){
-        while(cin.peek()!='\n'){ 
-            cin >> to_h  >> W; // сначала вершина потом веса
-            graph.push_back(make_tuple(i,to_h,W)); // записываем в кортеж
-        }
-        cin.ignore();
-    }
-    return graph;
-}
-vector <ll> Bellman_Ford(vector <tuple <int, int, int>> edges, int start, int gsize){
-    start--;// 0_N нумерация
-    int a, b, w;
-    int ex;
-    vector <ll> distance(gsize);// колво вершин
-    for (size_t i = 0; i < distance.size(); i++){
-        distance[i] = INF;// заполняем бесконечностями
-    }
-    distance[start] = 0;
-    for (size_t i = 0; i < distance.size()-1; i++){ //асимптотика O(nm), на каждой итерации перебираем все ребра
-        ex = 0;
-        for(const auto & e : edges){
-            tie(a, b, w) = e;
-            a--;// 0_N нумерация
-            b--;
-            if (distance[a] < INF)
-                distance[b] = min(distance[b],distance[a]+w);
-        }
-    }
-    return distance;
-}
-
 
 inline void solve(){
-    /*
-        .....
-    */
-   return;
+    size_t n;
+    cin >> n;
+    multiset <int> towers;
+    incr(i,0,n){
+        int cube; cin >> cube;
+        auto it = towers.upper_bound(cube);
+        if (it==towers.end()) towers.insert(cube);
+        else{
+            towers.erase(it);
+            towers.insert(cube);
+        }
+    }
+    cout << towers.size() << nl;
+    return;
 }
 
 int main(){
     IOS;
+    //prepare();
     solve();
     return 0;
 }

@@ -1,3 +1,4 @@
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -17,7 +18,6 @@
 #include <stack>
 #include <cassert>
 #include <queue>
-
 using namespace std;
 using ll = long long;
 using ull = unsigned long long;
@@ -42,6 +42,10 @@ constexpr char nl = '\n';
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
+inline void prepare(){
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+}
 
 inline vector <bool> dfs_visited_from(vector <vector <int>> graph, int cur,vector <bool> &visited){
     if (visited[cur]) return visited;

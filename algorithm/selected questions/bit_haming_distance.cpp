@@ -47,24 +47,19 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
+int haming_dist(int a, int b){// размер множества меньше
+    return __builtin_popcount(a^b);// исключающие или
+}
 inline void solve(){
-    ll n;
-    cin >> n;
-    ll ans = n/10;
-    
-    if (n % 10 == 9) ans++;
-    cout  << ans <<nl;
+    int a, b;
+    cin >> a>>b;
+    cout << haming_dist(a,b) <<nl;
     return;
 }
 
 int main(){
     IOS;
-    //prepare();
-    size_t tt;
-    cin >> tt;
-    incr(i, 0 , tt){
-        solve();
-    }
-    
+    prepare();
+    solve();
     return 0;
 }

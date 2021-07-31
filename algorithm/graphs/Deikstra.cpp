@@ -1,3 +1,4 @@
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -40,8 +41,11 @@ constexpr char nl = '\n';
 #define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
-#define fca(a,s) for(const auto & a : s)
-
+#define fca(a,s) for(const auto & a: s)
+inline void prepare(){
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+}
 inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
     int n, to_h, W;
     cin >> n;cin.ignore();

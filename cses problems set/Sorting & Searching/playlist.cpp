@@ -35,32 +35,41 @@ inline void prepare(){
 }
 int abs_(int a) {return a <= 0 ? -a : a;}
 inline void solve(){
-    ll n;size_t maximus=0, counter=1;
+    size_t max_sum = 0, n, counter = 0;
     cin >> n;
-    vector <ll> playlist(n);
-    incr(i,0,n) cin >> playlist[i];
-    int i = 1, j = 0;
-    while(i < n && j < n){
-        cout << j << " " << i <<"--" << counter<<nl;
-        if(playlist[i]==playlist[j]){
-            j++;
-            maximus=max(counter,maximus);
-            if(i==j) i++;
-            counter=i-j;
-
-        } else {
-            i++;
-            counter++;
+    vector <int> data(n);
+    set <int> melodic;
+    incr(i,0,n) cin >>data[i];
+    incr(i,0,n){
+        //cout <<"----" <<  data[i] << "--------"  << nl;
+        
+        if (melodic.find(data[i])==melodic.end()){
+            melodic.insert(data[i]);
         }
+        else{
+            max_sum = max(max_sum, melodic.size());
+            int x = i-melodic.size();
+            //cout << x << " +++++++" <<nl;
+            incr(j,x,i){
+                if (data[j]==data[i]){
+                    melodic.erase(data[j]);
+                    break;
+                }
+                else{
+                    melodic.erase(data[j]);
+                }
+            }
+            melodic.insert(data[i]);
+        }
+        //fca(a, melodic) cout << a  << " "; cout << nl;
     }
-    cout << counter << nl;
-    
+    cout << max(max_sum,melodic.size()) << nl;
 }
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    prepare();
+    //prepare();
     size_t tests = 1;
     //cin >> tests;
     for (size_t i = 0; i < tests; i++)

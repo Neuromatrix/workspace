@@ -46,52 +46,48 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline vector <tuple <int, int, int>> list_of_ribs(){//сканирование в список ребер
-    vector <tuple <int, int, int>> graph;
-    int n, to_h, W;
-    cin >> n;cin.ignore();// размер графа
-    n++;
-    for(size_t i = 1; i < n; i++){
-        while(cin.peek()!='\n'){ 
-            cin >> to_h  >> W; // сначала вершина потом веса
-            graph.push_back(make_tuple(i,to_h,W)); // записываем в кортеж
+inline pair <int, int> search_borders(vector <int> data, long long f_x){
+    bool flag = false;
+    vector <long long>  prefix_sum(data.size()); prefix_sum[0] = data[0];
+    for(int i = 1; i < data.size(); i++){
+        prefix_sum[i] = prefix_sum[i-1] + data[i];
+    }
+    long long l = 0, r = data.size()-1, cur_sum = 0;
+    while(l<=data.size() && r>=0){
+        if (l == 0 || r==0){
+            cur_sum = prefix_sum[max(l,r)];
+        } else {
+            cur_sum = prefix_sum[max(r,l)] - prefix_sum[min(l-1,r-1)];
         }
-        cin.ignore();
-    }
-    return graph;
-}
-vector <ll> Bellman_Ford(vector <tuple <int, int, int>> edges, int start, int gsize){
-    start--;// 0_N нумерация
-    int a, b, w;
-    int ex;
-    vector <ll> distance(gsize);// колво вершин
-    for (size_t i = 0; i < distance.size(); i++){
-        distance[i] = INF;// заполняем бесконечностями
-    }
-    distance[start] = 0;
-    for (size_t i = 0; i < distance.size()-1; i++){ //асимптотика O(nm), на каждой итерации перебираем все ребра
-        ex = 0;
-        for(const auto & e : edges){
-            tie(a, b, w) = e;
-            a--;// 0_N нумерация
-            b--;
-            if (distance[a] < INF)
-                distance[b] = min(distance[b],distance[a]+w);
+        if (cur_sum ==  f_x) {flag = true;break;}
+        else if (cur_sum > f_x){
+            while(cur_sum > f_x && r>=0){
+                r--;
+                if (l == 0 || r==0){
+                    cur_sum = prefix_sum[max(l,r)];
+                } else {
+                    cur_sum = prefix_sum[max(r,l)] - prefix_sum[min(l-1,r-1)];
+                }
+            }
         }
+        if (cur_sum ==  f_x) {flag = true;break;}
+        l++;
     }
-    return distance;
+    if (flag) return {min(l,r), max(l,r)};
+    else return {-1,-1};
 }
-
-
 inline void solve(){
     /*
-        .....
+        ...
     */
-   return;
+    return;
 }
 
 int main(){
-    IOS;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    prepare();
     solve();
     return 0;
 }

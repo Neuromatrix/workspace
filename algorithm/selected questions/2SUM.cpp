@@ -46,37 +46,36 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    int n;
-    cin >> n;
-    vi ap(n);
-    vc <ll> ans;
-    ll pol_ans = 0;
-    ll sum = 0;
-    seea(ap,0,n);
-    incr(i,0,n){
-        incr(j,0,i+1){
-            pol_ans += ap[i] % ap[j];
-            pol_ans += ap[j] % ap[i];
-        }
-        ans.push_back(pol_ans+sum);
-         sum+=pol_ans;
-        pol_ans = 0;
+inline pair <int, int> search_index_two_sum(vector <int> data, long long find_sum){
+    size_t n = data.size();
+    vector <pair <int, int>> base(n);
+    for(int i = 0; i < n; i++){
+        base[i].first = data[i]; 
+        base[i].second=i;
     }
-    incr(i, 0, n) cout << ans[i] << " "; cout << nl;
-    
-    
+    ll front=0,back=n-1;
+    while(front <=n-1 && back >=0){
+        if (find_sum==(base[front].first+base[back].first)) break;// сумма найдена
+
+        if (find_sum < (base[front].first + base[back].first)) back--;//сумма больше найденной
+        else if (find_sum > (base[front].first + base[back].first)) front ++;// сумма меньше найденной
+        
+    }
+    if ((base[front].first+base[back].first)==find_sum && front!=back) return { base[front].second+1, base[back].second+1};
+    else return {-1,-1};
+}
+inline void solve(){
+    /*
+        ...
+    */
+    return;
 }
 
 int main(){
-    IOS;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
     prepare();
-    size_t tt = 1;
-    //cin >> tt;
-    incr(i, 0 , tt){
-        solve();
-    }
-    
+    solve();
     return 0;
 }
