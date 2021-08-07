@@ -53,7 +53,7 @@ inline pair <int, int> search_borders(vector <int> data, long long f_x){
         prefix_sum[i] = prefix_sum[i-1] + data[i];
     }
     long long l = 0, r = data.size()-1, cur_sum = 0;
-    while(l<=data.size() && r>=0){
+    while(l<data.size() && r>=0){
         if (l == 0 || r==0){
             cur_sum = prefix_sum[max(l,r)];
         } else {
