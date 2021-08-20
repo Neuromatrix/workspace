@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +45,60 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
+class point{
+    public:
+        ld  x,y;
+        void make(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
+        }
+        point(){
+            x = 0;
+            y = 0;
+        }
+        point(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
+        }
+};
+class vecs{
+    public:
+        ld  x,y;
+        ld  len(){
+            return sqrt(this->x*this->x+this->y*this->y);
+        }
+        vecs();
+        vecs(point a, point b){
+            x = a.x - b.x;
+            y = a.y - b.y;
+        }
+};
+inline ld vec_mult(vecs a, vecs b){
+    return a.x * b.y - b.x * a.y;
 }
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
+long double cos(vecs a, vecs b){
+    return vec_mult(a, b)/(a.len() * b.len());
+}
+long double angle(vecs a, vecs b){
+    return acos(vec_mult(a, b)/(a.len() * b.len()));
 }
 inline void solve(){
-    /*
-        ...
-    */
+    point s1,s2,p;
+    cin >> s1.x >> s1.y >> s2.x >> s2.y >> p.x >> p.y;
+    vecs line(s1,s2);
+    vecs to(s2,p);
+    ld j = vec_mult(line, to);
+    if (j<0) cout << "RIGHT" << nl;
+    if (j==0) cout << "TOUCH" << nl;
+    if (j>0) cout << "LEFT" << nl;
     return;
 }
-
+ 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt;
+    cin >> tt;
+    while (tt--) solve();
     return 0;
 }

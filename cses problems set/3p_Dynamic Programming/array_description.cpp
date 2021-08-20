@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/1746
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +46,48 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
-}
+
 inline void solve(){
-    /*
-        ...
-    */
+    size_t n, m;
+    cin >> n >> m;
+    vector <ll> val(n);
+    seea(val,0,n);
+    vector <vector <ll>> dp(m+1,vector<ll> (n,0));
+    if (val[0]==0){
+        incr(i,1,m+1){
+            dp[i][0] = 1;
+        }
+    } else {
+        dp[val[0]][0] = 1;
+    }
+    incr(i,1,n){
+        int j = val[i];
+        if (j!=0) {
+            if(j-1>=0) dp[j][i]+=dp[j-1][i-1];
+            if(j+1<=m) dp[j][i]+=dp[j+1][i-1];
+            dp[j][i]+=dp[j][i-1];
+            dp[j][i]%=(int)1e9+7;
+        } else {
+            incr(j,1,m+1){
+                if(j-1>=0) dp[j][i]+=dp[j-1][i-1];
+                if(j+1<=m) dp[j][i]+=dp[j+1][i-1];
+                dp[j][i]+=dp[j][i-1];
+                dp[j][i]%=(int)1e9+7;
+            }
+        }
+    }
+    ll accum = 0;
+    incr(i,1,m+1){
+        accum+=dp[i][n-1];
+        accum%=(int)1e9+7;
+    }
+    cout << accum << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

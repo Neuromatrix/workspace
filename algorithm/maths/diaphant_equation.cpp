@@ -46,22 +46,63 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
+class equation
+{
+private:
+    ll a = 0, b = 0, c = 0, g = 0;
+    bool fall = true;
+    inline tuple <ll, ll, ll> gcd(ll a, ll b){
+        if (min(a,b)==0) return {1,0,max(a,b)};
+        else{
+            ll x,y,g;
+            tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
+            return {y,x-(max(a,b)/min(a,b))*y,g};
+        }
     }
-}
+public:
+    ll x, y;
+    void init(ll _a_,ll _b_, ll _c_){
+        a = _a_;
+        b = _b_;
+        c = _c_;        
+    }
+    bool solvable(){
+        return fall;
+    }
+    pair <int, int> solve(){
+        ll x, y, mult;
+        tie(x,y,g) = gcd(a,b);
+        if (c%g == 0){
+            mult  = c/g;
+            fall = true;
+            return {x*mult, y*mult};
+        } else {
+            fall = false;
+            return {0,0};
+        }
+    }
+    pair <int, int> solve(int k){
+        ll x, y, mult;
+        tie(x,y,g) = gcd(a,b);
+        if (c%g == 0){
+            mult  = c/g;
+            fall = true;
+            return {x*mult+b*k/g, y*mult-a*k/g};
+        } else {
+            fall = false;
+            return {0,0};
+        }
+    }
+    equation(ll _a_,ll _b_, ll _c_){
+        init(_a_,_b_,_c_);
+    }
+    equation();
+};
+
+
 inline void solve(){
-    /*
-        ...
-    */
+    equation h(39,15,12);
+    cout << h.solve(2).first << " " << h.solve(2).second << nl;
     return;
 }
 

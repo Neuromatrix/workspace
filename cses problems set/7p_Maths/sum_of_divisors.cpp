@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/1082
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,22 +46,42 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
+map <int,int> factoriz_with_map(int N){ 
+    map <int,int> f;
+    for(int i = 2; i * i <= N; i++){
+        while(N%i == 0){
+            f[i]++;
+            N/=i;
+        }
     }
+    if (N > 1) f[N]++;
+    return f;
+}
+long long binPow(long long a, long long pow,long long mod){
+	if (a == 1 || pow == 0) {
+		return 1;
+	} else if (pow == 1) {
+		return a%=mod;
+	} else {
+		ll part = binPow(a, pow >> 1,mod)%mod;
+		if (pow & 1) {
+			return (((part * part)%mod) * a)%mod;
+		} else {
+			return (part * part)%mod;
+		}
+	}
 }
 inline void solve(){
-    /*
-        ...
-    */
+    int n;
+    cin >> n;
+    map <int, int> div = factoriz_with_map(n);
+    ll ans = 1;
+    fca(a,div) cout << a.first <<" --- "<<a.second <<nl;
+    fca(a, div){
+        ans*=((binPow(a.first,a.second,1e9+7)-1)/(a.first-1));
+        ans%=(ll)(1e9+7);
+    }
+    cout << ans << nl;
     return;
 }
 

@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/1744
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +46,44 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
-}
+int cuts = 0;
+
 inline void solve(){
-    /*
-        ...
-    */
+    int a, b;
+    cin >> a >> b; a++; b++;
+    vector <vector <int>> dp(a,vector<int> (b));
+    incr(i,1,a){
+        incr(j,1,b){
+            if (i==j){
+                dp[i][j] = 0;
+            } else if (i == 1){
+                dp[i][j] = j - 1;
+            } else if (j == 1){ 
+                dp[i][j] = i - 1;
+            } else {
+                dp[i][j] = INF;
+            }
+        }
+    }
+    incr(i,1,a){
+        incr(j,1,b){
+            if(dp[i][j]==INF){
+                incr(k,1,i-1){
+                    dp[i][j] = min(dp[k][j]+dp[i-k][j]+1,dp[i][j]);
+                }
+                incr(k,1,j-1){
+                    dp[i][j] = min(dp[i][k]+dp[i][j-k]+1,dp[i][j]);
+                }
+            }
+        }
+    }
+    cout << dp[a-1][b-1] << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

@@ -82,7 +82,7 @@ inline void solve(){
     vector <ll> sh_path;
     if (aps.F[1] == true && aps.F[n-1] == true){
         cout << aps.S[n-1].F+1 << nl;
-        ll i = 10;
+        ll i = n-1;
         while(i>=1){
             sh_path.pb(i);
             i = aps.S[i].S;
@@ -92,10 +92,10 @@ inline void solve(){
     else cout << "IMPOSSIBLE" << nl;
     return;
 }
-
+// 1 2 3 4 -10 -100 67 8954280 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

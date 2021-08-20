@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/1636
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +46,29 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
-}
+
 inline void solve(){
-    /*
-        ...
-    */
+    ll n, x;
+    cin >> n >> x; x++;
+    vi coins;
+    seev(coins,n);
+    vector <ll> dp(x,0);
+    dp[0] = 1;
+    fca(c,coins){
+        incr(i,1,x){
+            if(i-c>=0){
+                dp[i]+=dp[i-c];
+                dp[i]%=(ll)(1e9+7);
+            }
+        }
+    }
+    cout << dp[x-1] << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

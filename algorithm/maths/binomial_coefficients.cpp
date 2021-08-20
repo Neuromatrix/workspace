@@ -46,22 +46,16 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
+ull bin_cof(ull n, ull k){
+    if (k==n || k==0) return 1;
+    else return bin_cof(n-1,k-1)+bin_cof(n-1,k);
 }
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
+ull bin_cof(ull n, ull k, ull mod){
+    if (k==n || k==0) return 1;
+    else return bin_cof(n-1,k-1,mod)%mod+bin_cof(n-1,k,mod)%mod;
 }
 inline void solve(){
-    /*
-        ...
-    */
+    cout << bin_cof(5,2) << nl;
     return;
 }
 

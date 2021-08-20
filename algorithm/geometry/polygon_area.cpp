@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +45,70 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
+class point{
+    public:
+        ld  x,y;
+        void make(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
+        }
+        bool operator==(point b){
+            if (this->x == b.x && this->y== b.y) return true;
+            else return false;
+        }
+        point(){
+            x = 0;
+            y = 0;
+        }
+        point(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
+        }
+};
+class vecs{
+    public:
+        ld  x,y;
+        ld  len(){
+            return sqrt(this->x*this->x+this->y*this->y);
+        }
+        vecs();
+        vecs(point a, point b){
+            x = a.x - b.x;
+            y = a.y - b.y;
+        }
+};
+inline ld vec_mult(vecs a, vecs b){
+    return a.x * b.y - b.x * a.y;
 }
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
+long double cos(vecs a, vecs b){
+    return vec_mult(a, b)/(a.len() * b.len());
 }
-inline void solve(){
-    /*
-        ...
-    */
-    return;
+long double angle(vecs a, vecs b){
+    return acos(vec_mult(a, b)/(a.len() * b.len()))*3.14/180;
 }
 
+inline void solve(){
+    int n;
+    cin >> n;
+    vector <point> data(n); 
+    incr (i,0,n){
+        cin >> data[i].x >> data[i].y;
+    }
+    ld ans_sum = 0; 
+    incr(i,0,n){
+        int j = i + 1;
+        if (j >= n) j = 0;
+        ans_sum += (data[i].x * data[j].y) - (data[j].x * data[i].y);
+    }
+    ans_sum = ans_sum < 0 ? -ans_sum : ans_sum;
+    cout << ans_sum << nl;
+}
+ 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt = 1;
+    //cin >> tt;
+    while (tt--) solve();
     return 0;
 }

@@ -1,4 +1,4 @@
-// https://cses.fi/problemset/task/1732/
+// https://cses.fi/problemset/task/1733
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -100,15 +100,16 @@ inline void solve(){
     Z_array gh(a);
     set <int> ans;
     incr(i,0,a.sz){
-        if(gh[i]+i==a.sz) ans.insert(a.sz-i);
+        if (i+gh[i]==a.sz) ans.insert(a.sz-gh[i]);
     }
+    ans.insert(a.sz);
     fca(a,ans) cout << a << " ";
     return;
 }
 
 int main(){
     IOS;
-    //prepare();
+    prepare();
     solve();
     return 0;
 }

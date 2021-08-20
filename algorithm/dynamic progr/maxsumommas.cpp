@@ -26,36 +26,7 @@ constexpr char nl = '\n';
 #define incr(i,k,n) for (int i = k; i < n; i++)
 #define decr(i,k,n) for (int i = k; i > n; i--)
 #define sortest(obj,all) sort(obj.begin(),obj.end())
-inline void solve(){
-    size_t n,find_sum;
-    cin >> n >> find_sum;
-    vector <pair <int, int>> base(n);
-    incr(i, 0 ,n) {cin >> base[i].first; base[i].second=i;}
-    sortest(base,all);
-    ll front=0,back=n-1;
-    while(front <=n-1 && back >=0){
-        if (find_sum==(base[front].first+base[back].first)) break;
-        if (find_sum < (base[front].first + base[back].first)) back--;
-        else if (find_sum > (base[front].first + base[back].first)) front ++;
-        
-    }
-    if ((base[front].first+base[back].first)==find_sum && front!=back) cout << base[front].second+1 << " " << base[back].second+1<<nl;
-    else cout << "IMPOSSIBLE" <<nl;
-    return;
-}
 
-int main(){
-    #ifdef _DEBUG
-        freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
-        freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
-
-    #endif
-    size_t tests = 1;
-    //cin >> tests;
-    for (int i = 0; i < tests; i++)
-        solve();
-    return 0;
-}
 inline void solve(){
 	size_t n;
 	cin >> n;

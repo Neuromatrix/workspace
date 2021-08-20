@@ -46,22 +46,52 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
+vector <vector <int>> const_mult(vector <vector <int>> a, int skalyar){
+    for(size_t i = 0; i < a.size(); i++){
+        for (size_t j = 0; j < a[i].size(); j++){
+            a[i][j]*=skalyar;
+        }
+    }
+    return a;
 }
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
+vector <vector <int>> sum(vector <vector <int>> a, vector <vector<int>> b){
+    for (size_t i = 0; i < a.size(); i++){
+        for (size_t j = 0; j < a[i].size(); j++){
+            a[i][j]+=b[i][j];
+        }
+    }
+    return a;
+}
+vector <vector <int>> mult(vector <vector <int>> a, vector <vector<int>> b){
+    size_t n = a.size();
+    vector <vector<int>> C;
+    C.resize(n);
+    for(size_t i = 0; i < n; i++) C[i].assign(n,0);
+    for(size_t i = 0; i < n; i++){
+        for(size_t j = 0; j < n; j++){
+            for(size_t k = 0; k < n; k++){
+                C[i][j]+=a[i][k]*b[k][j];
+            }
+        }
+    }
+    return C;
+}
+vector <vector <int>> power(vector <vector <int>> a, int pow){
+    vector <vector <int>> res;
+    if (pow == 1){
+        return a;
+    } else {
+        res = power(a,pow >> 1);
+        if (pow & 1) {
+            return mult(mult(res,res), a);
+        } else {
+            return mult(res,res);
+        }
     }
 }
 inline void solve(){
-    /*
-        ...
-    */
+    vector <vector <int>> a ={{2,5},{1,4}};
+    fca(a,power(a,3)) {fca(b,a) cout << b << " "; cout << nl;} cout << nl;
     return;
 }
 

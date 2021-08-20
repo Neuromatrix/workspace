@@ -19,7 +19,7 @@
 #include <cassert>
 #include <queue>
 using namespace std;
-using ll = long long;   
+using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
@@ -46,22 +46,24 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
+ll divisors_count(int N){ 
+    ll ans = 1;
+    for(int i = 2; i * i <= N; i++){
+        ll k = 1;
+        while(N%i == 0){
+            k++;
+            N/=i;
+        }
+        ans*=k;
     }
+    if (N > 1) ans*=2;
+    return ans;
 }
+
 inline void solve(){
-    /*
-        ...
-    */
+    int n;
+    cin >> n;
+    cout << divisors_count(n) << nl;
     return;
 }
 

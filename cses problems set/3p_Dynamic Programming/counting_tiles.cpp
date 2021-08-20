@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/2181
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,28 +46,25 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
-}
+ll mod = 100000007;
+ld pi = acos(-1);
 inline void solve(){
-    /*
-        ...
-    */
+    ll n, m;
+    cin >> n >> m;
+    ld ans = 1;
+    incr(a,1,n/2){
+        incr(b,1,m/2){
+            ans*=4*((cos((pi*a)/(n+1))*cos((pi*a)/(n+1)))+(cos((pi*b)/(m+1))*cos((pi*b)/(m+1))));
+            ans=fmodl(ans,mod);
+        }
+    }
+    cout << ans << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

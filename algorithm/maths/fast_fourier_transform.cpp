@@ -46,22 +46,42 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
-}
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
+vector <complex <double>> fft(vector <complex <double>> polinom, int d = 1){
+    double pi = acos(-1);
+    int n = polinom.size();
+    vector <complex <double>> r(n);
+    for(size_t i = 0; i < n; i++){
+        int b = 0;
+        for(size_t j = 1; j < n; j <<= 1){
+            b <<= 1;
+            if (i & j) b++;
+        }
+        r[b] = polinom[i];
     }
+    for(size_t m = 2; m <=n; m <<=1){
+        complex <double> wm = exp(complex <double> {0,d*2*pi/m});
+        for (size_t k = 0; k < n; k+=m){
+            complex <double> w = 1;
+            for(size_t j = 0; j < m/2; j++){
+                complex <double> u = r[k+j];
+                complex <double> t = w*r[k + j + m/2];
+                r[k+j] = u+t;
+                r[k + j + m/2] = u - t;
+                w = w*wm;
+            }
+        }
+    }
+    if (d==-1) for(size_t i = 0; i < n; i++) r[i] /= n;
+    return r;
 }
 inline void solve(){
-    /*
-        ...
-    */
+    vector <complex <double>> f = {3,2,0,0};
+    vector <complex <double>> g = {1,5,0,0};
+    auto tf = fft(f);
+    auto tg = fft(g);
+    vector <complex <double>> tp(4);
+    incr(i,0,4) {tp[i] = tf[i]*tg[i];}
+    fca(gg, fft(tp,-1)) cout << gg.real() << " ---- " <<gg.imag() <<nl;
     return;
 }
 
