@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/1639
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,61 +46,31 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class Z_array
-{
-    private:
-        size_t size_it;
-        string inp;
-        vector <int> z_array;
-    public:
-        Z_array(string s){
-            init(s);
-        }
-        Z_array();
-        size_t size(){
-            return size_it;
-        }
-        void init(string s){
-            inp = s;
-            size_it = s.length();
-            int n = (int) s.length();
-            z_array.resize(n);
-            for (int i=1, l=0, r=0; i<n; ++i) {
-                if (i <= r)
-                    z_array[i] = min (r-i+1, z_array[i-l]);
-                while (i+z_array[i] < n && s[z_array[i]] == s[i+z_array[i]])
-                    ++z_array[i];
-                if (i+z_array[i]-1 > r)
-                    l = i,  r = i+z_array[i]-1;
-            }
-            return;
-        }
-        int operator[](size_t ind){
-            return z_array[ind];
-        }
-        void print(){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << " "; 
-            }
-            cout << endl;
-        }
-        void print(string sep){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << sep; 
-            }
-            cout << endl;
-        }
-};
-
-
 
 inline void solve(){
-    
+    string f, s;
+    cin >> f >> s;
+    ll n = f.sz, m = s.sz;
+    vc <vc <ll>> dp(n+1, vc <ll>(m+1));
+    incr(i,0,m+1){
+        dp[0][i] = i;
+    }
+    incr(i,0,n+1){
+        dp[i][0] = i;
+    }
+    incr(i,1,n+1){
+        incr(j,1,m+1){
+            dp[i][j] = INF;
+            dp[i][j] = min({dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(f[i-1]!=s[j-1])});
+        }
+    }
+    cout << dp[n][m] << nl;
+    return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

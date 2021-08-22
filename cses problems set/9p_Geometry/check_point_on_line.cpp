@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/2189
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,61 +46,60 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class Z_array
-{
-    private:
-        size_t size_it;
-        string inp;
-        vector <int> z_array;
+class point{
     public:
-        Z_array(string s){
-            init(s);
+        ld  x,y;
+        void make(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
         }
-        Z_array();
-        size_t size(){
-            return size_it;
+        point(){
+            x = 0;
+            y = 0;
         }
-        void init(string s){
-            inp = s;
-            size_it = s.length();
-            int n = (int) s.length();
-            z_array.resize(n);
-            for (int i=1, l=0, r=0; i<n; ++i) {
-                if (i <= r)
-                    z_array[i] = min (r-i+1, z_array[i-l]);
-                while (i+z_array[i] < n && s[z_array[i]] == s[i+z_array[i]])
-                    ++z_array[i];
-                if (i+z_array[i]-1 > r)
-                    l = i,  r = i+z_array[i]-1;
-            }
-            return;
-        }
-        int operator[](size_t ind){
-            return z_array[ind];
-        }
-        void print(){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << " "; 
-            }
-            cout << endl;
-        }
-        void print(string sep){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << sep; 
-            }
-            cout << endl;
+        point(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
         }
 };
-
-
-
-inline void solve(){
-    
+class vecs{
+    public:
+        ld  x,y;
+        ld  len(){
+            return sqrt(this->x*this->x+this->y*this->y);
+        }
+        vecs();
+        vecs(point a, point b){
+            x = a.x - b.x;
+            y = a.y - b.y;
+        }
+};
+inline ld vec_mult(vecs a, vecs b){
+    return a.x * b.y - b.x * a.y;
 }
-
+long double cos(vecs a, vecs b){
+    return vec_mult(a, b)/(a.len() * b.len());
+}
+long double angle(vecs a, vecs b){
+    return acos(vec_mult(a, b)/(a.len() * b.len()));
+}
+inline void solve(){
+    point s1,s2,p;
+    cin >> s1.x >> s1.y >> s2.x >> s2.y >> p.x >> p.y;
+    vecs line(s1,s2);
+    vecs to(s2,p);
+    ld j = vec_mult(line, to);
+    if (j<0) cout << "RIGHT" << nl;
+    if (j==0) cout << "TOUCH" << nl;
+    if (j>0) cout << "LEFT" << nl;
+    return;
+}
+ 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt;
+    cin >> tt;
+    while (tt--) solve();
     return 0;
 }

@@ -1,4 +1,4 @@
-// #include <bits\stdc++.h>
+// https://cses.fi/problemset/task/2191
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -46,61 +46,70 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class Z_array
-{
-    private:
-        size_t size_it;
-        string inp;
-        vector <int> z_array;
+class point{
     public:
-        Z_array(string s){
-            init(s);
+        ld  x,y;
+        void make(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
         }
-        Z_array();
-        size_t size(){
-            return size_it;
+        bool operator==(point b){
+            if (this->x == b.x && this->y== b.y) return true;
+            else return false;
         }
-        void init(string s){
-            inp = s;
-            size_it = s.length();
-            int n = (int) s.length();
-            z_array.resize(n);
-            for (int i=1, l=0, r=0; i<n; ++i) {
-                if (i <= r)
-                    z_array[i] = min (r-i+1, z_array[i-l]);
-                while (i+z_array[i] < n && s[z_array[i]] == s[i+z_array[i]])
-                    ++z_array[i];
-                if (i+z_array[i]-1 > r)
-                    l = i,  r = i+z_array[i]-1;
-            }
-            return;
+        point(){
+            x = 0;
+            y = 0;
         }
-        int operator[](size_t ind){
-            return z_array[ind];
-        }
-        void print(){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << " "; 
-            }
-            cout << endl;
-        }
-        void print(string sep){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << sep; 
-            }
-            cout << endl;
+        point(ld  x, ld  y){
+            this->x = x;
+            this->y = y;
         }
 };
-
-
-
-inline void solve(){
-    
+class vecs{
+    public:
+        ld  x,y;
+        ld  len(){
+            return sqrt(this->x*this->x+this->y*this->y);
+        }
+        vecs();
+        vecs(point a, point b){
+            x = a.x - b.x;
+            y = a.y - b.y;
+        }
+};
+inline ld vec_mult(vecs a, vecs b){
+    return a.x * b.y - b.x * a.y;
+}
+long double cos(vecs a, vecs b){
+    return vec_mult(a, b)/(a.len() * b.len());
+}
+long double angle(vecs a, vecs b){
+    return acos(vec_mult(a, b)/(a.len() * b.len()))*3.14/180;
 }
 
+inline void solve(){
+    int n;
+    cin >> n;
+    vector <point> data(n); 
+    incr (i,0,n){
+        cin >> data[i].x >> data[i].y;
+    }
+    ld ans_sum = 0; 
+    incr(i,0,n){
+        int j = i + 1;
+        if (j >= n) j = 0;
+        ans_sum += (data[i].x * data[j].y) - (data[j].x * data[i].y);
+    }
+    ans_sum = ans_sum < 0 ? -ans_sum : ans_sum;
+    cout << ans_sum << nl;
+}
+ 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt = 1;
+    //cin >> tt;
+    while (tt--) solve();
     return 0;
 }
