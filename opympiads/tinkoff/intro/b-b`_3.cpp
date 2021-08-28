@@ -46,28 +46,38 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+vector <long long> divisors(long long N){
+    vector <long long> ans;
+    ans.push_back(1);
+    if (N == 1) {return ans;}
+    for(long long i = 2; i*i <=N; i++){
+        if (N%i==0) ans.push_back(i);
+    }
+    return ans;
+}
+ll abss(ll x){
+    return x < 0 ? -x : x;
+}
+ll check_manhatt(ll x1, ll y1, ll x2, ll y2){
+    return abss(x1-x2)+abss(y1-y2);
 }
 inline void solve(){
-
+    ll k;
+    cin >> k;
+    vector <ll> divii = divisors(k);
+    ll mins = LLONG_MAX;
+    fca(div, divii){
+        mins = min(mins,check_manhatt(1,1,div,k/div));
+    }
+    cout << mins << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tests = 1;
+    //cin >> tests;
+    while(tests--) solve();
     return 0;
 }

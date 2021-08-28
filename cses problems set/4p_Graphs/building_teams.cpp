@@ -46,9 +46,36 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
+inline pair<vector <bool>,vector <int>> bfs_distance_from(vector<vector<int>> graph, int cur){ // работает со списком смежности
+    queue <int> q;
+    vector <int> distance(graph.size());
+    vector <bool> visited(graph.size());
+    distance[cur] = 0;
+    visited[cur] = true;
+    q.push(cur);
+    while (!q.empty()){
+        cur = q.front();
+        q.pop();
+        fca(u,graph[cur]){ // проход по всем вершинам в которые  ведут ребра
+            if(visited[u]) continue; // вершина посещена
+            visited[u] = true; 
+            distance[u] = distance[cur] + 1; // расстояние для вершины в которую ведут ребра cur увеличиваем
+            q.push(u); 
+        }
+    }
+    return {visited, distance};
+}
 inline void solve(){
-
+    int n, m;
+    cin >> n >> m;
+    vc <vi> g(n+1);
+    incr(i,0,m){
+        int x, y;
+        cin >> x >> y;
+        g[x].push_back(y);
+        g[y].push_back(x);
+    }
+    
     return;
 }
 

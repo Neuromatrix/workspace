@@ -46,28 +46,20 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
 
+inline void solve(){
+    string ptr = "the";
+    string ex;
+    while (cin>>ex){
+        if(ex==ptr) {cout << "Petya" << nl; return;}
+    }
+    cout << "Program" << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

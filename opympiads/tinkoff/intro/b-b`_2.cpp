@@ -46,28 +46,28 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
 
+inline void solve(){
+    int n;
+    cin >> n;
+    deque <pair <int,int>>  turtles(n);
+    incr(i,0,n) {cin >> turtles[i].second; turtles[i].first = 0;}
+    int i = 0;
+    while (turtles[i].first!=n*n){
+        turtles[i].first++;
+        turtles.insert(turtles.begin()+n-turtles[0].second,turtles[0]);
+        turtles.pop_front();
+    }
+    fca(a,turtles){
+        if(a.first>0) n-=1;
+    }
+    cout << n << nl;
     return;
 }
 
-int main(){
+int main(){ 
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

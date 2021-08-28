@@ -46,22 +46,22 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+vc <vii> G;
+void graph_add_adj(){
+
 }
 inline void solve(){
-
+    int n, m;
+    cin >> n >> m;
+    int maxn = n*m+1;
+    G.resize(n*m);
+    string ptr;
+    incr(i,0,n){
+        cin >> ptr;
+        incr(j,1,m+1){
+            
+        }
+    }
     return;
 }
 
