@@ -18,6 +18,7 @@
 #include <stack>
 #include <cassert>
 #include <queue>
+#include <unordered_map>
 using namespace std;
 using ll = long long;   
 using ull = unsigned long long;
@@ -52,7 +53,8 @@ class turing_machine
         vc <vc <tuple <char,int,int>>> machine;
         string ribbon,input;
         size_t n,m;
-        bool dbg = 1;
+        unordered_map <char, int> Z;
+        bool dbg = 1,lmd_pr = 0;
         // func
         int binPow(int a, int pow){
             if (a == 1 || pow == 0) {
@@ -77,7 +79,9 @@ class turing_machine
             }
             return res;
         }
-        int id(char a) {return (int)a -'a';}
+        int id(char a){
+            return Z[a];
+        }
         tuple <char,int,int> parsing(string ptr){
             int move,mode;
             char symbol;
@@ -96,30 +100,38 @@ class turing_machine
             return make_tuple(symbol,move,mode);
         }
         int ribbon_prepare(){
-            ribbon.resize(4*input.length());
+            ribbon.resize(5*input.length());
             int i = 0, ans;
-            while(i<input.length()){
+            while(i<2*input.length()){
                 ribbon[i]='#';
                 i++;
             }
             ans = i;
             int j = 0;
-            while(i<2*input.length()){
+            while(i<3*input.length()){
                 ribbon[i] = input[j];
                 j++; i++;
             }
-            while(i<4*input.length()){
+            while(i<5*input.length()){
                 ribbon[i]='#';
                 i++;
             }
             return ans;
+        }
+        void Z_prepare(string alphabet){
+            incr(i,0,alphabet.length()){
+                Z[alphabet[i]] = i;
+            }
+            return;
         }
     public:
         turing_machine(){n=0;m=0;}
         void init(){
             string alphabet;
             cin >> alphabet;
-            m = alphabet.length() + 1;
+            alphabet.pb('#');
+            Z_prepare(alphabet);
+            m = alphabet.length();
             cin >> n;
             string ptr;
             machine.resize(n);
@@ -151,7 +163,8 @@ class turing_machine
         }
         void print(string sep = " "){
             incr(i,0,ribbon.length()){
-                cout << ribbon[i] << sep;
+                if(ribbon[i]=='#' && !lmd_pr) continue;
+                else cout << ribbon[i] << sep;
             }
             cout << endl;
         }

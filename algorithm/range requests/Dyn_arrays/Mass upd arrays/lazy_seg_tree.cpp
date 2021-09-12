@@ -51,89 +51,134 @@ template <typename T>
 class lseg_tree
 {
     private:
-        vector <T> t;
-        size_t MAXN = 0;
-    void build (vector <T> a, int v, int tl, int tr) {
-        if (tl == tr)
-            t[v] = a[tl];
-        else {
-            int tm = (tl + tr) / 2;
-            build (a, v*2, tl, tm);
-            build (a, v*2+1, tm+1, tr);
-        }
-    }
- 
-    void update (int v, int tl, int tr, int l, int r, T add) {
-        if (l > r)
-            return;
-        if (l == tl && tr == r)
-            t[v] += add;
-        else {
-            int tm = (tl + tr) / 2;
-            update (v*2, tl, tm, l, min(r,tm), add);
-            update (v*2+1, tm+1, tr, max(l,tm+1), r, add);
-        }
-    }
-    int sum (int v, int tl, int tr, int l, int r) {
-        if (l > r)
-            return 0;
-        if (l == tl && r == tr)
-            return t[v];
-        int tm = (tl + tr) / 2;
-        return sum (v*2, tl, tm, l, min(r,tm))
-            + sum (v*2+1, tm+1, tr, max(l,tm+1), r);
-    }
-    int get(int v, int tl, int tr, int pos) {
-        if (tl == tr)
-            return t[v];
-        int tm = (tl + tr) / 2;
-        if (pos <= tm)
-            return t[v] + get (v*2, tl, tm, pos);
-        else
-            return t[v] + get (v*2+1, tm+1, tr, pos);
-    }
-    public:
-        lseg_tree(size_t size, vector <T> data){
-            MAXN = size;
-            t.resize(4*MAXN);
-        }
-        lseg_tree(vector <T> data){
-            MAXN = data.size();
-            t.resize(4*MAXN);
-        }
-        lseg_tree(size_t size){
-            MAXN = size;
-            t.resize(4*MAXN);
-        }
-        lseg_tree();
-        void init(vector <T> data){
-            MAXN = data.size();
-            t.resize(4*MAXN);
-            build(data,1,0,MAXN-1);
-        }
-        T get(int pos){
-            return get(1,0,MAXN-1,pos);
-        }
-        T sum_seg(int l,int r){
-            return sum(1,0,MAXN-1,l,r);
-        }
-        void one_update(int pos, T add){
-            update(1,0,MAXN-1,pos,pos,add);
-        }
-        void mass_update(int l,int r, T add){
-            update(1,0,MAXN-1,l,r,add);
-        }
-        void print(string sep = " "){
-            for(size_t i = 0; i < MAXN; i++){
-                cout << get(i) <<sep;
+        vector <T> data;
+        vector <T> lazy;
+        string type = "min";
+        size_t arr_size = 0; 
+        vector <T> inp;
+        T es = 0;
+        void setPush(int cur,T ad){
+            if (cur>arr_size || cur+1>arr_size) return;
+            else{
+                if (cur!=1){
+                    lazy[2*cur+1]+=lazy[cur];
+                    lazy[2*cur]+=lazy[cur];
+                    lazy[cur] = 0;
+                } else {
+                    lazy[2*cur+1]+=ad;
+                    lazy[2*cur]+=ad;
+                }
+                
+                return;
             }
-            cout << endl;
+        }
+        void mass_update(int cur, int tl, int tr, int l, int r,int ad){
+            cout << tl << tr << endl;
+            if (l > r)
+		        return;
+            if(l==tl && r ==tr){
+                setPush(cur,ad);
+                data[cur]+=(lazy[cur]+ad);
+            } else {
+                setPush(cur,ad);
+                int tm = (tl + tr) / 2;
+                mass_update (cur*2, tl, tm, l, min(r,tm), ad);
+                mass_update (cur*2+1, tm+1, tr, max(l,tm+1), r, ad);
+            }
+        } 
+        int nulls_res(int i){ // вычисление дополнительных нулей до степени двойки
+            int pow = ceil(log2(i));
+            return 2<<(pow-1);
+        }
+        T _min_(T a,T  b){
+            return min(a,b);
+        }
+        T _max_(T a,T  b){
+            return max(a,b);
+        }
+        T _sum_(T a, T b){
+            return a + b;
+        }
+    public:
+        void init(vector <T> gh){// инициализация дерева через вектор (численных типов)
+            inp = gh;
+            int additional_nulls=nulls_res(gh.size())-gh.size();// дополнительные нули
+            arr_size = nulls_res(gh.size()); //изменение размера листьев
+            data.resize(2*arr_size);// изменение размера дерева
+            lazy.assign(2*arr_size,0);
+            int i = data.size()-1;// итератор
+            if (type == "min"){
+                es = INF;
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = es;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _min_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type == "max"){
+                es = -INF;
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = es;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _max_(data[2*i], data[2*i+1]);
+                }
+            }
+            else if (type =="sum"){
+                while(additional_nulls--){ // завполняем нулями
+                    data[i] = 0;
+                    i--;
+                }
+                int yy = gh.size(), j = gh.size()-1; 
+                while(yy--){ // заполняем листья
+                    data[i] = gh[j];
+                    i--;j--;
+                }
+                for (; i > 0; i--){//заполняем остальные уровни
+                    data[i] = _sum_(data[2*i], data[2*i+1]);
+                }
+            }
+    
+        }
+        void one_change(int i, T x){
+        }
+        void one_add(int i, T x){
+        }
+        void mass_update(int l, int r,int ad){
+            mass_update(1,0,arr_size-1,l,r,ad);
+        }
+        void print(string sep = " "){// выводим с заданным сепаратором
+            for (size_t i = 1; i < data.size(); i++) (data[i]==INF || data[i]==-INF) ? cout << "-" << sep : cout << data[i]<< sep; cout << '\n';
+            return;
+        }
+        void lazy_print(string sep = " "){// выводим с заданным сепаратором
+            for (size_t i = 1; i < data.size(); i++) cout << lazy[i] << sep; cout << '\n';
+            return;
         }
 };
 
 
 inline void solve(){
-    
+    vi data= {1,2,3,4,5};
+    lseg_tree <int> doo;
+    doo.init(data);
+    doo.print();
+    doo.mass_update(0,7,1);
+    doo.print();
+    doo.lazy_print();
 }
 int main(){
     IOS;
