@@ -1,4 +1,5 @@
-// https://cses.fi/problemset/task/1097
+// prefix_comms
+
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -56,7 +57,7 @@ class turing_machine
         unordered_map <char, int> Z;
         bool dbg = 1,lmd_pr = 0;
         // func
-        int binPow(int a, int pow){
+        int binPow(int a, int pow){ // помощь для переовда строкив  число
             if (a == 1 || pow == 0) {
                 return 1;
             } else if (pow == 1) {
@@ -70,7 +71,7 @@ class turing_machine
                 }
             }
         }
-        int stringToInt(string a){
+        int stringToInt(string a){// перевод стркои в число
             int max_pow = a.size() - 1;
             int res = 0;
             for (int i = 0; i < a.size(); i++){
@@ -79,13 +80,13 @@ class turing_machine
             }
             return res;
         }
-        int id(char a){
+        int id(char a){// вывод номера буквы в алфавите
             return Z[a];
         }
-        tuple <char,int,int> parsing(string ptr){
+        tuple <char,int,int> parsing(string ptr){// перевод строки в кортеж из символа, направления движения, и номера режима
             int move,mode;
             char symbol;
-            if (ptr[0]==',') {symbol = '&';ptr.erase(ptr.begin());}
+            if (ptr[0]==',') {symbol = '&';ptr.erase(ptr.begin());}// на всякий если символ не указан
             else{
                 symbol=ptr[0];
                 ptr.erase(ptr.begin());
@@ -99,7 +100,7 @@ class turing_machine
             mode = stringToInt(ptr);
             return make_tuple(symbol,move,mode);
         }
-        int ribbon_prepare(){
+        int ribbon_prepare(){// подготовка и эмуляция бесконечной ленты
             ribbon.resize(5*input.length());
             int i = 0, ans;
             while(i<2*input.length()){
@@ -118,7 +119,7 @@ class turing_machine
             }
             return ans;
         }
-        void Z_prepare(string alphabet){
+        void Z_prepare(string alphabet){// подготовка алфавита
             incr(i,0,alphabet.length()){
                 Z[alphabet[i]] = i;
             }
@@ -126,9 +127,10 @@ class turing_machine
         }
     public:
         turing_machine(){n=0;m=0;}
-        void init(){
+        void init(){// запускаяем для инициализации и считывания файла
             string alphabet;
             cin >> alphabet;
+            alphabet.pb('=');
             alphabet.pb('#');
             Z_prepare(alphabet);
             m = alphabet.length();
@@ -145,7 +147,7 @@ class turing_machine
             cin >> input;
             cin >> dbg;
         }
-        void simulation(){
+        void simulation(){// запуск симуляции
             int it = ribbon_prepare();
             int move, mode;
             char symb;
@@ -174,13 +176,15 @@ class turing_machine
                     int a,b;
                     char w;
                     tie(w,a,b) = machine[i][j];
-                    cout << w <<","<< a << ","<< b << " ";
+                    cout << w <<" "<< a << " "<< b << "   ";
                 }
+                cout << endl;
             }
             cout << endl;
         }
         void status(){
-            cout << "q_num:: " << n << " alphabet:: " << m << " mode_dbg:: " << dbg << endl;
+            cout << "q_num:: " << n 
+            << nl << "alphabet:: " << m << nl << "mode_dbg:: " << dbg << endl;
         }
 };
 
