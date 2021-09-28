@@ -52,63 +52,71 @@ private:
     ll a = 0, b = 0, c = 0, g = 0;
     bool fall = true;
     inline tuple <ll, ll, ll> gcd(ll a, ll b){
-        if (min(a,b)==0) return {1,0,max(a,b)};
-        else{
-            ll x,y,g;
-            tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-            return {y,x-(max(a,b)/min(a,b))*y,g};
-        }
+        
     }
 public:
-    ll x, y;
     void init(ll _a_,ll _b_, ll _c_){
         a = _a_;
         b = _b_;
-        c = _c_;        
+        c = _c_;   
+        solve();     
     }
     bool solvable(){
         return fall;
     }
     pair <int, int> solve(){
         ll x, y, mult;
-        tie(x,y,g) = gcd(a,b);
+        tie(y,x,g) = gcd(a,b);
         if (c%g == 0){
             mult  = c/g;
             fall = true;
-            return {x*mult, y*mult};
+            return make_pair(x*mult, y*mult);
         } else {
             fall = false;
-            return {0,0};
+            return make_pair(0,0);
         }
     }
     pair <int, int> solve(int k){
         ll x, y, mult;
-        tie(x,y,g) = gcd(a,b);
+        tie(y,x,g) = gcd(a,b);
         if (c%g == 0){
             mult  = c/g;
             fall = true;
-            return {x*mult+b*k/g, y*mult-a*k/g};
+            return make_pair(x*mult+(b*k)/g, y*mult-(a*k)/g);
         } else {
             fall = false;
-            return {0,0};
+            return make_pair(0,0);
         }
-    }
-    equation(ll _a_,ll _b_, ll _c_){
-        init(_a_,_b_,_c_);
     }
     equation();
 };
 
 
-inline void solve(){
-    equation h(39,15,12);
-    cout << h.solve(2).first << " " << h.solve(2).second << nl;
+inline void ssolve(){
+    ll a, b, c;
+    cin >> a >> b >> c;
+    equation h;
+    h.init(a,b,c);
+    if (!h.solvable()){
+        cout << -1 << nl;
+        return;
+    }
+    ll minx = INF,miny;
+    incr(k,-10000,10000){
+        pair <ll,ll> ans = h.solve(k);
+        if (ans.F<0) continue;
+        if(ans.F<minx){
+            minx = ans.F;
+            miny = ans.S;
+        }
+    }
+    cout << minx << " " << miny << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    ssolve();
     return 0;
 }

@@ -46,28 +46,21 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline int e_gcd(int a, int b){
-    if (min(a,b)==0) return max(a,b);
-    else return e_gcd(min(a,b),max(a,b)%min(a,b)); 
+inline ll e_gcd(ll a, ll b){
+    if (b==0) return a;
+    else return e_gcd(b,a%b); 
 }
-inline tuple <int, int, int> gcd(int a, int b){
-    if (min(a,b)==0) return {1,0,max(a,b)};
-    else{
-        int x,y,g;
-        tie(x,y,g) = gcd(min(a,b),max(a,b)%min(a,b));
-        return {y,x-(max(a,b)/min(a,b))*y,g};
-    }
-}
+
 inline void solve(){
-    /*
-        ...
-    */
+    ll a, b;
+    cin >> a >> b;
+    cout << (a*b)/e_gcd(max(a,b),min(a,b)) << nl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

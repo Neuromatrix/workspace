@@ -1,4 +1,4 @@
-// https://cses.fi/problemset/task/1082
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,46 +47,61 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = LLONG_MAX){
+ll binPow(ll a, ll pow){
 	if (a == 1 || pow == 0) {
 		return 1;
 	} else if (pow == 1) {
-		return a%=mod;
+		return a;
 	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
+		ll part = binPow(a, pow >> 1);
 		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
+			return (((part * part)) * a);
 		} else {
-			return (part * part)%mod;
+			return (part * part);
 		}
 	}
 }
-map <ll,ll> factoriz_with_map(ll N){ 
-    map <ll,ll> f;
-    for(ll i = 2; i * i <= N; i++){
-        while(N%i == 0){
-            f[i]++;
-            N/=i;
-        }
-    }
-    if (N > 1) f[N]++;
-    return f;
-}
-ll sum_of_divisors(ll N){
-    map <ll, ll> ans = factoriz_with_map(N);
-    ll accum = 1;
-    fca(a, ans){
-        accum*=(binPow(a.F,a.S+1)-1)/(a.first-1);
-    }
-    return accum;
+
+ll stringToInt(string a){
+	ll max_pow = a.size() - 1;
+	ll res = 0;
+	for (ll i = 0; i < a.size(); i++){
+		res += (a[i] - '0') * (binPow(10, max_pow));
+		max_pow--;
+	}
+	return res;
 }
 inline void solve(){
-    ll n; cin >> n;
-    cout << sum_of_divisors(n) << nl;
+    deque <ll> eq;
+    string a;
+    while(cin>>a){
+        if(a=="+"){
+            int one = eq.back();
+            eq.pop_back();
+            int two = eq.back();
+            eq.pop_back();
+            eq.push_back(one+two);
+        } else if (a=="-"){
+            int one = eq.back();
+            eq.pop_back();
+            int two = eq.back();
+            eq.pop_back();
+            eq.push_back(two - one);
+        } else if (a=="*"){
+            int one = eq.back();
+            eq.pop_back();
+            int two = eq.back();
+            eq.pop_back();
+            eq.push_back(one*two);
+        } else {
+            eq.push_back(stringToInt(a));
+        }
+    }
+    fca(it,eq) cout << it << nl;
 }
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

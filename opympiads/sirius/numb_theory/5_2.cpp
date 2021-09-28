@@ -1,4 +1,4 @@
-// https://cses.fi/problemset/task/1082
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -19,7 +19,7 @@
 #include <cassert>
 #include <queue>
 using namespace std;
-using ll = long long;   
+using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
@@ -46,20 +46,6 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = LLONG_MAX){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
 map <ll,ll> factoriz_with_map(ll N){ 
     map <ll,ll> f;
     for(ll i = 2; i * i <= N; i++){
@@ -71,21 +57,28 @@ map <ll,ll> factoriz_with_map(ll N){
     if (N > 1) f[N]++;
     return f;
 }
-ll sum_of_divisors(ll N){
-    map <ll, ll> ans = factoriz_with_map(N);
-    ll accum = 1;
-    fca(a, ans){
-        accum*=(binPow(a.F,a.S+1)-1)/(a.first-1);
-    }
-    return accum;
-}
 inline void solve(){
-    ll n; cin >> n;
-    cout << sum_of_divisors(n) << nl;
+    ll n;
+    cin >> n;
+    map <ll, ll> ans = factoriz_with_map(n);
+    fca(it,ans){
+        if(it!=*(--ans.end())){
+            cout << it.first;
+            if (it.second==1) cout << "*";
+            else cout <<"^" <<it.second << "*";
+        } else {
+            cout << it.first;
+            if (it.second==1) cout <<endl;
+            else cout <<"^" <<it.second << endl;
+        }
+        
+    }
+    return;
 }
+
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

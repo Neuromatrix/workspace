@@ -1,4 +1,4 @@
-// https://cses.fi/problemset/task/1082
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -19,7 +19,7 @@
 #include <cassert>
 #include <queue>
 using namespace std;
-using ll = long long;   
+using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
@@ -45,6 +45,19 @@ constexpr char nl = '\n';
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+}
+ll divisors_count(ll N){ 
+    ll ans = 1;
+    for(ll i = 2; i * i <= N; i++){
+        ll k = 1;
+        while(N%i == 0){
+            k++;
+            N/=i;
+        }
+        ans*=k;
+    }
+    if (N > 1) ans*=2;
+    return ans;
 }
 long long binPow(long long a, long long pow,long long mod = LLONG_MAX){
 	if (a == 1 || pow == 0) {
@@ -80,12 +93,15 @@ ll sum_of_divisors(ll N){
     return accum;
 }
 inline void solve(){
-    ll n; cin >> n;
-    cout << sum_of_divisors(n) << nl;
+    ll n;
+    cin >> n;
+    cout << divisors_count(n) << " " << sum_of_divisors(n) << endl;
+    return;
 }
+
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

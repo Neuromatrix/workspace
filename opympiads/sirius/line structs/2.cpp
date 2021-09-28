@@ -1,4 +1,4 @@
-// https://cses.fi/problemset/task/1082
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,46 +47,50 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = LLONG_MAX){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		ll part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-map <ll,ll> factoriz_with_map(ll N){ 
-    map <ll,ll> f;
-    for(ll i = 2; i * i <= N; i++){
-        while(N%i == 0){
-            f[i]++;
-            N/=i;
+
+inline void solve(){
+    stack <int> a;
+    string data;
+    cin >> data;
+    incr(i,0,data.sz){
+        if(data[i]=='('){
+            a.push(1);
+        } else if(data[i]=='['){
+            a.push(2);
+        } else if (data[i] == '{'){
+            a.push(3);
+        } else {
+            if(data[i]==')'){
+                if(a.empty() || a.top()!=1){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            } else if (data[i]==']'){
+                if(a.empty() || a.top()!=2){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            } else if (data[i]=='}'){
+                if(a.empty() || a.top()!=3){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            }
         }
     }
-    if (N > 1) f[N]++;
-    return f;
-}
-ll sum_of_divisors(ll N){
-    map <ll, ll> ans = factoriz_with_map(N);
-    ll accum = 1;
-    fca(a, ans){
-        accum*=(binPow(a.F,a.S+1)-1)/(a.first-1);
-    }
-    return accum;
-}
-inline void solve(){
-    ll n; cin >> n;
-    cout << sum_of_divisors(n) << nl;
+    if(a.empty()) cout <<"yes" << nl;
+    else cout << "no" << nl;
+    return;
 }
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

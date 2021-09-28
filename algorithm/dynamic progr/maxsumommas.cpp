@@ -11,29 +11,48 @@
 #include <complex>
 #include <list>
 #include <map>
+#include <bitset>
+#include <numeric>
+#include <deque>
+#include <stack>
+#include <cassert>
+#include <queue>
 using namespace std;
-   // #define _DEBUG
-#ifdef _DEBUG
-    #include <C:\\Users\\grivi\\vscodes\\.vscode\\helper.h>
-#endif
-using ll = long long;
+using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
-
-#define fca(iterator,object) for (const auto & iterator: object)
-#define incr(i,k,n) for (int i = k; i < n; i++)
-#define decr(i,k,n) for (int i = k; i > n; i--)
-#define sortest(obj,all) sort(obj.begin(),obj.end())
-
+#define pb push_back
+#define F first
+#define S second
+#define pii pair<int,int>
+#define tiii tuple<int,int,int>
+#define vi vector<int>
+#define vii vector<pii>
+#define vc vector
+#define all(x) x.begin(),x.end()
+#define incr(i,a,b) for (int i=a; i<b; ++i)
+#define decr(i,a,b) for (int i=a; i>b; --i)
+#define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+#define setpr(x) cout<<setprecision(x)<<fixed
+#define sz size()
+#define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
+#define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
+#define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
+#define fca(a,s) for(const auto & a: s)
+inline void prepare(){
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
+    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+}
 inline void solve(){
 	size_t n;
 	cin >> n;
-	vector <int> base(n);
+	vector <ll> base(n);
 	incr(i,0,n)
 		cin >> base[i];
-	int best=0,sum=0,index_r,index_l;
+	ll best=0,sum=0,index_r,index_l;
 	incr(i,0,n){
 		if (sum+base[i]<base[i]){
 			index_l=i;
@@ -44,16 +63,16 @@ inline void solve(){
 		}
 		best=max(best,sum);
 	}
-	cout << best <<" " <<index_l << " " <<index_r;
+	cout << best <<endl;
 	return;
 }
 
 
 int main()
 {
-    prepare();
+    //prepare();
     size_t tests;
-    cin >> tests;
+    //cin >> tests;
     for (int i = 0; i< 1;i++){
         solve();
     }
