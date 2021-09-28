@@ -101,19 +101,19 @@ class turing_machine
             return make_tuple(symbol,move,mode);
         }
         int ribbon_prepare(){// подготовка и эмуляция бесконечной ленты
-            ribbon.resize(5*input.length());
+            ribbon.resize(7*input.length());
             int i = 0, ans;
-            while(i<2*input.length()){
+            while(i<3*input.length()){
                 ribbon[i]='#';
                 i++;
             }
             ans = i;
             int j = 0;
-            while(i<3*input.length()){
+            while(i<4*input.length()){
                 ribbon[i] = input[j];
                 j++; i++;
             }
-            while(i<5*input.length()){
+            while(i<7*input.length()){
                 ribbon[i]='#';
                 i++;
             }
