@@ -54,10 +54,9 @@ class idiot_stack
     friend bool full(idiot_stack &);
 private:
     stack <int> data;
-    int sizz = 0;
     int maxx;
 public:
-    idiot_stack(int maxx = INF){sizz = 0;this->maxx = maxx;}
+    idiot_stack(int maxx = INF){this->maxx = maxx;}
     ~idiot_stack(){
         while(!data.empty()) data.pop();
     }
