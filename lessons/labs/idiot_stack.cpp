@@ -48,39 +48,36 @@ inline void prepare(){
 }
 class idiot_stack
 {
-    friend void push(int it,idiot_stack &);
-    friend void pop(idiot_stack &);
-    friend bool empty(idiot_stack &);
-    friend bool full(idiot_stack &);
 private:
     stack <int> data;
     int maxx;
 public:
+    void push(int it){
+        data.push(it);
+        return;
+    }
+    void pop(){
+        if(!data.empty()) data.pop();
+        return;
+    }
+
+    bool empty(){
+        if(data.empty()) return true;
+        else return false;
+    }
+    bool full(){
+        if(data.size()>maxx) return true;
+        else return false;
+    }
     idiot_stack(int maxx = INF){this->maxx = maxx;}
     ~idiot_stack(){
         while(!data.empty()) data.pop();
     }
 };
-void push(int it, idiot_stack &x){
-    x.data.push(it);
-    return;
-}
-void pop(idiot_stack &x){
-    if(!x.data.empty()) x.data.pop();
-    return;
-}
 
-bool empty(idiot_stack &x){
-    if(x.data.empty()) return true;
-    else return false;
-}
-bool full(idiot_stack &x){
-    if(x.data.size()>x.maxx) return true;
-    else return false;
-}
 inline void solve(){
     idiot_stack a;
-    push(1,a);
+    a.push(1);
     /*
         .....
     */
