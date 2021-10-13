@@ -130,13 +130,13 @@ class NAM
         bool possible(size_t i){
             if(nam[i].alpha==empty) return true;
             else
-                if(Rabin_Karp(outP,nam[i].alpha).size()==0) return false;
+                if(outP.find(nam[i].alpha)>=outP.size()) return false;
                 else return true;
         }
         void to_do(size_t j){
-            //size_t k = outP.find(nam[j].alpha);
+            size_t k = outP.find(nam[j].alpha);
             //fast//
-            size_t k = *Rabin_Karp(outP,nam[j].alpha).begin();
+            //size_t k = *Rabin_Karp(outP,nam[j].alpha).begin();
             if (nam[j].alpha!=empty)
                 for (size_t i = 0; i < nam[j].alpha.length(); i++)
                     outP.erase(outP.begin()+k);
@@ -193,6 +193,7 @@ class NAM
 inline void solve(){
     NAM ts;
     ts.init();
+    ts.print_table_dbg();
     ts.simulation();
 }
 
