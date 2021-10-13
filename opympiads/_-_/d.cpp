@@ -1,7 +1,7 @@
-// https://cses.fi/problemset/task/1667
+// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
-#include <cmath>
+// #include <cmath>
 #include <vector>
 #include <set>
 #include <string>
@@ -19,10 +19,11 @@
 #include <cassert>
 #include <queue>
 using namespace std;
-using ll = long long;
+using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
-constexpr ll INF = INT_MAX-1;
+constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -33,27 +34,48 @@ constexpr char nl = '\n';
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
-#define incr(i,a,b) for (ll i=a; i<b; ++i)
-#define decr(i,a,b) for (ll i=a; i>b; --i)
+#define incr(i,a,b) for (int i=a; i<b; ++i)
+#define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
 #define setpr(x) cout<<setprecision(x)<<fixed
 #define sz size()
-#define seea(a,x,y) for(ll i=x;i<y;i++){cin>>a[i];}
-#define seev(v,n) for(ll i=0;i<n;i++){ll x; cin>>x; v.push_back(x);}
-#define sees(s,n) for(ll i=0;i<n;i++){ll x; cin>>x; s.insert(x);}
+#define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
+#define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
+#define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
-inline void solve(){
-    
+inline ll abs_ (ll a)
+{
+    return (a > 0 ? a : -a);
 }
-// 1 2 3 4 -10 -100 67 8954280 
+
+inline void solve(){
+    ll a, b, c, d, b1, d1, b2, d2;
+    cin >> a >> b >> c >> d;
+    b1 = max(a,c);
+    b2 = min(a,c);
+    if (a >= c)
+    {
+        d1 = b;
+        d2 = d;
+    }
+    else
+    {
+        d1 = d;
+        d2 = b;
+    }
+    cout << (int)round(sqrt(abs_(pow(b1,d1)-pow(abs_(b1-b2), abs_(d1-d2))))) << nl;
+    return;
+}
 int main(){
     IOS;
-    //prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

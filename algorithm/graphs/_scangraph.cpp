@@ -104,7 +104,7 @@ inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
     return graph;
 }
 
-inline vector <tuple <int, int, int>> list_of_ribs(){ // да ко их вообще юзает
+inline vector <tuple <int, int, int>> list_of_ribs(){ // !да кто их вообще юзает
     vector <tuple <int, int, int>> graph;
     int n, to_h, W;
     cin >> n;cin.ignore();
@@ -121,7 +121,7 @@ inline vector <tuple <int, int, int>> list_of_ribs(){ // да ко их вооб
 }
 
 inline void solve(){
-    
+
 }
 int main(){
     prepare();
