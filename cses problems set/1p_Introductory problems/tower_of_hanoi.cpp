@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,50 +47,32 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int n, m;
-vi colors;
-bool exx;
-vc <vi> graph;
-vector <bool> visited;
-inline vector <bool> dfs_visited_from(int cur,int color = 0){
-    if (visited[cur] && colors[cur]!=color && colors[cur]!=3) {exx=true;return visited;}
-    if (visited[cur]) {return visited;}
-    colors[cur] = color;
-    visited[cur] = true;
-    fca(u,graph[cur]){
-        dfs_visited_from(u,(color+1)%2);
+vii ans;
+void towerOfHanoi(int n, int from_rod, int to_rod, int aux_rod)
+    {
+        if (n == 1)
+        {
+            ans.pb({from_rod,to_rod});
+            return;
+        }
+        towerOfHanoi(n - 1, from_rod, aux_rod, to_rod);
+        ans.pb({from_rod,to_rod});
+        towerOfHanoi(n - 1, aux_rod, to_rod, from_rod);
     }
-    return visited;
-}
 inline void solve(){
-    cin >> n >> m;
-    graph.resize(n+1);
-    incr(i,0,m){
-        int x, y;
-        cin >> x >> y;
-        graph[x].push_back(y);
-        graph[y].push_back(x);
+    int n;
+    cin >> n;
+    towerOfHanoi(n,1,3,2);
+    cout << ans.sz << nl;
+    fca(a,ans){
+        cout << a.first << " "<< a.second << nl;
     }
-    
-    colors.resize(n+1,3);
-    visited.assign(n+1,false);
-    incr(i,1,n+1){
-        if(colors[i]==3) dfs_visited_from(i);
-    }
-    if(exx){
-        cout <<"IMPOSSIBLE" << nl;
-        return;
-    }
-    incr(i,1,n+1){
-        cout << colors[i]+1 << " ";
-    }
-    cout << nl;
-    return;
 }
-
 int main(){
     IOS;
     // prepare();
-    solve();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

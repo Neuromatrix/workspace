@@ -22,12 +22,13 @@ using namespace std;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
-constexpr int INF = INT_MAX-1;
+constexpr ll INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
 #define S second
-#define pii pair<int,int>
+#define pii pair<   ,int>
 #define tiii tuple<int,int,int>
 #define vi vector<int>
 #define vii vector<pii>
@@ -46,50 +47,61 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int n, m;
-vi colors;
-bool exx;
-vc <vi> graph;
-vector <bool> visited;
-inline vector <bool> dfs_visited_from(int cur,int color = 0){
-    if (visited[cur] && colors[cur]!=color && colors[cur]!=3) {exx=true;return visited;}
-    if (visited[cur]) {return visited;}
-    colors[cur] = color;
-    visited[cur] = true;
-    fca(u,graph[cur]){
-        dfs_visited_from(u,(color+1)%2);
-    }
-    return visited;
-}
-inline void solve(){
+inline vector <vector <pair <ll, ll>>> adjacency_lists_with_weight(){
+    ll n, m, to_h, W;
     cin >> n >> m;
-    graph.resize(n+1);
-    incr(i,0,m){
-        int x, y;
-        cin >> x >> y;
-        graph[x].push_back(y);
-        graph[y].push_back(x);
+    n++;
+    vector <vector <pair <ll, ll>>> graph(n); // списки смежности
+    for (size_t i = 0; i < m; i++)
+    {
+        ll k;
+        cin >> k >> to_h >> W;
+        graph[k].push_back({to_h,W});
     }
     
-    colors.resize(n+1,3);
-    visited.assign(n+1,false);
-    incr(i,1,n+1){
-        if(colors[i]==3) dfs_visited_from(i);
-    }
-    if(exx){
-        cout <<"IMPOSSIBLE" << nl;
-        return;
-    }
-    incr(i,1,n+1){
-        cout << colors[i]+1 << " ";
-    }
-    cout << nl;
-    return;
+    return graph;
 }
 
-int main(){
+vector <ll> Deikstra(vector <vector <pair <ll, ll>>> G, ll start){
+    ll gsize = G.size();
+    priority_queue <pair<ll, ll>> q;
+    vector <ll> distance(G.size());
+    vector <bool> processed(G.size());
+    for (size_t i = 1; i < G.size(); i++){
+        distance[i] = LINF;
+        processed[i] = false;
+    }
+    distance[start] = 0;
+    q.push({0,start});
+    while (!q.empty()){
+        ll a = q.top().second;
+        q.pop();
+        if(processed[a]) continue;
+        processed[a] = true;
+        for(const auto & u : G[a]){
+            ll b =  u.first, w = u.second;
+            if (distance[a]+w < distance[b]){
+                distance[b] = distance[a] + w;
+                q.push({-distance[b],b});
+            }
+        }
+    }
+    return distance;
+}
+inline void solve(){
+    ll i = 0;
+
+    fca(a,Deikstra(adjacency_lists_with_weight(),1)){
+        if(i)cout << a << " ";
+        i++;
+    }
+    cout << nl;
+}
+signed main(){
     IOS;
-    // prepare();
-    solve();
+    //prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }
