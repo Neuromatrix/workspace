@@ -49,7 +49,7 @@ inline void prepare(){
 class easy_matrix
 {
 private:
-    int n;
+    int n = 3;
     int ** data;
 public:
     easy_matrix operator* (int skalyar){
@@ -112,7 +112,6 @@ public:
         return ans;
     }
     easy_matrix(vc <vi> input){
-        n = input.size();
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
@@ -124,7 +123,6 @@ public:
         }
     }
     easy_matrix(int ** input){
-        this-> n = sqrt(sizeof(input)/sizeof(int));
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
@@ -136,8 +134,7 @@ public:
         }
     }
     easy_matrix(int n){
-        this->n = n;
-        this->data= new int*[n];
+        data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
         }
@@ -147,20 +144,20 @@ public:
             }
         }
     }
-    
+    void print(){
+        for(size_t i = 0; i < n; i++){
+            for (size_t j = 0; j < n; j++){
+                cout << data[i][j] << " ";
+            }
+            cout << nl;
+        }
+    }
+    easy_matrix(){}
     ~easy_matrix(){
         for (int i = 0; i < n; i++) {
             delete[] data[i];
         }
         delete[] data;
-    }
-    void print(){
-        for(size_t i = 0; i < n; i++){
-            for (size_t j = 0; j < n; j++){
-                cout << this->data[i][j] << " ";
-            }
-            cout << nl;
-        }
     }
 };
 
@@ -180,8 +177,8 @@ inline void solve(){
     easy_matrix d(f);
     easy_matrix g(o);
     d.print();
-    d = d*g;
-    d.print();
+    cout<<d.track();
+    (d*2).print();
 }
 
 int main(){
