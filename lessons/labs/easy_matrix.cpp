@@ -112,6 +112,7 @@ public:
         return ans;
     }
     easy_matrix(vc <vi> input){
+        this->n = input.size();
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
@@ -123,6 +124,7 @@ public:
         }
     }
     easy_matrix(int ** input){
+        this->n = sizeof(input)/(sizeof(input[0])*sizeof(input[0][0]));
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
@@ -133,7 +135,8 @@ public:
             }
         }
     }
-    easy_matrix(int n){
+    easy_matrix(int nn){
+        this->n = nn;
         data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
