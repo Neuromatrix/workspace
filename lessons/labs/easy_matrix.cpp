@@ -51,6 +51,10 @@ class easy_matrix
 private:
     int n = 3;
     int ** data;
+    bool valid(int i, int j){
+        if(i<0 || i >=n  || j < 0 || j>=n) return false;
+        return true;
+    }
 public:
     easy_matrix operator* (int skalyar){
         for(size_t i = 0; i < n; i++){
@@ -58,18 +62,20 @@ public:
                 data[i][j]*=skalyar;
             }
         }
-        return easy_matrix(data);
+        return easy_matrix(data,n);
     }
     easy_matrix operator+ (easy_matrix &x){
+        assert(valid(x.n-1,x.n-1));
         int ** b = x.data;
         for (size_t i = 0; i < n; i++){
             for (size_t j = 0; j < n; j++){
                 data[i][j]+=b[i][j];
             }
         }
-        return easy_matrix(data);
+        return easy_matrix(data,n);
     }
     easy_matrix operator*(easy_matrix &x){
+        assert(valid(x.n-1,x.n-1));
         int ** b = x.data;
         int** result= new int*[n];
         for (int i = 0; i < n; i++) 
@@ -88,8 +94,13 @@ public:
                 }
             }
         }   
-        return easy_matrix(result);
+        return easy_matrix(result,n);
     }
+    int& operator()(int x,int y){
+        assert(valid(x,y));
+        return data[x][y];
+    }
+
     int track(){
         int result = 0;
         incr(i,0,n){
@@ -98,6 +109,7 @@ public:
         return result;
     }
     vi column(int j){
+        assert(valid(0,j));
         vi ans;
         incr(i,0,n){
             ans.pb(data[i][j]);
@@ -105,6 +117,7 @@ public:
         return ans;
     }
     vi str(int j){
+        assert(valid(j,0));
         vi ans;
         incr(i,0,n){
             ans.pb(data[j][i]);
@@ -123,8 +136,8 @@ public:
             }
         }
     }
-    easy_matrix(int ** input){
-        this->n = sizeof(input)/(sizeof(input[0])*sizeof(input[0][0]));
+    easy_matrix(int ** input, int nn){
+        this->n = nn;
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
             data[i] = new int[n];
@@ -173,15 +186,18 @@ inline void solve(){
         {7,8,9},
     };
     vc <vi>  o = {
-        {1,2,3},
-        {0,1,0},
-        {1,2,3},
+        {1,2,3,4},
+        {0,1,0,4},
+        {1,2,3,4},
+        {1,2,3,4},
     };
     easy_matrix d(f);
     easy_matrix g(o);
     d.print();
-    cout<<d.track();
-    (d*2).print();
+    cout<<d.track()<< nl;
+    (d+g).print();
+    d(1,1)=6;
+    d.print();
 }
 
 int main(){
