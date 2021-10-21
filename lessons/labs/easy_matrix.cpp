@@ -124,7 +124,7 @@ public:
         }
         return ans;
     }
-    easy_matrix(vc <vi> input){
+    easy_matrix(vector <vector<int>> input){
         this->n = input.size();
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
@@ -180,12 +180,12 @@ public:
 
 
 inline void solve(){
-    vc <vi>  f = {
+    vector <vector<int>>  f = {
         {1,2,3},
         {4,5,6},
         {7,8,9},
     };
-    vc <vi>  o = {
+    vector <vector<int>>  o = {
         {1,2,3,4},
         {0,1,0,4},
         {1,2,3,4},
