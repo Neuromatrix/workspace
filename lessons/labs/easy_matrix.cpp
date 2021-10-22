@@ -55,6 +55,18 @@ private:
         if(i<0 || i >=n  || j < 0 || j>=n) return false;
         return true;
     }
+    easy_matrix(int ** input, int nn){
+        this->n = nn;
+        this->data= new int*[n];
+        for (int i = 0; i < n; i++) {
+            data[i] = new int[n];
+        }
+        for(size_t i = 0; i < n; i++){
+            for (size_t j = 0; j < n; j++){
+                data[i][j] =  input[i][j];
+            }
+        }
+    }
 public:
     easy_matrix operator* (int skalyar){
         for(size_t i = 0; i < n; i++){
@@ -124,7 +136,7 @@ public:
         }
         return ans;
     }
-    easy_matrix(vector <vector<int>> input){
+    easy_matrix(vector <vector<int>> &input){
         this->n = input.size();
         this->data= new int*[n];
         for (int i = 0; i < n; i++) {
@@ -136,18 +148,7 @@ public:
             }
         }
     }
-    easy_matrix(int ** input, int nn){
-        this->n = nn;
-        this->data= new int*[n];
-        for (int i = 0; i < n; i++) {
-            data[i] = new int[n];
-        }
-        for(size_t i = 0; i < n; i++){
-            for (size_t j = 0; j < n; j++){
-                data[i][j] =  input[i][j];
-            }
-        }
-    }
+    
     easy_matrix(int nn){
         this->n = nn;
         data= new int*[n];
@@ -186,16 +187,15 @@ inline void solve(){
         {7,8,9},
     };
     vector <vector<int>>  o = {
-        {1,2,3,4},
-        {0,1,0,4},
-        {1,2,3,4},
-        {1,2,3,4},
+        {1,2,3},
+        {0,1,0},
+        {1,2,3},
     };
     easy_matrix d(f);
     easy_matrix g(o);
     d.print();
     cout<<d.track()<< nl;
-    (d+g).print();
+    (d*g).print();
     d(1,1)=6;
     d.print();
 }
