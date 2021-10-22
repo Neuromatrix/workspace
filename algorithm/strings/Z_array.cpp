@@ -78,13 +78,7 @@ class Z_array
         int operator[](size_t ind){
             return z_array[ind];
         }
-        void print(){
-            for(size_t i = 0; i < size_it; i++) {
-                cout << z_array[i] << " "; 
-            }
-            cout << endl;
-        }
-        void print(string sep){
+        void print(string sep = " "){
             for(size_t i = 0; i < size_it; i++) {
                 cout << z_array[i] << sep; 
             }
