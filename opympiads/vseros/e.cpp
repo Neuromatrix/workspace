@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -24,6 +23,7 @@ using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
+constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -34,6 +34,7 @@ constexpr char nl = '\n';
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
 #define incr(i,a,b) for (int i=a; i<b; ++i)
 #define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
@@ -47,60 +48,39 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-template <typename T>
-class lseg_tree
-{
-    private:
-        vector <T> t;
-        int size_it = 0;
-        
-        void build (vector <T> a, int v, int tl, int tr) {
-            if (tl == tr)
-                t[v] = a[tl];
-            else {
-                int tm = (tl + tr) / 2;
-                build (a, v*2, tl, tm);
-                build (a, v*2+1, tm+1, tr);
-            }
-        }
-    public:
-        void init(vector <T> a){
-            t.resize(4*a.size());
-            size_it = a.size();
-            build(a,1,0,size_it - 1)
-        }
-        void update (int v = 1, int tl = 0, int tr = size_it -1 , int l = 0, int r = size_it-1, int add = 1) {
-            if (l > r)
-                return;
-            if (l == tl && tr == r)
-                t[v] += add;
-            else {
-                int tm = (tl + tr) / 2;
-                update (v*2, tl, tm, l, min(r,tm), add);
-                update (v*2+1, tm+1, tr, max(l,tm+1), r, add);
-            }
-        }
- 
-        T get (int v = 1, int tl = 0, int tr = size_it-1, int pos = 0 ) {
-            if (tl == tr)
-                return t[v];
-            int tm = (tl + tr) / 2;
-            if (pos <= tm)
-                return t[v] + get (v*2, tl, tm, pos);
-            else
-                return t[v] + get (v*2+1, tm+1, tr, pos);
-        }
-        
-};
-
-
 inline void solve(){
-    vi data= {1,2,3,4,5};
-    
+    ll x, y;
+    cin >> x >> y;
+    vc <ll> nominals;
+    incr(i,x,y+1){
+        nominals.pb(i);
+    }
+    vc <ll> va(2*(x+y)+1);
+    fca(it, nominals){
+        va[it] = 1;
+    }
+    incr(i,0,2*(x+y)+1){
+        if(va[i]) continue;
+        fca(it,nominals){
+            
+            if(i-it>=0){
+                if(va[i-it]==1) va[i] = 1;
+            }
+        }
+    }
+    // fca(it, va) cout << it << " "; cout << nl;
+    decr(i,2*(x+y)+1,-1){
+        if(va[i]==0){
+            cout << i+1 << nl;
+            return;
+        }
+    }
 }
-int main(){
+signed main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    //cin >> tt;
+    while(tt--) solve();
     return 0;
 }
