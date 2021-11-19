@@ -51,52 +51,91 @@ template <typename T>
 class lseg_tree
 {
     private:
-        vector <T> t;
+        vector <T> tree;
+        vector <T> mod; 
         int size_it = 0;
-        
-        void build (vector <T> a, int v, int tl, int tr) {
-            if (tl == tr)
-                t[v] = a[tl];
-            else {
+        void push(int v, int tl, int tr) {
+            if (mod[v] != 0 && v * 2 + 1 < 4*size_it){
+                mod[v * 2] = mod[v * 2 + 1] = mod[v];
+                mod[v] = 0;
                 int tm = (tl + tr) / 2;
-                build (a, v*2, tl, tm);
-                build (a, v*2+1, tm+1, tr);
+                tree[v * 2] += (tm - tl + 1) * mod[v * 2];
+                tree[v * 2 + 1] += (tr - tm) * mod[v * 2 + 1];
             }
+        }
+        void build (const vector <T> &a, int v, int tl, int tr) {
+            if (tl == tr) {
+                tree[v] = a[tl];
+            } else {
+                int tm = (tl + tr) / 2;
+                build(a, v * 2, tl, tm);
+                build(a, v * 2 + 1, tm + 1, tr);
+                tree[v] = tree[v * 2] + tree[v * 2 + 1];
+            }
+        }
+        void update (int v, int tl, int tr, int l, int r, int val) {
+            if (l <= tl && tr <= r) {
+                tree[v] += val * (tr - tl + 1);
+                mod[v] = val;
+                return;
+            }
+            if (tr < l || r < tl) {
+                return;
+            }
+            push(v, tl, tr);
+            int tm = (tl + tr) / 2;
+            update(v * 2, tl, tm, l, r, val);
+            update(v * 2 + 1, tm + 1, tr, l, r, val);
+            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+        }
+        T sum (int v, int tl, int tr, int l, int r) {
+            if (l <= tl && tr <= r) {
+                return tree[v];
+            }
+            if (tr < l || r < tl) {
+                return 0;
+            }
+            push(v, tl, tr);
+            int tm = (tl + tr) / 2;
+            return sum( v * 2, tl, tm, l, r)
+                + sum(v * 2 + 1, tm + 1, tr, l, r);
         }
     public:
         void init(vector <T> a){
-            t.resize(4*a.size());
+            tree.resize(4*a.size());
+            mod.assign(4*a.size(),0);
             size_it = a.size();
-            build(a,1,0,size_it - 1)
+            build(a,1,0,size_it - 1);
         }
-        void update (int v = 1, int tl = 0, int tr = size_it -1 , int l = 0, int r = size_it-1, int add = 1) {
-            if (l > r)
-                return;
-            if (l == tl && tr == r)
-                t[v] += add;
-            else {
-                int tm = (tl + tr) / 2;
-                update (v*2, tl, tm, l, min(r,tm), add);
-                update (v*2+1, tm+1, tr, max(l,tm+1), r, add);
+        T get(int pos){
+            return sum(1,0,size_it-1,pos,pos);
+        }
+        void update(int l, int r, int add){
+            update(1,0,size_it-1,l,r,add);
+        }
+        T sum(int l, int r){
+            return sum(1,0,size_it-1,l,r);
+        }
+        lseg_tree(vector <T> a){
+            init(a);
+        }
+        lseg_tree(){}
+        void print(){
+            incr(i,0,tree.sz){
+                cout << tree[i] << " ";
             }
+            cout << nl;
         }
- 
-        T get (int v = 1, int tl = 0, int tr = size_it-1, int pos = 0 ) {
-            if (tl == tr)
-                return t[v];
-            int tm = (tl + tr) / 2;
-            if (pos <= tm)
-                return t[v] + get (v*2, tl, tm, pos);
-            else
-                return t[v] + get (v*2+1, tm+1, tr, pos);
-        }
-        
 };
 
 
 inline void solve(){
-    vi data= {1,2,3,4,5};
-    
+    vi data= {1,1,1,1,1,1,1,1};
+    lseg_tree <int> tree(data);
+    cout << tree.sum(0,7) << nl;
+    tree.update(0,3,2);
+    tree.print();
+    cout << tree.sum(0,1) << nl;
 }
 int main(){
     IOS;

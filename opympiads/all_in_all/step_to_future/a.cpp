@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -19,10 +18,12 @@
 #include <cassert>
 #include <queue>
 using namespace std;
-using ll = long long;
+using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
+constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -33,6 +34,7 @@ constexpr char nl = '\n';
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
 #define incr(i,a,b) for (int i=a; i<b; ++i)
 #define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
@@ -46,59 +48,26 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-template <class T>
-class fenwik_tree
-{
-	private:
-		vector <T> data;
-	public:
-		void init(size_t n){
-			data.assign(n,0);
-		}
-		void init(vector <T> pool){
-			init(pool.size());
-			for (int i = 0; i < pool.size(); i++){
-				add(i,pool[i]);
-			}
-		}
-		void add(size_t i, T new_el){
-			for(;i < data.size(); i = i | (i+1)){
-				data[i]+=new_el;
-			}
-		}
-		void print(){
-			for (const auto & it : data) cout << it << " "; cout << '\n';
-		}
-		T sum(int r){
-			ll res = 0;
-			for (;r >= 0; r = (r&(r + 1))-1){
-				res+=data[r];
-			}
-			return res;
-		}
-		T sum(size_t l, size_t r){
-			return sum(r) - sum(l - 1);
-		}	
-		T get(int index){
-			return sum(index,index);
-		}		
-};
-
-
 
 inline void solve(){
-	vector <int> pool = {1,2,3,4,5,6};
-	fenwik_tree <int> fen_tr;
-	fen_tr.init(pool);
-	cout << fen_tr.sum(1,3);
-	cout << fen_tr.sum(2,5);
-	fen_tr.add(5,7);
-
+    string s;
+    cin >> s;
+    int n = s.sz;
+    vi data;
+    incr(i,0,n){
+        data.pb(s[i]-'0');
+    }
+    int count = 0;
+    incr(i,0,n-1){
+        if((data[i]+data[i+1])%3==0) count++;
+    }
+    cout << count << nl;
 }
-
-int main(){
-    solve();
+signed main(){
+    IOS;
+    prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }
-
-

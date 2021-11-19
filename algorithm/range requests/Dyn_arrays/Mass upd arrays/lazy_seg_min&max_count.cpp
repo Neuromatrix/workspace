@@ -59,8 +59,8 @@ class lseg_tree
                 mod[v * 2] = mod[v * 2 + 1] = mod[v];
                 mod[v] = 0;
                 int tm = (tl + tr) / 2;
-                tree[v * 2] = (tm - tl + 1) * mod[v * 2];
-                tree[v * 2 + 1] = (tr - tm) * mod[v * 2 + 1];
+                tree[v * 2] += mod[v * 2];
+                tree[v * 2 + 1] += mod[v * 2 + 1];
             }
         }
         void build (const vector <T> &a, int v, int tl, int tr) {
@@ -70,12 +70,12 @@ class lseg_tree
                 int tm = (tl + tr) / 2;
                 build(a, v * 2, tl, tm);
                 build(a, v * 2 + 1, tm + 1, tr);
-                tree[v] = tree[v * 2] + tree[v * 2 + 1];
+                tree[v] = min(tree[v * 2],tree[v * 2 + 1]);
             }
         }
         void update (int v, int tl, int tr, int l, int r, int val) {
             if (l <= tl && tr <= r) {
-                tree[v] = val * (tr - tl + 1);
+                tree[v] += val;
                 mod[v] = val;
                 return;
             }
@@ -86,19 +86,18 @@ class lseg_tree
             int tm = (tl + tr) / 2;
             update(v * 2, tl, tm, l, r, val);
             update(v * 2 + 1, tm + 1, tr, l, r, val);
-            tree[v] = tree[v * 2] + tree[v * 2 + 1];
+            tree[v] = min(tree[v * 2],tree[v * 2 + 1]);
         }
-        T sum (int v, int tl, int tr, int l, int r) {
+        T minimum(int v, int tl, int tr, int l, int r) {
             if (l <= tl && tr <= r) {
                 return tree[v];
             }
             if (tr < l || r < tl) {
-                return 0;
+                return INF;
             }
             push(v, tl, tr);
             int tm = (tl + tr) / 2;
-            return sum( v * 2, tl, tm, l, r)
-                + sum(v * 2 + 1, tm + 1, tr, l, r);
+            return min(minimum( v * 2, tl, tm, l, r),minimum(v * 2 + 1, tm + 1, tr, l, r));
         }
     public:
         void init(vector <T> a){
@@ -107,14 +106,11 @@ class lseg_tree
             size_it = a.size();
             build(a,1,0,size_it - 1);
         }
-        T get(int pos){
-            return sum(1,0,size_it-1,pos,pos);
-        }
         void update(int l, int r, int add){
             update(1,0,size_it-1,l,r,add);
         }
-        T sum(int l, int r){
-            return sum(1,0,size_it-1,l,r);
+        T minimum(int l, int r){
+            return minimum(1,0,size_it-1,l,r);
         }
         lseg_tree(vector <T> a){
             init(a);
@@ -132,10 +128,10 @@ class lseg_tree
 inline void solve(){
     vi data= {1,1,1,1,1,1,1,1};
     lseg_tree <int> tree(data);
-    cout << tree.sum(0,7) << nl;
-    tree.update(0,3,8);
+    cout << tree.minimum(0,7) << nl;
+    tree.update(0,3,2);
     tree.print();
-    cout << tree.sum(0,1) << nl;
+    cout << tree.minimum(3,4) << nl;
 }
 int main(){
     IOS;

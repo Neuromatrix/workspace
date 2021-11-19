@@ -146,7 +146,7 @@ class NAM
                     outP.insert(outP.begin()+k,nam[j].betta[i]);
         }
     public:
-        void init(){
+        void init(string pp){
             cin >> n;
             nam.resize(n);
             for(size_t i = 0; i < n; i++){
@@ -157,7 +157,12 @@ class NAM
                 cin >> nam[i].betta;
             }
             cin >> dbg_mod;
-            cin >> P;
+            P = pp;
+            outP = P;
+            return;
+        }
+        void reinit(string pp){
+            P = pp;
             outP = P;
             return;
         }
@@ -192,9 +197,18 @@ class NAM
 
 inline void solve(){
     NAM ts;
-    ts.init();
-    ts.print_table_dbg();
-    ts.simulation();
+    string k;
+    ts.init(k);
+    incr(x,0,100){
+        incr(i,0,200+x){
+            k.pb('1');
+        }
+        ts.reinit(k);
+        ts.simulation();
+        k.clear();
+    }
+    
+    
 }
 
 int main(){
