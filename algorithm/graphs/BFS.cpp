@@ -46,7 +46,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline pair<vector <bool>,vector <int>> bfs_distance_from(vector<vector<int>> graph, int cur){ // работает со списком смежности
+inline pair<vector <bool>,vector <int>> bfs_distance_from(vector<vector<int>> &graph, int cur){ // работает со списком смежности
     queue <int> q;
     vector <int> distance(graph.size());
     vector <bool> visited(graph.size());

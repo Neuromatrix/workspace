@@ -47,7 +47,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
-inline vector <bool> dfs_visited_from(vector <vector <int>> graph, int cur,vector <bool> &visited){
+inline vector <bool> dfs_visited_from(const vector <vector <int>> &graph, int cur,vector <bool> &visited){
     if (visited[cur]) return visited;
     visited[cur] = true;
     fca(u,graph[cur]){

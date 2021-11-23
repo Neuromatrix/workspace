@@ -46,7 +46,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-vector <vector <ll>> Floyd_Warshall(vector <vector<int>> G){
+vector <vector <ll>> Floyd_Warshall(vector <vector<int>> &G){
     int n = G.size(); // работает в натуральной нумерации
     vector <vector <ll>> distance(n,vector<ll> (n));
     for (size_t i = 1; i < n; i++){

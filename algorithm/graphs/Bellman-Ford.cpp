@@ -60,7 +60,7 @@ inline vector <tuple <int, int, int>> list_of_ribs(){//сканирование 
     }
     return graph;
 }
-vector <ll> Bellman_Ford(vector <tuple <int, int, int>> edges, int start, int gsize){
+vector <ll> Bellman_Ford(vector <tuple <int, int, int>> &edges, int start, int gsize){
     start--;// 0_N нумерация
     int a, b, w;
     int ex;

@@ -61,7 +61,7 @@ inline vector <vector <pair <int, int>>> adjacency_lists_with_weight(){
     return graph;
 }
 
-vector <ll> Deikstra(vector <vector <pair <int, int>>> G, int start){
+vector <ll> Deikstra(vector <vector <pair <int, int>>> &G, int start){
     int gsize = G.size();
     priority_queue <pair<int, int>> q;
     vector <ll> distance(G.size());
