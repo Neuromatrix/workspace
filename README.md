@@ -1,2 +1,3 @@
-# workspace
-
+# This workspace about olympiad task, algorithm and structs.
+Part of the implementation was written by me personally, and has a more ugly Olympiad style, some was taken from sites such as https://e-maxx.ru/algo/ and https://www.geeksforgeeks.org/ and from some articles.
+The algorithm folder contains algorithms scattered by topic. If there are several algorithms for solving the problem (for example, finding the minimum spanning tree), then most likely only one will be presented. The ___problem set folder contains solutions to some problems from the corresponding sites, also divided into topics. The lessons & olympads folders contain a personal solution to certain tasks set in the places corresponding to the folder name. The Structs folder contains basic data structures from dynarray to RBtree (or will soon contain). Most of the comments are written in Russian and it is possible that comments in English will be added soon
