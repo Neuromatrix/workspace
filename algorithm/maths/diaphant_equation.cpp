@@ -52,7 +52,12 @@ private:
     ll a = 0, b = 0, c = 0, g = 0;
     bool fall = true;
     inline tuple <ll, ll, ll> gcd(ll a, ll b){
-        
+        if(b==0) return {1,0,a};
+        else{
+            ll x, y, g;
+            tie(x,y,g) = gcd(b,a%b);
+            return {y,x-(a/b)*y,g};
+        }
     }
 public:
     void init(ll _a_,ll _b_, ll _c_){
@@ -66,7 +71,7 @@ public:
     }
     pair <int, int> solve(){
         ll x, y, mult;
-        tie(y,x,g) = gcd(a,b);
+        tie(x,y,g) = gcd(a,b);
         if (c%g == 0){
             mult  = c/g;
             fall = true;
@@ -78,7 +83,7 @@ public:
     }
     pair <int, int> solve(int k){
         ll x, y, mult;
-        tie(y,x,g) = gcd(a,b);
+        tie(x,y,g) = gcd(a,b);
         if (c%g == 0){
             mult  = c/g;
             fall = true;
@@ -88,35 +93,18 @@ public:
             return make_pair(0,0);
         }
     }
-    equation();
+    ll ggcd() {return g;}
+    equation(){}
 };
 
 
 inline void ssolve(){
-    ll a, b, c;
-    cin >> a >> b >> c;
-    equation h;
-    h.init(a,b,c);
-    if (!h.solvable()){
-        cout << -1 << nl;
-        return;
-    }
-    ll minx = INF,miny;
-    incr(k,-10000,10000){
-        pair <ll,ll> ans = h.solve(k);
-        if (ans.F<0) continue;
-        if(ans.F<minx){
-            minx = ans.F;
-            miny = ans.S;
-        }
-    }
-    cout << minx << " " << miny << nl;
-    return;
+
 }
 
 int main(){
     IOS;
-    //prepare();
+    prepare();
     ssolve();
     return 0;
 }

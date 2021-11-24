@@ -1,23 +1,4 @@
-// #include <bits\stdc++.h>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <string>
-#include <algorithm>
-#include <cctype>
-#include <iterator>
-#include <climits>
-#include <complex>
-#include <list>
-#include <map>
-#include <bitset>
-#include <numeric>
-#include <deque>
-#include <stack>
-#include <cassert>
-#include <queue>
+#include <bits\stdc++.h>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -39,34 +20,46 @@ constexpr char nl = '\n';
 #define pii pair<int,int>
 #define tiii tuple<int,int,int>
 #define vi vector<int>
+#define vvi vector<vector<int>>
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
-#define incr(i,a,b) for (int i=a; i<b; ++i)
-#define decr(i,a,b) for (int i=a; i>b; --i)
+#define rall(x) x.rbegin(),x.rend()
+#define incr(i,a,b) for (ll i=a; i<b; ++i)
+#define decr(i,a,b) for (ll i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
 #define setpr(x) cout<<setprecision(x)<<fixed
-#define sz size()
+#define sz(x) (int)x.size()
 #define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
+#pragma GCC target ("avx2")
+#pragma GCC optimization ("O3")
+#pragma GCC optimization ("unroll-loops")
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ull bin_cof(ull n, ull k, ull mod = LINF){
-    if (k==n || k==0) return 1;
-    else return bin_cof(n-1,k-1,mod)%mod+bin_cof(n-1,k,mod)%mod;
-}
-inline void solve(){
-    cout << bin_cof(5,2) << nl;
-    return;
-}
 
-int main(){
+inline void solve(){
+    ll a, b, c;
+    cin >> a >> b >> c;
+    if(a+c-2*b==0) cout << 0 << nl;
+    else {
+        if((a+c-2*b) < 0){
+            cout << min(abs((a+c-2*b)%3),((a+c-2*b)%3+3)%3) << nl;
+        } else {
+            cout << min(((a+c-2*b)%3),abs(((a+c-2*b)%3-3)%3)) << nl;
+        }
+    }
+    
+}
+signed main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
     return 0;
 }

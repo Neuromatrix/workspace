@@ -46,27 +46,43 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+int abss(int x){
+    return x < 0 ? -x : x;
 }
-inline void solve(){
-    return;
+ll check_manhatt(ll x1, ll y1, ll x2, ll y2){
+    return abss(x1-x2)+abss(y1-y2);
 }
 
+inline void solve(){
+    int n = 3;
+    vi data;
+    while (n<11)
+    {
+        data.reserve(n);
+        incr(i,0,n){
+            data[i] = i+1;
+        }
+        incr(i,0,n){
+            while (next_permutation(all(data)))
+            {
+                int a = 0, b = n-1;
+                incr(j,a,b-1){
+                    
+                }
+                
+            }
+            
+        }
+        n++;
+    }
+    
+    
+}
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
+    //cout << " --------------- " <<nl;
+    //idiot_solve();
     return 0;
 }

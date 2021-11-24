@@ -1,7 +1,7 @@
 // #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
-#include <cmath>
+// #include <cmath>
 #include <vector>
 #include <set>
 #include <string>
@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,35 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
+
+inline ll abs_ (ll a)
+{
+    return (a > 0 ? a : -a);
 }
 
+inline void solve(){
+    ll a, b, c, d, b1, d1, b2, d2;
+    cin >> a >> b >> c >> d;
+    b1 = max(a,c);
+    b2 = min(a,c);
+    if (a >= c)
+    {
+        d1 = b;
+        d2 = d;
+    }
+    else
+    {
+        d1 = d;
+        d2 = b;
+    }
+    cout << (int)round(sqrt(abs_(pow(b1,d1)-pow(abs_(b1-b2), abs_(d1-d2))))) << nl;
+    return;
+}
 int main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

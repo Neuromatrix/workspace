@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,43 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
+inline void solve(){
+    int n; cin >> n;
+    vc <string> data(n);
+    incr(i,0,n){
+        cin >> data[i];
+    }
+    vc <vc <bool>> used(n,vc <bool>(n,0));
+    int x, y;
+    cin >> x >> y;
+    x--;
+    y--;
+    while(true){
+        if(used[x][y]){
+            cout << -1 << nl;
+            break;
+        }
+        used[x][y]=1;
+        if (data[x][y]=='.'){
+            cout << x +1 << " " << y+1 << nl;
+            break;
+        }
+        if(data[x][y]=='N') x--;
+        else if (data[x][y]=='S') x++;
+        else if (data[x][y]=='W') y--;
+        else y++;
+        if(x<0 || x>=n || y<0 || y >=n){
+            cout << 0 << nl;
+            break;
+        }
+    }
+}
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

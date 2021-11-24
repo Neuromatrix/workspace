@@ -1,28 +1,10 @@
-// #include <bits\stdc++.h>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <string>
-#include <algorithm>
-#include <cctype>
-#include <iterator>
-#include <climits>
-#include <complex>
-#include <list>
-#include <map>
-#include <bitset>
-#include <numeric>
-#include <deque>
-#include <stack>
-#include <cassert>
-#include <queue>
+#include <bits\stdc++.h>
 using namespace std;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +28,37 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
+inline void solve(){
+    int n; 
+    cin >> n;
+    vi data;
+    seev(data,n);
+    set <int> check;
+    fca(a,data){
+        check.insert(a);
+    }
+    sort(all(data));
+    if(check.sz==1) {cout << -1 << nl; return;}
+    vector <set <int>> checks(n);
+    incr(j,1,n){
+        int dist = abs(data[j] - data[j-1]);
+        for(int i = 1; i*i<=dist; i++){
+            if(dist%i==0) checks[j].insert(i);
+        }
+    }
+    set <int> ans;
+    incr(i,1,)
+    incr(i,0,n-1){
+        if
+    }
+
+}
 int main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
     return 0;
 }

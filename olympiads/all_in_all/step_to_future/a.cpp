@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -23,6 +22,8 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
+constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -33,6 +34,7 @@ constexpr char nl = '\n';
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
 #define incr(i,a,b) for (int i=a; i<b; ++i)
 #define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
@@ -46,27 +48,26 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
-int main(){
+inline void solve(){
+    string s;
+    cin >> s;
+    int n = s.sz;
+    vi data;
+    incr(i,0,n){
+        data.pb(s[i]-'0');
+    }
+    int count = 0;
+    incr(i,0,n-1){
+        if((data[i]+data[i+1])%3==0) count++;
+    }
+    cout << count << nl;
+}
+signed main(){
     IOS;
     prepare();
-    solve();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

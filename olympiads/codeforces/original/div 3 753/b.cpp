@@ -1,38 +1,21 @@
-// #include <bits\stdc++.h>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <string>
-#include <algorithm>
-#include <cctype>
-#include <iterator>
-#include <climits>
-#include <complex>
-#include <list>
-#include <map>
-#include <bitset>
-#include <numeric>
-#include <deque>
-#include <stack>
-#include <cassert>
-#include <queue>
+#include <bits\stdc++.h>
 using namespace std;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
+constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
 #define S second
-#define pii pair<int,int>
-#define tiii tuple<int,int,int>
+#define pii pair<int,int>#define tiii tuple<int,int,int>
 #define vi vector<int>
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
 #define incr(i,a,b) for (int i=a; i<b; ++i)
 #define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
@@ -46,27 +29,41 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
-int main(){
+inline void solve(){
+    ll n = 16;
+    ll x =  1;
+    // incr(i,1,n+1){
+    //     if(x & 1) x+=i;
+    //     else x-=i;
+    //     cout << x << nl;
+    // }
+    // return;
+     cin >> x >> n;
+    if(x&1){
+        if(n%4==1){
+            cout << x+4*(n/4)+1<< nl;
+        } else if (n%4==2) {
+            cout << x-1 << nl;
+        } else if (n%4==3){
+            cout << x-4*(n/4+1) << nl;
+        } else cout << x << nl;
+    }
+    else {
+        if(n%4==1){
+            cout << x-4*(n/4)-1 << nl;
+        } else if (n%4==2) {
+            cout << x + 1 << nl;
+        } else if (n%4==3){
+            cout << x+4*(n/4+1) << nl;
+        } else cout << x << nl;
+    }
+}
+signed main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
     return 0;
 }

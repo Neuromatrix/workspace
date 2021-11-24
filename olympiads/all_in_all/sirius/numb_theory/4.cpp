@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,33 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+ll abs_(ll a){
+    return a < 0 ? -a : a;
 }
 inline void solve(){
-    return;
+    ll a, b, d;
+    cin >> a >> b >> d;
+    if((a+b) & 1){
+        ll dist2;
+        ll dist = (a+b)/2;
+        if(dist>0) dist2 = dist+1;
+        else dist2 = dist-1;
+        ll m1 = abs_(dist%d);
+        ll m2 = abs_(dist2%d);
+        if (min(m1,abs_(d-m1))< min(m2,abs_(d-m2))){
+            cout << dist <<" "<< min(m1,abs_(d-m1)) <<nl;
+        } else {
+            cout << dist2 <<" "<< min(m2,abs_(d-m2)) <<nl;
+        }
+    } else {
+        ll dist = (a+b)/2;
+        ll m1 = abs_(dist%d);
+        cout << dist <<" "<< min(m1,abs_(d-m1)) <<nl;
+    }
 }
-
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,41 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
+inline void solve(){
+    string comm;
+    queue <int> a;
+    while (cin >> comm)
+    {
+        if(comm=="exit"){
+            cout << "bye" << nl;
+            break;
+        } else if(comm == "size"){
+            cout << a.sz << nl;
+        } else if (comm == "clear"){
+            while (!a.empty()){
+                a.pop();
+            }
+            cout << "ok" << nl;
+        } else if (comm == "push"){
+            int n;
+            cin >> n;
+            a.push(n);
+            cout << "ok" << nl;
+        } else if (comm == "front"){
+            if(a.empty()) cout << "error" << nl;
+            else cout << a.front() << nl;
+        } else if (comm == "pop"){
+            if(a.empty()) cout << "error" << nl;
+            else {cout << a.front() << nl;a.pop();}
+        }
+        
+    }
+    
+}
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

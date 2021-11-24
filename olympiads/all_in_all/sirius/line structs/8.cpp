@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,40 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
+inline void solve(){
+    stack< pair<int,int> > s1, s2;
+    int n;
+    cin >> n;
+    incr(i,0,n){
+        int x;
+        cin >> x;
+        if(x!=0){
+            int minima = s1.empty() ? x : min(x, s1.top().second);
+            s1.push (make_pair (x, minima));
+        } else{
+            int current_minimum;
+            if(s1.empty() && s2.empty()) {cout << -1 << nl; continue;}
+            if (s1.empty() || s2.empty())
+	            current_minimum = s1.empty() ? s2.top().second : s1.top().second;
+            else
+	            current_minimum = min (s1.top().second, s2.top().second);
+            cout << current_minimum << endl;
+            if (s2.empty())
+                while (!s1.empty()) {
+                    int element = s1.top().first;
+                    s1.pop();
+                    int minima = s2.empty() ? element : min (element, s2.top().second);
+                    s2.push (make_pair (element, minima));
+                }
+            int result = s2.top().first;
+            s2.pop();
+        }
+    }
+}
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

@@ -1,28 +1,10 @@
-// #include <bits\stdc++.h>
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <vector>
-#include <set>
-#include <string>
-#include <algorithm>
-#include <cctype>
-#include <iterator>
-#include <climits>
-#include <complex>
-#include <list>
-#include <map>
-#include <bitset>
-#include <numeric>
-#include <deque>
-#include <stack>
-#include <cassert>
-#include <queue>
+#include <bits\stdc++.h>
 using namespace std;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +28,53 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+vector <bool> eratostene_is_prime(ll N){
+    vector <bool> sieve;
+    sieve.assign(N<<1,0);
+    for (ll i = 2; i <= N; i++){
+        if (sieve[i]) continue;
+        for (ll j = i<<1; j <= N; j+=i){
+            sieve[j] = true;
+        }
+    }
+    return sieve;
 }
 inline void solve(){
-    return;
+    int n; cin >> n;
+    vii data;
+    ll x = 0;
+    incr(i,0,n){
+        ll h;
+        cin >> h;
+        data.pb({h,i});
+        x+=h;
+    }
+    vc <bool> seive = eratostene_is_prime(x);
+    sort(all(data));
+    if(seive[x]){
+        cout << n << nl;
+        incr(i,0,n){
+            cout << i+1 << " ";
+        }
+        cout << nl;
+        return;
+    }
+    incr(i,0,n){
+        if(seive[x-data[i].first]){
+            cout << n-1 << nl;
+            incr(j,0,n){
+                if(j!=data[i].second) cout << j+1 << " ";
+            }
+            cout << nl;
+            break;
+        }
+    }
 }
-
 int main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
     return 0;
 }

@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,55 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+int n, m;
+// inline int check1(int x, int y,vc <string> & data, char t){
+//     if(x<0 || x>=n || y<0 || y>=m)
+//     return check(x+1,y,data,'M')+check(x-1,y,data,'M')+check(x,y-1,data,'M')+check(x+1,y,data,'M')
+// }
+inline ll check (int x, int y, vc <string> & data)
+{
+    ll count = 0;
+    for (int i = -1; i < 2; i++)
+    {
+        for (int j = -1; j < 2; j++)
+        {
+            if (i == j || i == -j) continue;
+            if (x+i < 0 || x+i >= n || y+j < 0 || y+j >= m) continue;
+            if (data[x+i][y+j] == 'C')
+            {
+                for (int p = -1; p < 2; p++)
+                {
+                    for (int q = -1; q < 2; q++)
+                    {
+                        if (p == q || p == -q) continue;
+                        if (x+i+p < 0 || x+i+p >= n || y+j+q < 0 || y+j+q >= m) continue;
+                        if (data[x+i+p][y+j+q] == 'M') count++;
+                    }
+                }
+            }
+        }
+    }
+    return count;
 }
 inline void solve(){
-    return;
+    cin >> n >> m;
+    vc <string> data(n);
+    ll ans = 0;
+    incr(i,0,n){
+        cin>> data[i];
+    }
+    incr(i,0,n){
+        incr(j,0,m){
+            if(data[i][j]=='A') ans+=check(i,j,data);
+        }
+    }
+    cout << ans << nl;
 }
-
 int main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }

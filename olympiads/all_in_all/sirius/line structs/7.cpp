@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,62 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
+inline void print(queue <int> a){
+    while(!a.empty()){
+        cout << a.front() << " ";
+        a.pop();
+    }
+    cout << endl;
 }
 inline void solve(){
-    return;
+    queue <int> ff, ss;
+    incr(i,0,5){
+        int x;
+        cin >> x;
+        ff.push(x);
+    }
+    incr(i,0,5){
+        int x;
+        cin >> x;
+        ss.push(x);
+    }
+    incr(i,1,1e6){
+        int f1, s1;
+        f1 = ff.front();
+        s1 = ss.front();
+        ff.pop();
+        ss.pop();
+        if(f1<s1){
+            if(f1 == 0 && s1 == 9){
+                ss.push(f1);
+                ss.push(s1);
+            } else {
+                ff.push(f1);
+                ff.push(s1);
+            }
+        } else {
+            if(f1 == 9 && s1 == 0){
+                ff.push(f1);
+                ff.push(s1);
+            } else {
+                ss.push(f1);
+                ss.push(s1);
+            }
+        }
+        if(ff.empty()){
+            cout << "first " << i << nl;
+            return;
+        }
+        if(ss.empty()){
+            cout << "second " << i << nl;
+            return;
+        }
+    }
+    cout << "botva" << nl;
 }
-
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

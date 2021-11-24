@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,27 +47,50 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
+
 inline void solve(){
+    stack <int> a;
+    string data;
+    cin >> data;
+    incr(i,0,data.sz){
+        if(data[i]=='('){
+            a.push(1);
+        } else if(data[i]=='['){
+            a.push(2);
+        } else if (data[i] == '{'){
+            a.push(3);
+        } else {
+            if(data[i]==')'){
+                if(a.empty() || a.top()!=1){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            } else if (data[i]==']'){
+                if(a.empty() || a.top()!=2){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            } else if (data[i]=='}'){
+                if(a.empty() || a.top()!=3){
+                    cout << "no" << nl;
+                    return;
+                } else {
+                    a.pop();
+                }
+            }
+        }
+    }
+    if(a.empty()) cout <<"yes" << nl;
+    else cout << "no" << nl;
     return;
 }
-
 int main(){
     IOS;
-    prepare();
+    //prepare();
     solve();
     return 0;
 }

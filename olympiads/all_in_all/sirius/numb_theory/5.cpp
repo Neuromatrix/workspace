@@ -23,6 +23,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -46,13 +47,13 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
+long long binPow(long long a, long long pow,long long mod = LINF){
 	if (a == 1 || pow == 0) {
 		return 1;
 	} else if (pow == 1) {
 		return a%=mod;
 	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
+		ll part = binPow(a, pow >> 1,mod)%mod;
 		if (pow & 1) {
 			return (((part * part)%mod) * a)%mod;
 		} else {
@@ -61,12 +62,18 @@ long long binPow(long long a, long long pow,long long mod = 1e9+7){
 	}
 }
 inline void solve(){
+    ll a, p;
+    cin >> p >> a;
+    ull x = binPow(a,p-2,p);
+    cout << x << endl;
     return;
 }
 
 int main(){
     IOS;
-    prepare();
-    solve();
+    //prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
     return 0;
 }

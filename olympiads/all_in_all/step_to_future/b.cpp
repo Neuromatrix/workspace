@@ -1,4 +1,3 @@
-// #include <bits\stdc++.h>
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -23,6 +22,8 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 constexpr int INF = INT_MAX-1;
+constexpr ll LINF = LLONG_MAX-1;
+constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 #define pb push_back
 #define F first
@@ -33,6 +34,7 @@ constexpr char nl = '\n';
 #define vii vector<pii>
 #define vc vector
 #define all(x) x.begin(),x.end()
+#define rall(x) x.rbegin(),x.rend()
 #define incr(i,a,b) for (int i=a; i<b; ++i)
 #define decr(i,a,b) for (int i=a; i>b; --i)
 #define IOS ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
@@ -46,27 +48,42 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-long long binPow(long long a, long long pow,long long mod = 1e9+7){
-	if (a == 1 || pow == 0) {
-		return 1;
-	} else if (pow == 1) {
-		return a%=mod;
-	} else {
-		long long  part = binPow(a, pow >> 1,mod)%mod;
-		if (pow & 1) {
-			return (((part * part)%mod) * a)%mod;
-		} else {
-			return (part * part)%mod;
-		}
-	}
-}
-inline void solve(){
-    return;
-}
 
-int main(){
+inline void solve(){
+    ld q;
+    int n;
+    cin >> q >> n;
+    string ans;
+    ans.push_back('0');
+    ans.push_back('.');
+    while (q!=0){
+        q*=4;
+        if(q>=1 and q<2){
+            q--;
+            ans.push_back('1');
+        } else if(q>=2 and q<3){
+            q-=2;
+            ans.push_back('2');
+        } else if(q>=3){
+            q-=3;
+            ans.push_back('3');
+        } else {
+            ans.push_back('0');
+        }
+    }
+    while (ans.back()=='0'){
+        ans.pop_back();
+    }
+    incr(i,0,min(n+2,(int)ans.sz)){
+        cout << ans[i];
+    }
+    cout << nl;
+}
+signed main(){
     IOS;
-    prepare();
-    solve();
+    // prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
     return 0;
 }
