@@ -69,7 +69,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class DSUe2//!две евристики и 0_N нумерация
+class DSUe2//!две евристики и наутральная нумерация
 {
     private:
         vector <int> parent;
@@ -106,6 +106,7 @@ class DSUe2//!две евристики и 0_N нумерация
         DSUe2(){}
         DSUe2(int n){init(n);}
 };
+//!первый вес//
 vector < pair<int,int> > Kruskal(vector <tuple<int, int, int>> g /*список ребер*/, int n){
     DSUe2 dsu(n);
     vector < pair<int,int> > res;
@@ -113,7 +114,7 @@ vector < pair<int,int> > Kruskal(vector <tuple<int, int, int>> g /*список 
     sort (g.begin(), g.end());
     for (int i=0; i<m; ++i) {
         int a, b, w;
-        tie(a,b,w) = g[i];
+        tie(w,a,b) = g[i];
         if (!dsu.same(a,b)) {
             res.push_back({a,b});
             dsu.unite(a, b);
@@ -121,6 +122,7 @@ vector < pair<int,int> > Kruskal(vector <tuple<int, int, int>> g /*список 
     }
     return res;
 }
+//!первый вес//
 long long Kruskal_cost(vector <tuple<int, int, int>> g /*список ребер*/, int n){
     DSUe2 dsu(n);
     long long cost = 0;
@@ -128,7 +130,7 @@ long long Kruskal_cost(vector <tuple<int, int, int>> g /*список ребер
     sort (g.begin(), g.end());
     for (int i=0; i<m; ++i) {
         int a, b, w;
-        tie(a,b,w) = g[i];
+        tie(w,a,b) = g[i];
         if (!dsu.same(a,b)) {
             cost+=w;
             dsu.unite(a, b);

@@ -136,7 +136,7 @@ private:
     vector <int> depth;
     ancestors_tree ancset;
     vector <int> order;
-    map <int, int> index;
+    unordered_map <int, int> index;
     inline void dfs(int cur, int prev, int d = 1){
         depth.push_back(d);
         order.push_back(cur);
@@ -160,7 +160,7 @@ public:
     }
     int query(int a, int b){
         return ancset.query(a,depth[index[a]]-data.mins(min(index[a],index[b]),max(index[a],index[b])+1));
-        // return data.mins(min(index[a],index[b]),max(index[a],index[b])+1);
+        // return data.mins(min(index[a],index[b]),max(index[a],index[b])+1); высота предка над a и b
     }
     LCA(){}
 };
