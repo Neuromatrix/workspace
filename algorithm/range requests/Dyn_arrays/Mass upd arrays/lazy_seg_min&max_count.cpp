@@ -117,7 +117,7 @@ class lseg_tree
         }
         lseg_tree(){}
         void print(){
-            incr(i,0,tree.sz){
+            incr(i,0,tree.size()){
                 cout << tree[i] << " ";
             }
             cout << nl;
