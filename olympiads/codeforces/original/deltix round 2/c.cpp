@@ -1,31 +1,15 @@
-#include <iostream>
-#include <iomanip>
-#include <ostream>
-#include <fstream>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#include <bitset>
-#include <vector>
-#include <string>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <array>
-#include <algorithm>
-#include <functional>
-#include <cmath>
-#include <time.h>
-#include <random>
-#include <chrono>
-#include <cassert>
-#include <cstring>
-#include <climits>
+#include <bits\stdc++.h>
+#include <ext/rope>
+#include <ext/pb_ds/detail/standard_policies.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+using namespace __gnu_cxx;
 using ll = long long;   
-using ull = __int128;
+using ull = unsigned long long;
 using ld = long double;
+template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
 constexpr int INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
 constexpr ll MOD = 1000000007;
@@ -51,6 +35,9 @@ constexpr long double eps = 1e-9;
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2")
+#pragma GCC optimization ("O3")
+#pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
 template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
@@ -70,56 +57,74 @@ template <typename T> inline T factorial(T n){
 }
 template <typename T> 
 T pow(T a, T poww,long long mod = LLONG_MAX){
-    if (a == 1 || poww == 0) return 1LL;
+	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
-        T  part = pow(a, poww >> 1,mod)%mod;
-        if (poww & 1) return (((part * part)%mod) * a)%mod; 
+		T  part = pow(a, poww >> 1,mod)%mod;
+		if (poww & 1) return (((part * part)%mod) * a)%mod; 
         else  return (part * part)%mod;
-    }
-}
-
-inline ull sqrtull(ull x) {
-    ull left = 0ull;
-    ull right = (x >> 1ull) + 1ull;
-    while (right - left > 1ull) {
-        ull mid = left + ((right - left) >> 1ull);
-        if (mid> x/mid) {
-            right = mid;
-        }else {
-            left = mid;
-        }
-    }
-    return left;
+	}
 }
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-signed main(){
-    // prepare();
-    IOS;
-    ll m;
-    ull n;
-    cin >> m;
-    n = m;
-    unsigned long long  sum = 0;
-    ull prev = 0;
-    for (ull i = 1ull; i < n; i++) {
-        ull now = (n - i)/(i*i);
-        if (now == 0ull) break;
-            
-        sum += now;
-        if (prev == now) {
-            ull last = (sqrtull( 1ull + 4ull * n * now) - 1ull)/ (2ull * now);
-            if (last > i){
-                sum += now * (last - i);
-                i = last;
-            }
+vector <bool> sieve;
+void eratostene_is_prime(int N){
+    sieve.assign(N<<1,0);
+    for (int i = 2; i <= N; i++){
+        if (sieve[i]) continue;
+        for (int j = i<<1; j <= N; j+=i){
+            sieve[j] = true;
         }
-        prev  = now;
+    }
+}
+ll f(const vector<int>& a)
+{
+    ll res = 0;
+    int n = sz(a);
+    vc <ll> ones(n+1);
+    ones[1] = (a[0]==1 ? 1 :0 );
+    incr(i,2,n+1){
+        ones[i] = ones[i-1]+(a[i-1]==1 ? 1 :0 );
+    }
+    vi id;
+    id.push_back(-1);
+    incr(i,0,n){
+        if(a[i]!=1) id.push_back(i);
+    }
+    id.push_back(n-1);
+    incr(i,1,sz(id)-1){
+        if(!sieve[a[id[i]]])
+            res+=(ones[id[i]+1]-ones[id[i-1]+1])+(ones[id[i+1]+1]-ones[id[i]+1])+(ones[id[i]+1]-ones[id[i-1]+1])*(ones[id[i+1]+1]-ones[id[i]+1]);
+    }
+    return res;
+}
+inline void solve(){
+    int n, e;
+    cin >> n >> e;
+    vvi epss(e);
+    vi data;
+    seev(data,n);
+    int mx = *max_element(all(data));
+    eratostene_is_prime(mx);
+    incr(i,0,n){
+        epss[i%e].push_back(data[i]);
+    }
+    ll sum = 0;
+    fca(it,epss){
+        if(sz(it)<2) continue;
+        sum+=f(it);
     }
     cout << sum << nl;
-    return 0;       
+    
+        
+}
+signed main(){
+    IOS;
+    // prepare();
+    size_t tt = 1;
+    cin >> tt;
+    while(tt--) solve();
+    return 0;
 }

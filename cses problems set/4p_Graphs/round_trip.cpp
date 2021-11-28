@@ -22,10 +22,17 @@
 #include <cassert>
 #include <cstring>
 #include <climits>
+#include <ext/rope>
+#include <ext/pb_ds/detail/standard_policies.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+using namespace __gnu_cxx;
 using ll = long long;   
-using ull = __int128;
+using ull = unsigned long long;
 using ld = long double;
+template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
 constexpr int INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
 constexpr ll MOD = 1000000007;
@@ -51,6 +58,9 @@ constexpr long double eps = 1e-9;
 #define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2")
+#pragma GCC optimization ("O3")
+#pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
 template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
@@ -70,56 +80,68 @@ template <typename T> inline T factorial(T n){
 }
 template <typename T> 
 T pow(T a, T poww,long long mod = LLONG_MAX){
-    if (a == 1 || poww == 0) return 1LL;
+	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
-        T  part = pow(a, poww >> 1,mod)%mod;
-        if (poww & 1) return (((part * part)%mod) * a)%mod; 
+		T  part = pow(a, poww >> 1,mod)%mod;
+		if (poww & 1) return (((part * part)%mod) * a)%mod; 
         else  return (part * part)%mod;
-    }
-}
-
-inline ull sqrtull(ull x) {
-    ull left = 0ull;
-    ull right = (x >> 1ull) + 1ull;
-    while (right - left > 1ull) {
-        ull mid = left + ((right - left) >> 1ull);
-        if (mid> x/mid) {
-            right = mid;
-        }else {
-            left = mid;
-        }
-    }
-    return left;
+	}
 }
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-signed main(){
-    // prepare();
-    IOS;
-    ll m;
-    ull n;
-    cin >> m;
-    n = m;
-    unsigned long long  sum = 0;
-    ull prev = 0;
-    for (ull i = 1ull; i < n; i++) {
-        ull now = (n - i)/(i*i);
-        if (now == 0ull) break;
-            
-        sum += now;
-        if (prev == now) {
-            ull last = (sqrtull( 1ull + 4ull * n * now) - 1ull)/ (2ull * now);
-            if (last > i){
-                sum += now * (last - i);
-                i = last;
-            }
-        }
-        prev  = now;
+int cycle_st = -1,cycle_end = -1;
+vvi g;
+vector <int> cl;
+vector <int> p;
+bool dfs (int v, int prev) {
+	cl[v] = 1;
+	for (size_t i=0; i<g[v].size(); ++i) {
+		int to = g[v][i];
+        if(to == prev) continue;
+		if (cl[to] == 0) {
+			p[to] = v;
+			if (dfs (to,v))  return true;
+		}
+		else if (cl[to] == 1) {
+			cycle_end = v;
+			cycle_st = to;
+			return true;
+		}
+	}
+	cl[v] = 2;
+	return false;
+}
+inline void solve(){
+    int n, m;
+    cin >> n >> m;
+    g.resize(n+1);
+    p.assign(n+1,-1);
+    cl.assign(n+1,0);
+    while (m--){
+        int a, b;   
+        cin >>a >> b;
+        g[a].push_back(b);
+        g[b].push_back(a);
     }
-    cout << sum << nl;
-    return 0;       
+    for(size_t i = 1; i <= n; i ++) if(cl[i]==0 && cycle_st==-1) dfs(i,0);
+    vector<int> cycle;
+    if(cycle_st==-1) cout << "IMPOSSIBLE" << nl;
+    else{
+        cycle.push_back (cycle_st);
+        for (int v=cycle_end; v!=cycle_st; v=p[v])
+            cycle.push_back (v);
+        cycle.push_back (cycle_st);
+        cout << sz(cycle) << nl << cycle << nl;
+    }
+}
+signed main(){
+    IOS;
+    // prepare();
+    size_t tt = 1;
+    // cin >> tt;
+    while(tt--) solve();
+    return 0;
 }
