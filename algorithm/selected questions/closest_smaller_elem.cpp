@@ -59,7 +59,7 @@ inline vector <pair <int, int>> closest_smaller_elem(vector <int> data){
             if (tmp.top() < data[i]) break;
             tmp.pop();
         }
-        ans[i].second = tmp.top();
+        if(!tmp.empty()) ans[i].second = tmp.top();
         tmp.push(ans[i].first);
     } 
     return ans;
