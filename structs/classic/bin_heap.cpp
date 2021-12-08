@@ -71,8 +71,7 @@ inline void prepare(){
 template <typename T>
 class bin_heap
 {
-    struct Node
-    {
+    struct Node{
         T data, degree;
         Node *child, *sibling, *parent;
     };
@@ -127,46 +126,43 @@ class bin_heap
         }
         return _new;
     }
-    list<Node*> adjust(list<Node*> _heap)
+    list<Node*> adjust(list<Node*> _heap)//* MAIN FUNC CORRECT
     {
         if (_heap.size() <= 1)
             return _heap;
         list<Node*> new_heap;
         auto it1  = _heap.begin() ,it2  = _heap.begin(),it3  = _heap.begin();
-    
-        if (_heap.size() == 2)
-        {
+        if (_heap.size() == 2){
             it2 = it1;
             it2++;
             it3 = _heap.end();
         }
-        else
-        {
+        else{
             it2++;
             it3=it2;
             it3++;
         }
-        while (it1 != _heap.end())
-        {
+        while (it1 != _heap.end()){
+            //* if only one element remains to be processed
             if (it2 == _heap.end())
                 it1++;
-            else if ((*it1)->degree < (*it2)->degree)
-            {
+            //* next heap becuese merging of bintree is not possible
+            else if ((*it1)->degree < (*it2)->degree){
                 it1++;
                 it2++;
                 if(it3!=_heap.end())
                     it3++;
             }
+            //* 3 trees are same degree(deg(1)==deg(2)==deg(3))
             else if (it3!=_heap.end() &&
                     (*it1)->degree == (*it2)->degree &&
-                    (*it1)->degree == (*it3)->degree)
-            {
+                    (*it1)->degree == (*it3)->degree){
                 it1++;
                 it2++;
                 it3++;
             }
-            else if ((*it1)->degree == (*it2)->degree)
-            {
+            //* if degree of two Binomial Tree are same in heap
+            else if ((*it1)->degree == (*it2)->degree){
                 Node *temp;
                 *it1 = mergeBinomialTrees(*it1,*it2);
                 it2 = _heap.erase(it2);
@@ -179,13 +175,11 @@ class bin_heap
 
     list<Node*> insertATreeInHeap(list<Node*> _heap, Node *tree){
         list<Node*> temp;
-        temp.push_back(tree);
-        temp = unionBionomialHeap(_heap,temp);
-    
-        return adjust(temp);
+        temp.push_back(tree); // create new binheap with one tree
+        temp = unionBionomialHeap(_heap,temp);// merge tho heaps
+        return adjust(temp);// correct heap
     }
-    list<Node*> removeMinFromTreeReturnBHeap(Node *tree)
-    {
+    list<Node*> removeMinFromTreeReturnBHeap(Node *tree){
         list<Node*> heap;
         Node *temp = tree->child;
         Node *lo;
@@ -199,13 +193,12 @@ class bin_heap
         return heap;
     }
 
-    list<Node*> insert(list<Node*> _head, T key)
-    {
+    list<Node*> insert(list<Node*> _head, T key){ // insert value
         Node *temp = newNode(key);
         return insertATreeInHeap(_head,temp);
     }
-    Node* getMin(bin_heap<T> h)
-    {
+
+    Node* getMin(bin_heap<T> h){// return min Node 
         list<Node*> _heap = h.data;
         auto it = _heap.begin();
         Node *temp = *it;
@@ -217,9 +210,8 @@ class bin_heap
         }
         return temp;
     }
-    
-    list<Node*> extractMin(bin_heap<T> h)
-    {
+    //! ex min
+    list<Node*> extractMin(bin_heap<T> h){
         list<Node*> _heap = h.data;
         list<Node*> new_heap,lo;
         Node *temp;
@@ -233,20 +225,20 @@ class bin_heap
             it++;
         }
         lo = removeMinFromTreeReturnBHeap(temp);
-        new_heap = unionBionomialHeap(new_heap,lo);
-        new_heap = adjust(new_heap);    
+        new_heap = unionBionomialHeap(new_heap,lo);// merge two LISTS with trees
+        new_heap = adjust(new_heap);   // correct binheap
         return new_heap;
     }
-    void printTree(Node *h)
-    {
+
+    //! print func
+    void printTree(Node *h){ //print any tree
         while (h) {
             cout << h->data << " ";
             printTree(h->child);
             h = h->sibling;
         }
     }
-    void printHeap(bin_heap<T> h)
-    {
+    void printHeap(bin_heap<T> h){// print every tree
         list<Node*> _heap = h.data;
         auto it = _heap.begin();
         
@@ -257,19 +249,19 @@ class bin_heap
         }
     }
 public:
-    void print(){
+    void print(){// print heap
         printHeap(*this);
     }
-    T minimum(){
+    T minimum(){// return min in this heap
         return getMin(*this)->data;
     }
-    void extractMin(){
+    void extractMin(){// remove minimum
         this->data = extractMin(*this);
     }
-    void insert(T key){
+    void insert(T key){// insert any key in this binheap
         this->data = insert(this->data,key);
     }
-    bin_heap operator+(bin_heap b){
+    bin_heap operator+(bin_heap b){// merge 2 binheaps
         bin_heap <T> tmp;
         tmp.data = mergeBinomialHeap(this->data,b->data);
         return tmp;
