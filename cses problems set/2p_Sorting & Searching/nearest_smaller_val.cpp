@@ -92,129 +92,35 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int n, m;
-int sx , sy, ex,ey;
-vii monsters;
-vvi G;
-vc <vc <bool>> Npossible;
-vii moves = {{-1,0},{0,-1},{1,0},{0,1}};
-bool valid(int x, int y, int t){
-    if(x<0 or x>=n or y<0 or y>=m) return false;
-    if(Npossible[x][y]) return false;
-    if(G[x][y]<= t) return false;
-    return true;
-}
-bool end(int x, int y,int timer){
-    if(!valid(x,y,timer)) return false;
-    if(x==n-1 or x==0 or y==m-1 or y==0) return true;
-    return false;
-}
-map<pair<int,int>, pair<int,int>> par_mp;
-bool bfs2d(){
-    queue <tuple<int, int, int> > q;
-    int timer, x, y;
-    q.push({0,sx,sy});
-    G[sx][sy] = 0;
-    par_mp[{sx,sy}] = {-1,-1};
-    while (!q.empty()){
-        tie(timer,x,y) = q.front();
-        q.pop();
-        timer++;
-        fca(it, moves){
-            int nx = x+it.first;
-            int ny = y+it.second;
-            if(end(nx,ny,timer)){
-                par_mp[{nx,ny}] = {x,y};
-                ex = nx; ey = ny;
-                return true;
-            } if (valid(nx, ny, timer)){
-                par_mp[{nx,ny}] = {x,y};
-                q.push({timer,nx,ny});
-                G[nx][ny] = timer;
-            }
+inline vector <pair <int, int>> closest_smaller_elem(vector <int> data){
+    stack <pii> tmp;
+    vector <pair <int, int>> ans(data.size());
+    for (size_t i = 0; i < data.size(); i++){
+        ans[i].first = data[i];
+    }
+    tmp.push({data[0],0});
+    ans[0].second = 0;
+    for (size_t i = 1; i < data.size();i++){
+        while (!tmp.empty()){
+            if (tmp.top().first < data[i]) break;
+            tmp.pop();
         }
-        
-    }
-    return false;
-}
-void mosterbfs(){
-    queue <tuple<int, int, int> > q;
-    fca(it,monsters){
-        q.push({0,it.first,it.second});
-        G[it.first][it.second] = 0;
-    }
-    int timer, x, y;
-    while (!q.empty()){
-        tie(timer,x,y) = q.front();
-        q.pop();
-        timer++;
-        fca(it, moves){
-            int nx = it.first;
-            int ny = it.second;
-            if(valid(x+nx,y+ny,timer)){
-                q.push({timer,x+nx,y+ny});
-                G[x+nx][y+ny] = timer;
-            }
-        }
-    }
-    
+        if(!tmp.empty()) {  ans[i].second = tmp.top().second+1;} 
+        else ans[i].second = 0;
+        tmp.push({ans[i].first,i});
+    } 
+    return ans;
 }
 inline void solve(){
-    cin >> n >> m;
-    G.resize(n);
-    Npossible.resize(n);
-    incr(i,0,n){
-        G[i].assign(m,INF);
-        Npossible[i].resize(m);
-        incr(j,0,m){
-            char c;
-            cin >> c;
-            if(c=='#') Npossible[i][j] = true;
-            if(c=='A') {sx = i; sy = j;}
-            if(c=='M') monsters.push_back({i,j});
-        }
+    int n;
+    cin >> n;
+    vi data;
+    seev(data,n);
+    vii ttm= closest_smaller_elem(data);
+
+    fca(it,ttm){
+        cout << it.second << nl;
     }
-    if(sx == 0 or sy == 0 or sx == n-1 or sy == m-1) 
-    {
-        cout << "YES" << endl;
-        cout << 0;
-        return;
-    }
-    mosterbfs();
-    if(bfs2d()) {
-    
-        cout << "YES" << nl;
-        pair<int,int> tmp = {ex,ey};
-        pair<int,int> tmp1 = par_mp[{ex,ey}];
-        pair<int,int> ed = {-1,-1}; 
-        string ans;
-        while(tmp1 != ed){
-            if((tmp.second - tmp1.second) == 1 and (tmp.first - tmp1.first) == 0)
-            {
-            ans.push_back('R');
-            }
-            if((tmp.second - tmp1.second) == -1 and (tmp.first - tmp1.first) == 0)
-            {
-            ans.push_back('L');
-            }
-            if((tmp.second - tmp1.second) == 0 and (tmp.first - tmp1.first) == 1)
-            {
-            ans.push_back('D');
-            }
-            if((tmp.second - tmp1.second) == 0 and (tmp.first - tmp1.first) == -1)
-            {
-            ans.push_back('U');
-            }
-            tmp = par_mp[tmp];
-            tmp1 = par_mp[tmp];
-        }
-        reverse(all(ans));
-        cout << ans.size() << nl;
-        cout << ans  << nl;
-    } else {
-        cout <<"NO" << nl;
-    }
-    
 }
 signed main(){
     IOS;

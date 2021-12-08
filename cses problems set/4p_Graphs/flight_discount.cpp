@@ -92,133 +92,50 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int n, m;
-int sx , sy, ex,ey;
-vii monsters;
-vvi G;
-vc <vc <bool>> Npossible;
-vii moves = {{-1,0},{0,-1},{1,0},{0,1}};
-bool valid(int x, int y, int t){
-    if(x<0 or x>=n or y<0 or y>=m) return false;
-    if(Npossible[x][y]) return false;
-    if(G[x][y]<= t) return false;
-    return true;
-}
-bool end(int x, int y,int timer){
-    if(!valid(x,y,timer)) return false;
-    if(x==n-1 or x==0 or y==m-1 or y==0) return true;
-    return false;
-}
-map<pair<int,int>, pair<int,int>> par_mp;
-bool bfs2d(){
-    queue <tuple<int, int, int> > q;
-    int timer, x, y;
-    q.push({0,sx,sy});
-    G[sx][sy] = 0;
-    par_mp[{sx,sy}] = {-1,-1};
-    while (!q.empty()){
-        tie(timer,x,y) = q.front();
-        q.pop();
-        timer++;
-        fca(it, moves){
-            int nx = x+it.first;
-            int ny = y+it.second;
-            if(end(nx,ny,timer)){
-                par_mp[{nx,ny}] = {x,y};
-                ex = nx; ey = ny;
-                return true;
-            } if (valid(nx, ny, timer)){
-                par_mp[{nx,ny}] = {x,y};
-                q.push({timer,nx,ny});
-                G[nx][ny] = timer;
-            }
-        }
-        
+vector <ll> Deikstra(vector <vector <pair <int, int>>> &G, int start){
+    int gsize = G.size();
+    priority_queue <tuple<int, int, int> > q;
+    vector <ll> distance(G.size());
+    vector <bool> processed(G.size());
+    for (size_t i = 1; i < G.size(); i++){
+        distance[i] = INF;
+        processed[i] = false;
     }
-    return false;
-}
-void mosterbfs(){
-    queue <tuple<int, int, int> > q;
-    fca(it,monsters){
-        q.push({0,it.first,it.second});
-        G[it.first][it.second] = 0;
-    }
-    int timer, x, y;
+    distance[start] = 0;
+    q.push({0,0,start});
     while (!q.empty()){
-        tie(timer,x,y) = q.front();
+        int dist, max_w, a;
+        tie(dist,max_w,a) = q.top();
         q.pop();
-        timer++;
-        fca(it, moves){
-            int nx = it.first;
-            int ny = it.second;
-            if(valid(x+nx,y+ny,timer)){
-                q.push({timer,x+nx,y+ny});
-                G[x+nx][y+ny] = timer;
+        if(processed[a]) continue;
+        processed[a] = true;
+        for(const auto & u : G[a]){
+            int b =  u.first, w = u.second;
+            max_w = max(w,max_w);
+            if (distance[a]+w - (max_w&1 ?max_w/2+1 : max_w/2)< distance[b]){
+                distance[b] = distance[a] + w - (max_w&1 ?max_w/2+1 : max_w/2);
+                q.push({-distance[b],max_w,b});
             }
         }
     }
-    
+    return distance;
 }
 inline void solve(){
+    int n, m;
     cin >> n >> m;
-    G.resize(n);
-    Npossible.resize(n);
-    incr(i,0,n){
-        G[i].assign(m,INF);
-        Npossible[i].resize(m);
-        incr(j,0,m){
-            char c;
-            cin >> c;
-            if(c=='#') Npossible[i][j] = true;
-            if(c=='A') {sx = i; sy = j;}
-            if(c=='M') monsters.push_back({i,j});
-        }
+    vector <vector <pair <int, int>>> G;
+    G.resize(n+1);
+    while (m--){
+        int a, b , w;
+        cin >> a >> b >> w;
+        G[a].push_back({b,w});
     }
-    if(sx == 0 or sy == 0 or sx == n-1 or sy == m-1) 
-    {
-        cout << "YES" << endl;
-        cout << 0;
-        return;
-    }
-    mosterbfs();
-    if(bfs2d()) {
-    
-        cout << "YES" << nl;
-        pair<int,int> tmp = {ex,ey};
-        pair<int,int> tmp1 = par_mp[{ex,ey}];
-        pair<int,int> ed = {-1,-1}; 
-        string ans;
-        while(tmp1 != ed){
-            if((tmp.second - tmp1.second) == 1 and (tmp.first - tmp1.first) == 0)
-            {
-            ans.push_back('R');
-            }
-            if((tmp.second - tmp1.second) == -1 and (tmp.first - tmp1.first) == 0)
-            {
-            ans.push_back('L');
-            }
-            if((tmp.second - tmp1.second) == 0 and (tmp.first - tmp1.first) == 1)
-            {
-            ans.push_back('D');
-            }
-            if((tmp.second - tmp1.second) == 0 and (tmp.first - tmp1.first) == -1)
-            {
-            ans.push_back('U');
-            }
-            tmp = par_mp[tmp];
-            tmp1 = par_mp[tmp];
-        }
-        reverse(all(ans));
-        cout << ans.size() << nl;
-        cout << ans  << nl;
-    } else {
-        cout <<"NO" << nl;
-    }
-    
+    vc <ll> dist = Deikstra(G,1);
+    cout << dist << nl;  
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();
