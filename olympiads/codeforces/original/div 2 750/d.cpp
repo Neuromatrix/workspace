@@ -32,83 +32,22 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n;
-    cin >> n;
-    vii data(n);
-    vi ans(n);
-    incr(i,0,n){
-        cin >> data[i].first;
-        data[i].second = i;
+    int a, b, c, n;
+    cin>>n;
+    if(n&1)
+    {
+        cin>>a>>b>>c;
+        if(a+b!=0) cout<<-c<<" "<<-c<<" "<<a+b<<" ";
+        else if(a+c!=0) cout<<-b<<" "<<a+c<<" "<<-b<<" ";
+        else cout<<b+c<<" "<<-a<<" "<<-a<<" ";
+        n-=3; 
     }
-    deque<pii> mnoj;
-    sort(all(data));
-    incr(i,0,n){
-        int count = 0;
-        int j = i;
-        while (data[i].first==data[j].first){
-            count++;
-            if(j+1>=n) break;
-            j++;
-
-        }
-        if(count==1){
-            mnoj.push_back(data[i]);
-            continue;
-        }
-        else{
-            if(count%2==0){
-                int x = 1;
-                while (i<=j){
-                    ans[data[i].second] = x;
-                    x*=-1;
-                    i++;
-                } 
-            } else {
-                int x = 1;
-                while (i<j){
-                    ans[data[i].second] = x;
-                    x*=-1;
-                    i++;
-                } 
-                mnoj.push_back(data[j]);
-                i++;
-            }
-        } 
+    for(int i=0;i<n;i+=2)
+    {
+        cin>>a>>b;
+        cout<<-b<<" "<<a<<" ";
     }
-    if(mnoj.size()%2==0){
-        incr(i,0,n){
-            if(data[n-i-1].first*data[i].first>0){
-                ans[data[i].second] = -data[n-i-1].first;
-                ans[data[n-i-1].second] = data[i].first;
-            } else {
-                ans[data[i].second] = data[n-i-1].first;
-                ans[data[n-i-1].second] = data[i].first;
-            }
-        }
-    } else {
-        int med = mnoj.size()/2;
-        incr(i,0,med-1){
-            if(data[n-i-1].first*data[i].first>0){
-                ans[data[i].second] = -data[n-i-1].first;
-                ans[data[n-i-1].second] = data[i].first;
-            } else {
-                ans[data[i].second] = data[n-i-1].first;
-                ans[data[n-i-1].second] = data[i].first;
-            }
-        }
-        int a = med-1;
-        int b = med;
-        int c = med+1;
-        ans[mnoj[a].second] = mnoj[c].first;
-        ans[mnoj[b].second] = mnoj[c].first;
-        int mult = -(mnoj[b].first*+mnoj[a].first);
-        ans[mnoj[c].second] = mult;
-    }
-    fca(it,ans){
-        cout << it << " ";
-    }
-    cout << endl;
-
+    cout<<endl;
 }
 int main(){
     IOS;

@@ -40,7 +40,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -69,61 +69,15 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-vector <bool> sieve;
-void eratostene_is_prime(int N){
-    sieve.assign(N<<1,0);
-    for (int i = 2; i <= N; i++){
-        if (sieve[i]) continue;
-        for (int j = i<<1; j <= N; j+=i){
-            sieve[j] = true;
-        }
-    }
-}
-ll f(const vector<int>& a)
-{
-    ll res = 0;
-    int n = sz(a);
-    vc <ll> ones(n+1);
-    ones[1] = (a[0]==1 ? 1 :0 );
-    incr(i,2,n+1){
-        ones[i] = ones[i-1]+(a[i-1]==1 ? 1 :0 );
-    }
-    vi id;
-    id.push_back(-1);
-    incr(i,0,n){
-        if(a[i]!=1) id.push_back(i);
-    }
-    id.push_back(n-1);
-    incr(i,1,sz(id)-1){
-        if(!sieve[a[id[i]]])
-            res+=(ones[id[i]+1]-ones[id[i-1]+1])+(ones[id[i+1]+1]-ones[id[i]+1])+(ones[id[i]+1]-ones[id[i-1]+1])*(ones[id[i+1]+1]-ones[id[i]+1]);
-    }
-    return res;
-}
+
 inline void solve(){
-    int n, e;
-    cin >> n >> e;
-    vvi epss(e);
-    vi data;
-    seev(data,n);
-    incr(i,0,n){
-        epss[i%e].push_back(data[i]);
-    }
-    ll sum = 0;
-    fca(it,epss){
-        if(sz(it)<2) continue;
-        sum+=f(it);
-    }
-    cout << sum << nl;
     
-        
 }
 signed main(){
     IOS;
-    // prepare();
-    eratostene_is_prime(1e7);
+    prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }
