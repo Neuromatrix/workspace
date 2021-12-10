@@ -62,27 +62,33 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ull xpow(ull x, int  y){
-    ull res=1;
-    while(y>0){
-        if (y&1) res= (res*x); y=y>>1; x=(x*x);
-    }
-    return res;
-}
+
 
 inline void solve(){
-    ll n;
-    cin >> n;
-    ull c = 1;
-    for (ull p = 9;; n -= p, c++, p = 9*xpow(10,c-1)*c) {
-        if (n - p <= 0) break;
+    ll k,dig,num,i,cnt,j,p;
+    dig=1;cnt=0;i=9;num=1;
+    cin>>k;
+    while(k>cnt){
+        cnt+=i*dig++;
+        i*=10;
     }
-    n--;
-    ull x = n/c;
-    ull y = n%c;
-    ull ans = xpow(10,c-1) + x;
-    string s = to_string(ans);
-    cout<<s[y]<<endl;
+    p=--dig;
+    while(p-->1) num*=10;num--;p=dig;cnt=0;i=9;j=1;
+    while(p-->1){
+        cnt+=i*j++;
+        i*=10;
+    }
+    cnt=k-cnt;
+    num+=cnt/dig;
+    if(cnt%dig!=0){
+            cnt=cnt%dig;
+            p=dig-cnt-1;
+            i=10;
+            num++;
+            while(p--)i*=10;
+            num/=i;
+    }
+    cout<<num%10<<nl;
 }
 signed main(){
     IOS;

@@ -75,12 +75,19 @@ vector <complex <double>> fft(vector <complex <double>> polinom, int d = 1){
     return r;
 }
 inline void solve(){
-    vector <complex <double>> f = {3,2,0,0};
-    vector <complex <double>> g = {1,5,0,0};
+    vector <complex <double>> f = {5,1,3,4,2,1,2,0}; //! NEED POW of 2
+    vector <complex <double>> g = {2,3,1,0,0,0,0,0};
+    int n = f.size();
+    for (size_t i = 0; i < n; i++){
+        g.push_back(0);
+        f.push_back(0);
+    }
+    n = f.size();
     auto tf = fft(f);
     auto tg = fft(g);
-    vector <complex <double>> tp(4);
-    incr(i,0,4) {tp[i] = tf[i]*tg[i];}
+    
+    vector <complex <double>> tp(n);
+    incr(i,0,n) {tp[i] = tf[i]*tg[i];}
     fca(gg, fft(tp,-1)) cout << gg.real() << " ---- " <<gg.imag() <<nl;
     return;
 }
