@@ -46,9 +46,10 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-bool easy_prime(int N){
+template <typename t>
+bool easy_prime(t N){
     if (N < 2) return false;
-    for(size_t i = 2; i*i <=N; i++){
+    for(t i = 2; i*i <=N; i++){
         if (N%i==0) return false;
     } 
     return true;
