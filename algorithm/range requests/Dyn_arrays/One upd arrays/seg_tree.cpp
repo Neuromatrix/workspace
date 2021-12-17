@@ -395,9 +395,9 @@ class seg_tree // на стрингах не работает
             if (type == "max") return max_seg(l,r);
             if (type == "gcd") return gcd_seg(l,r);
             if (type == "lcm") return lcm_seg(l,r);
-            if (type == "or") return lcm_seg(l,r);
-            if (type == "and") return lcm_seg(l,r);
-            if (type == "xor") return lcm_seg(l,r);
+            if (type == "or") return xor_seg(l,r);
+            if (type == "and") return or_seg(l,r);
+            if (type == "xor") return and_seg(l,r);
         }
         void print(){// выводим с пробельным сепаратором
             for (size_t i = 1; i < data.size(); i++) cout << data[i] << " "; cout << '\n';

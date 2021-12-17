@@ -94,7 +94,7 @@ vector <pair <int, int>> pair_palindrome_index(string s){
             ans.push_back({i-l,i+l-1});
         }
     }
-    return anss;
+    return ans;
 }
 ll count_pair_palindrome_index(string s){
     int n = s.length();
@@ -154,13 +154,13 @@ string longest_palindrome(string s){
     if(lens == 2*(*max_element(d1.begin(),d1.end()))-1){
         int ind = max_element(d1.begin(),d1.end()) - d1.begin();
         for (size_t i = ind-d1[ind]+1; i < lens+1; i++){
-            ann.push_back(a[i]);
+            ann.push_back(s[i]);
         }
         
     } else {
         int ind = max_element(d2.begin(),d2.end()) - d2.begin();
         for (size_t i = ind-d2[ind]+1; i < lens+1; i++){
-            ann.push_back(a[i]);
+            ann.push_back(s[i]);
         }
     }
     return ann;

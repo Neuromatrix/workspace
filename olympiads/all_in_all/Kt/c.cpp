@@ -9,11 +9,12 @@ using namespace __gnu_cxx;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
-using ordered_set = tree<int,null_type,less<int>,rb_tree_tag,tree_order_statistics_node_update>;
+template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
 constexpr int INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
 constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
+constexpr long double eps = 1e-9;
 #define pb push_back
 #define F first
 #define S second
@@ -31,12 +32,39 @@ constexpr char nl = '\n';
 #define setpr(x) cout<<setprecision(x)<<fixed
 #define sz(x) (int)x.size()
 #define seea(a,x,y) for(int i=x;i<y;i++){cin>>a[i];}
-#define seev(v,n) for(ll i=0;i<n;i++){ll x; cin>>x; v.push_back(x);}
+#define seev(v,n) for(int i=0;i<n;i++){int x; cin>>x; v.push_back(x);}
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
-#pragma GCC target ("avx2")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2")
 #pragma GCC optimization ("O3")
 #pragma GCC optimization ("unroll-loops")
+template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
+template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
+template <typename T> inline T pw(T x) {return x*x;}
+template <typename T> inline T pw2(T x){return 1LL<<x;}
+template <typename T> inline T gcd(T a, T b){
+    if (b==0) return a; 
+    else return gcd(b,a%b);
+}
+template <typename T> inline T bin_cof(T n, T k, ull mod = LLONG_MAX){
+    if (k==n || k==0) return 1LL; 
+    else return bin_cof(n-1,k-1,mod)%mod+bin_cof(n-1,k,mod)%mod;
+} 
+template <typename T> inline T factorial(T n){
+    if(n==1) return 1LL; 
+    else return n*factorial(n-1);
+}
+template <typename T> 
+T pow(T a, T poww,long long mod = LLONG_MAX){
+	if (a == 1 || poww == 0) return 1LL;
+    else if (poww == 1) return a%=mod; 
+    else {
+		T  part = pow(a, poww >> 1,mod)%mod;
+		if (poww & 1) return (((part * part)%mod) * a)%mod; 
+        else  return (part * part)%mod;
+	}
+}
 inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
@@ -45,23 +73,12 @@ inline void prepare(){
 inline void solve(){
     ll n;
     cin >> n;
-    vc <ll> data;
-    seev(data,n);
-    vc<ll> add(n);
-    incr(i,1,n){
-        add[i] = max(0LL, (data[i - 1] + add[i - 1]) - data[i]);
-    }
-    ll maxx = *max_element(all(add));
-    int i = 0;
-    while(maxx>0){
-        maxx/=2;
-        i++;
-    }
-    cout << i << nl;
+    if (n%3==0) cout << "NO" << nl;
+    else cout << "YES" << nl;
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
     cin >> tt;
     while(tt--) solve();
