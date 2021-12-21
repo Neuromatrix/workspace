@@ -74,14 +74,14 @@ class stonesX2
 {
 private:
     vector <vector <int>> dp;
-    void func_1(int i){
-
+    int func_1(int x){
+        return x<<1;
     }
-    void func_2(){
-
+    int func_2(int x){
+        x+1;
     }
-    void func_3(){
-
+    int func_3(int x){
+        0; // на всякий случай
     }
 public:
     void init(){
@@ -101,11 +101,37 @@ public:
             for (size_t j = target-1; j >=0 ; j++){
                 if(i+j >=target) dp[i][j] = 0; // обозначеает что сумма в кучах првосходит целевую
                 else{
-                    
+                    if(max({func_1(i)+j, func_2(i)+j,i+func_1(j),i+func_2(j)}) >= target) {
+                        dp[i][j] = 1;
+                    }// сумма двух куч, которую
+                        // мы можем получить за этот ход большей целевой
+                    else {
+                        vector <int> possible_cases_sum = {
+                            dp[func_1(i)][j],
+                            dp[func_2(i)][j],
+                            dp[i][func_1(j)],
+                            dp[i][func_2(j)]//,
+                            // dp[func_3(i)][j],
+                            // dp[i][func_3(j)]
+                        }; // все возможные случаи применения действий
+                        sort(possible_cases_sum.begin(),possible_cases_sum.end());
+                        int maximum = possible_cases_sum.back();// максимум
+                        int minimum = possible_cases_sum.front();// минимум
+                        int maximum_negative = 0;// максимальный отрцательный
+                        for(const auto &it: possible_cases_sum){
+                            if(it > 0) maximum_negative = it;
+                            else break;
+                        }
+                        //! пусть сейчас ходит первый, тогда после его хода он станет вторым, а второй первым
+                        if(minimum < 0) dp[i][j] = -maximum_negative+1; // если хотя бы когда то выигрывает второй,
+                        // то мы можем стать вторым(первый меняется местами со вторым) и поедить
+                        else dp[i][j] = -maximum; // всегда побеждает первый, а так как мы станем вторым, 
+                        //то мы можем только достойно проиграть
+                    }
                 }
             }
         }
-        
+
     }
     int operator()(int x, int y){
         return dp[x][y];
