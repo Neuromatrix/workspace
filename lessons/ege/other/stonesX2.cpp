@@ -91,6 +91,18 @@ public:
     int operator()(int x, int y){
         return dp[x][y];
     }
+    void print(int F = -1){
+        if(F==-1){
+            for(size_t i = target-1; i >= 0; i++){
+                for (size_t j = target-1; j >=0 ; j++)
+                    cout << dp[i][j] << ' ';
+                cout <<'\n';
+            }
+        } else 
+        for (int i =0; i < target; i++){
+		    cout<<i<<' '<<dp[F][i]<<'\n';
+	}
+    }
     stonesX2(){
         init();
     }
@@ -99,8 +111,7 @@ public:
 int h1(int x) {return x*2;}
 int h2(int x) {return x+1;}
 int nmx(int a,int b, int c, int d){
-    vector<int> tmp = {a<0 ? -a : 1000,b<0 ? -b : 1000,c<0 ? -c : 1000,d<0 ? -d : 1000};
-	return -*min_element(tmp.begin(),tmp.end());
+    return -min({a<0 ? -a : 1000,b<0 ? -b : 1000,c<0 ? -c : 1000,d<0 ? -d : 1000});
 }
 inline void solve(){
     int n,f=13;
