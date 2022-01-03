@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstring>
 #include <climits>
+
 // #include <ext/rope>
 // #include <ext/pb_ds/detail/standard_policies.hpp>
 // #include <ext/pb_ds/tree_policy.hpp>
@@ -92,9 +93,37 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-#define N 1024
+constexpr int N  = 100005;
 
-int tree[N][N];
+template <typename T>
+inline void hash_combine(std::size_t &seed, const T &val) {
+    seed ^= std::hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+// auxiliary generic functions to create a hash value using a seed
+template <typename T> inline void hash_val(std::size_t &seed, const T &val) {
+    hash_combine(seed, val);
+}
+template <typename T, typename... Types>
+inline void hash_val(std::size_t &seed, const T &val, const Types &... args) {
+    hash_combine(seed, val);
+    hash_val(seed, args...);
+}
+
+template <typename... Types>
+inline std::size_t hash_val(const Types &... args) {
+    std::size_t seed = 0;
+    hash_val(seed, args...);
+    return seed;
+}
+
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2> &p) const {
+        return hash_val(p.first, p.second);
+    }
+};
+unordered_map <pii, int,pair_hash> tree;
+// int tree[N][N];
 struct treeNode
 {
     int par;   
@@ -108,9 +137,9 @@ struct Edge
     int weight;
     int deeper_end;
 } edge[N];
-struct segmentTree
+struct tmp
 {
-    int base_array[N], tree[6*N];
+    int base_array[N];
 } s;
 template <typename T>
 class lseg_tree
@@ -201,72 +230,59 @@ class lseg_tree
         }
 };
 void addEdge(int e, int u, int v, int w){
-    tree[u-1][v-1] = e-1;
-    tree[v-1][u-1] = e-1;
- 
+    tree[{u-1,v-1}] = e-1;
+    tree[{v-1,u-1}] = e-1;
     edge[e-1].weight = w;
 }
-void dfs(int curr, int prev, int dep, int n){
-    node[curr].par = prev;
-    node[curr].depth = dep;
-    node[curr].size = 1;
-    for (int j=0; j<n; j++)
-    {
-        if (j!=curr && j!=node[curr].par && tree[curr][j]!=-1)
-        {
-            edge[tree[curr][j]].deeper_end = j;
-            dfs(j, curr, dep+1, n);
-            node[curr].size+=node[j].size;
+void dfs(int cur, int prev, int dep, int n){
+    node[cur].par = prev;
+    node[cur].depth = dep;
+    node[cur].size = 1;
+    incr(j,0,n){
+        if (j!=cur && j!=node[cur].par && tree.find({cur,j})!=tree.end()){
+            edge[tree[{cur,j}]].deeper_end = j;
+            dfs(j, cur, dep+1, n);
+            node[cur].size+=node[j].size;
         }
-     }
+    }
 }
-void hld(int curr_node, int id, int *edge_counted, int *curr_chain,
-         int n, int chain_heads[])
+//!!some implementations were taken from the site https://www.geeksforgeeks.org/ 
+//!!this site is educational like https://e-maxx.ru/algo/
+// ^_^
+void hld(int cur_node, int id, int *edge_counted, int *cur_chain, int n, int heads[])
 {
-    if (chain_heads[*curr_chain]==-1)
-        chain_heads[*curr_chain] = curr_node;
-    node[curr_node].chain = *curr_chain;
-    node[curr_node].pos_segbase = *edge_counted;
+    if (heads[*cur_chain]==-1)
+        heads[*cur_chain] = cur_node;
+    node[cur_node].chain = *cur_chain;
+    node[cur_node].pos_segbase = *edge_counted;
     s.base_array[(*edge_counted)++] = edge[id].weight;
     int spcl_chld = -1, spcl_edg_id;
-    for (int j=0; j<n; j++)
-      if (j!=curr_node && j!=node[curr_node].par && tree[curr_node][j]!=-1)
-        if (spcl_chld==-1 || node[spcl_chld].size < node[j].size)
-           spcl_chld = j, spcl_edg_id = tree[curr_node][j];
+    incr(j,0,n)
+        if (j!=cur_node && j!=node[cur_node].par && tree.find({cur_node,j})!=tree.end())
+            if (spcl_chld==-1 || node[spcl_chld].size < node[j].size)
+                spcl_chld = j, spcl_edg_id = tree[{cur_node,j}];
     if (spcl_chld!=-1)
-      hld(spcl_chld, spcl_edg_id, edge_counted, curr_chain, n, chain_heads);
-    for (int j=0; j<n; j++)
-    {
-      if (j!=curr_node && j!=node[curr_node].par &&
-            j!=spcl_chld && tree[curr_node][j]!=-1)
-      {
-        (*curr_chain)++;
-        hld(j, tree[curr_node][j], edge_counted, curr_chain, n, chain_heads);
-      }
+        hld(spcl_chld, spcl_edg_id, edge_counted, cur_chain, n, heads);
+    incr(j,0,n){
+        if (j!=cur_node && j!=node[cur_node].par && j!=spcl_chld && tree.find({cur_node,j})!=tree.end()){
+            (*cur_chain)++;
+            hld(j, tree[{cur_node,j}], edge_counted, cur_chain, n, heads);
+        }
     }
 }
 lseg_tree <int> x;
-
-void change(int u, int v, int val, int n, int chain_heads[],int mm)
-{
+void change(int u, int v, int val, int n, int heads[],int mm){
     int chain_u, chain_v = node[v].chain, ans = 0;
- 
-    while (true)
-    {
+    for(;;){
         chain_u = node[u].chain;
-        if (chain_u==chain_v)
-        {
-            if (u==v);   //trivial
-            else
-              x.update(node[v].pos_segbase+1, node[u].pos_segbase, val);
+        if (chain_u==chain_v){
+            if (u==v) {/*pass*/}
+            else x.update(node[v].pos_segbase+1, node[u].pos_segbase, val);
             break;
         }
-        else
-        {
-            x.update(node[chain_heads[chain_u]].pos_segbase,
-                          node[u].pos_segbase,val);
- 
-            u = node[chain_heads[chain_u]].par;
+        else{
+            x.update(node[heads[chain_u]].pos_segbase,node[u].pos_segbase,val);
+            u = node[heads[chain_u]].par;
         }
     }
 }
@@ -275,14 +291,11 @@ int LCA(int u, int v, int n){
     if (node[u].depth < node[v].depth)
        swap(u, v);
     memset(LCA_aux, -1, sizeof(LCA_aux));
- 
-    while (u!=-1)
-    {
+    while (u!=-1){
         LCA_aux[u] = 1;
         u = node[u].par;
     }
-    while (v)
-    {
+    while (v){
         if (LCA_aux[v]==1)break;
         v = node[v].par;
     }
@@ -290,53 +303,41 @@ int LCA(int u, int v, int n){
     return v;
 }
 
-int RMQ(int qs, int qe, int n){
-    if (qs < 0 || qe > n-1 || qs > qe){
-        return -1;
-    }
+int query(int qs, int qe, int n){
     return x.sum(qs,qe);
 }
-int crawl_tree(int u, int v, int n, int chain_heads[])
-{
+int helper(int u, int v, int n, int heads[]){
     int chain_u, chain_v = node[v].chain, ans = 0;
- 
-    while (true)
-    {
+    for(;;){
         chain_u = node[u].chain;
-        if (chain_u==chain_v)
-        {
-            if (u==v);   //trivial
-            else
-              ans +=RMQ(node[v].pos_segbase+1, node[u].pos_segbase, n);
+        if (chain_u==chain_v){
+            if (u==v) {/*pass*/}
+            else ans +=query(node[v].pos_segbase+1, node[u].pos_segbase, n);
             break;
         }
-        else
-        {
-            ans +=RMQ(node[chain_heads[chain_u]].pos_segbase,
-                          node[u].pos_segbase, n);
- 
-            u = node[chain_heads[chain_u]].par;
+        else{
+            ans += query(node[heads[chain_u]].pos_segbase,node[u].pos_segbase, n);
+            u = node[heads[chain_u]].par;
         }
     }
  
     return ans;
 }
-int maxEdge(int u, int v, int n, int chain_heads[])
+int iscolored(int u, int v, int n, int heads[])
 {
     int lca = LCA(u, v, n);
-    int ans = crawl_tree(u, lca, n, chain_heads)+
-                  crawl_tree(v, lca, n, chain_heads);
+    int ans = helper(u, lca, n, heads) + helper(v, lca, n, heads);
     return ans;
 }
-void change(int u, int v, int val, int n, int chain_heads[]){
+void upd_color(int u, int v, int val, int n, int heads[]){
     int lca = LCA(u, v, n);
-    change(u,lca,val,n,chain_heads,0);
-    change(v,lca,val,n,chain_heads,0);
+    change(u,lca,val,n,heads,0);
+    change(v,lca,val,n,heads,0);
 }
  
 
 void solve(){
-    memset(tree, -1, sizeof(tree));
+    // memset(tree, -1, sizeof(tree));
     
     int n;
     cin >> n;
@@ -349,68 +350,31 @@ void solve(){
     }
     int root = 0, parent_of_root=-1, depth_of_root=0;
     dfs(root, parent_of_root, depth_of_root, n);
-    int chain_heads[N];
-    memset(chain_heads, -1, sizeof(chain_heads));
+    int heads[N];
+    memset(heads, -1, sizeof(heads));
     int edge_counted = 0;
-    int curr_chain = 0;
-    hld(root, n-1, &edge_counted, &curr_chain, n, chain_heads);
+    int cur_chain = 0;
+    hld(root, n-1, &edge_counted, &cur_chain, n, heads);
     x.init(s.base_array);
     int m;
     cin >> m;
     while (m--){
         int u, v;
         cin >> u >> v;
-        change(u-1, v-1,1, n,chain_heads);
+        upd_color(u-1, v-1,1, n,heads);
     }
     int result = 0;
     incr(i,0,n-1){
         int u = rribs[i].first, v = rribs[i].second;
-        if(!maxEdge(u-1, v-1, n, chain_heads)){
+        if(!iscolored(u-1, v-1, n, heads)){
             result++;
         }
     }
     cout << result << nl;
 }
-// inline void solve() {
-//     memset(tree, -1, sizeof(tree));
- 
-//     int n;
-//     cin >> n;
-//     vii rribs;
-//     incr(i,1,n){
-//         int a, b;
-//         cin >> a>> b;
-//         addEdge(i, a, b, 0);
-//         rribs.pb({a,b});
-//     }
-//     int root = 0, parent_of_root=-1, depth_of_root=0;
-//     dfs(root, parent_of_root, depth_of_root, n);
-//     int chain_heads[N];
-//     memset(chain_heads, -1, sizeof(chain_heads));
-//     int edge_counted = 0;
-//     int curr_chain = 0;
-//     hld(root, n-1, &edge_counted, &curr_chain, n, chain_heads);
-//     x.init(s.base_array);
-//     int u = 1, v  = 2; 
-//     cout << "Max edge between " << u << " and " << v << " is ";
-//     maxEdge(u-1, v-1, n, chain_heads);
-//     // // change(u-1, v-1,1, n,chain_heads);
- 
-//     // cout << "After Change: max edge between " << u << " and "
-//     //      << v << " is ";
-//     // maxEdge(u-1, v-1, n, chain_heads);
- 
-//     // v = 2; u = 8;
-//     // cout << "Max edge between " << u << " and " << v << " is ";
-//     // maxEdge(u-1, v-1, n, chain_heads);
-//     // cout << "After Change: max edge between " << u << " and "
-//     //      << v << " is ";
-//     // change(u-1, v-1,1, n,chain_heads);
-//     // maxEdge(u-1, v-1, n, chain_heads);
-// }
 signed main(){
-    
-    prepare();
+    IOS;
+    // prepare();
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();
