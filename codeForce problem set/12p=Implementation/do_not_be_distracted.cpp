@@ -69,29 +69,31 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
-}
-
 
 inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+    map <char, int> counter;
+    fca(it, s){
+        counter[it]++;
     }
-    cout << xorSum(xors,x) << nl;
+    incr(i,0,n){
+        char c = s[i];
+        int j = i+1;
+        while (c==s[j]){
+            j++;
+        }
+        
+        int len = j-i;
+        if(len!=counter[c]){
+            cout << "NO" << nl;
+            return;
+        }
+        i = --j; 
+    }
+    cout << "YES" << nl;
 }
 signed main(){
     IOS;

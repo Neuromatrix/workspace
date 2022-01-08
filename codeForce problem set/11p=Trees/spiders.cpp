@@ -66,38 +66,61 @@ T pow(T a, T poww,long long mod = LLONG_MAX){
 	}
 }
 inline void prepare(){
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
-}
-
-
-inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
+inline pair<vector <bool>,vector <int>> bfs_distance_from(const vector<vector<int>> &graph, int cur){ // работает со списком смежности
+    queue <int> q;
+    vector <int> distance(graph.size());
+    vector <bool> visited(graph.size());
+    distance[cur] = 0;
+    visited[cur] = true;
+    q.push(cur);
+    while (!q.empty()){
+        cur = q.front();
+        q.pop();
+        fca(u,graph[cur]){ // проход по всем вершинам в которые  ведут ребра
+            if(visited[u]) continue; // вершина посещена
+            visited[u] = true; 
+            distance[u] = distance[cur] + 1; // расстояние для вершины в которую ведут ребра cur увеличиваем
+            q.push(u); 
+        }
     }
-    cout << xorSum(xors,x) << nl;
+    return {visited, distance};
+}
+int diameter(const vector <vector<int>> &G){//наутральная нумерация
+    int root = 1;
+    vi max_dist_f = bfs_distance_from(G,root).second;
+    int max_ind = max_element(max_dist_f.begin(),max_dist_f.end())-max_dist_f.begin();
+    vector <int> max_dist_s = bfs_distance_from(G,max_ind).second;
+    return *max_element(max_dist_s.begin(),max_dist_s.end());
+}
+inline int solve(int yy){
+    int n;
+    cin >> n;
+    vvi G(n+1);
+    incr(i,0,n-1){
+        int a, b;
+        cin >> a >> b;
+        G[a].push_back(b);
+        G[b].push_back(a);
+    }
+    return diameter(G);
+}
+inline void solve(){
+    int m;
+    cin >> m;
+    int ans = 0;
+    while (m-->0){
+        ans+=solve(0);
+    }
+    cout << ans << nl;
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

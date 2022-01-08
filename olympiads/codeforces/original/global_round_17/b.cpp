@@ -41,80 +41,46 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
+bool ispalin(vi a){
+    vi b = a;
+    reverse(all(a));
+    return b==a;
+}
 inline void solve(){
     int n;
     cin >> n;
     vi data;
     seev(data,n);
     int l = 0, r = n-1;
-    int rem = -INF;
+    int f = -1, s = -1;
     while (l<=r){
-        if(data[l]==data[r]) {l++;r--;continue;}
-        else {
-            if(data[l+1]==data[r] && data[r-1]==data[l]){
-                l++;
-                r--;
-            }
-            else if(data[l+1]==data[r] && rem==-INF){
-                rem = data[l];
-                l++;
-            } else if (data[r-1]==data[l] && rem==-INF){
-                rem = data[r];
-                r--;
-            }
-            else if(rem!=-INF && (data[l]==rem || data[r]==rem)){
-                if(data[l]==rem && data[l+1]==data[r]) l++;
-                else if (data[r]==rem && data[r-1]==data[l]) r--;
-                else {
-                    cout << "NO" << nl;
-                    return;
-                }
-            }  else {
-                cout << "NO" << nl;
-                return;
-            }
+        if(data[l]!=data[r]){
+            f = data[l];
+            s = data[r];
+            break;
         }
+        l++; r--;
     }
-    cout << "YES" << nl;
+    if(f==-1 and f==s) 
+        cout << "YES" << nl;
+    else{
+        vi a, b;
+        incr(i,0,n){
+            if(data[i]==f) a.push_back(data[i]);
+            else if (data[i]==s) b.push_back(data[i]);
+            else {a.push_back(data[i]); b.push_back(data[i]);}
+        }
+        if(ispalin(a) || ispalin(b)) cout << "YES" << nl;
+        else cout << "NO" <<nl;
+    }
     
 }
-void soolve(){
-    int n;
-    cin >> n;
-    vi data;
-    set <int> rems;
-    incr(i,0,n){
-        int x;
-        cin >> x;
-        rems.insert(x);
-        data.pb(x);
-    }
-    fca(it,rems){
-        int i = 0, j = n-1;
-        while(i<j){
-            if(data[i]==data[j]){
-                i++;
-                j--;
-                continue;
-            } else if(data[i]!=data[j] && data[i]!=it && data[j]!=it){
-                
-            } else {
-                if(data[i]==it){
-                    i++;
-                } else {
-                    j--;
-                }
-            }
-        }
-    }
-    cout << "YES" <<nl;
-}
+
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
     cin >> tt;
-    while(tt--) soolve();
+    while(tt--) solve();
     return 0;
 }

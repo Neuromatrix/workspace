@@ -94,36 +94,8 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 constexpr int N  = 100005;
-
-template <typename T>
-inline void hash_combine(std::size_t &seed, const T &val) {
-    seed ^= std::hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-}
-// auxiliary generic functions to create a hash value using a seed
-template <typename T> inline void hash_val(std::size_t &seed, const T &val) {
-    hash_combine(seed, val);
-}
-template <typename T, typename... Types>
-inline void hash_val(std::size_t &seed, const T &val, const Types &... args) {
-    hash_combine(seed, val);
-    hash_val(seed, args...);
-}
-
-template <typename... Types>
-inline std::size_t hash_val(const Types &... args) {
-    std::size_t seed = 0;
-    hash_val(seed, args...);
-    return seed;
-}
-
-struct pair_hash {
-    template <class T1, class T2>
-    std::size_t operator()(const std::pair<T1, T2> &p) const {
-        return hash_val(p.first, p.second);
-    }
-};
-unordered_map <pii, int,pair_hash> tree;
-// int tree[N][N];
+vvi adj;
+vii tree[N];
 struct treeNode
 {
     int par;   
@@ -202,9 +174,9 @@ class lseg_tree
         }
     public:
         
-        void init(T a[]){
-            vector <T> tmp(N);
-            for (int i = 0; i < N; ++i){
+        void init(T a[],int n){
+            vector <T> tmp(n);
+            for (int i = 0; i < n; ++i){
                 tmp[i] = a[i];
             }
             init(tmp);
@@ -229,18 +201,84 @@ class lseg_tree
             cout << nl;
         }
 };
+struct LCA {
+    vector<int> height, euler, first, segtree;
+    vector<bool> visited;
+    int n;
+    void init(vector<vector<int>> &adj, int root = 0){
+        n = adj.size();
+        height.resize(n);
+        first.resize(n);
+        euler.reserve(n * 2);
+        visited.assign(n, false);
+        dfs(adj, root);
+        int m = euler.size();
+        segtree.resize(m * 4);
+        build(1, 0, m - 1);
+    }
+
+    void dfs(vector<vector<int>> &adj, int node, int h = 0) {
+        visited[node] = true;
+        height[node] = h;
+        first[node] = euler.size();
+        euler.push_back(node);
+        for (auto to : adj[node]) {
+            if (!visited[to]) {
+                dfs(adj, to, h + 1);
+                euler.push_back(node);
+            }
+        }
+    }
+
+    void build(int node, int b, int e) {
+        if (b == e) {
+            segtree[node] = euler[b];
+        } else {
+            int mid = (b + e) / 2;
+            build(node << 1, b, mid);
+            build(node << 1 | 1, mid + 1, e);
+            int l = segtree[node << 1], r = segtree[node << 1 | 1];
+            segtree[node] = (height[l] < height[r]) ? l : r;
+        }
+    }
+
+    int query(int node, int b, int e, int L, int R) {
+        if (b > R || e < L)
+            return -1;
+        if (b >= L && e <= R)
+            return segtree[node];
+        int mid = (b + e) >> 1;
+
+        int left = query(node << 1, b, mid, L, R);
+        int right = query(node << 1 | 1, mid + 1, e, L, R);
+        if (left == -1) return right;
+        if (right == -1) return left;
+        return height[left] < height[right] ? left : right;
+    }
+
+    int lca(int u, int v) {
+        int left = first[u], right = first[v];
+        if (left > right)
+            swap(left, right);
+        return query(1, 0, euler.size() - 1, left, right);
+    }
+};
 void addEdge(int e, int u, int v, int w){
-    tree[{u-1,v-1}] = e-1;
-    tree[{v-1,u-1}] = e-1;
+    tree[u-1].pb({v-1,e-1});
+    tree[v-1].pb({u-1,e-1});
+    adj[u-1].pb(v-1);
+    adj[v-1].pb(u-1);
     edge[e-1].weight = w;
 }
 void dfs(int cur, int prev, int dep, int n){
     node[cur].par = prev;
     node[cur].depth = dep;
     node[cur].size = 1;
-    incr(j,0,n){
-        if (j!=cur && j!=node[cur].par && tree.find({cur,j})!=tree.end()){
-            edge[tree[{cur,j}]].deeper_end = j;
+    fca(it,tree[cur]){
+        int j = it.first;
+        int rib = it.second;
+        if (j!=cur && j!=node[cur].par && j!=prev){
+            edge[rib].deeper_end = j;
             dfs(j, cur, dep+1, n);
             node[cur].size+=node[j].size;
         }
@@ -257,20 +295,26 @@ void hld(int cur_node, int id, int *edge_counted, int *cur_chain, int n, int hea
     node[cur_node].pos_segbase = *edge_counted;
     s.base_array[(*edge_counted)++] = edge[id].weight;
     int spcl_chld = -1, spcl_edg_id;
-    incr(j,0,n)
-        if (j!=cur_node && j!=node[cur_node].par && tree.find({cur_node,j})!=tree.end())
+    fca(it,tree[cur_node]){
+        int j = it.first;
+        int rib = it.second;
+        if (j!=cur_node && j!=node[cur_node].par)
             if (spcl_chld==-1 || node[spcl_chld].size < node[j].size)
-                spcl_chld = j, spcl_edg_id = tree[{cur_node,j}];
+                spcl_chld = j, spcl_edg_id = rib;
+    }
     if (spcl_chld!=-1)
         hld(spcl_chld, spcl_edg_id, edge_counted, cur_chain, n, heads);
-    incr(j,0,n){
-        if (j!=cur_node && j!=node[cur_node].par && j!=spcl_chld && tree.find({cur_node,j})!=tree.end()){
+    fca(it,tree[cur_node]){
+        int j = it.first;
+        int rib = it.second;
+        if (j!=cur_node && j!=node[cur_node].par && j!=spcl_chld){
             (*cur_chain)++;
-            hld(j, tree[{cur_node,j}], edge_counted, cur_chain, n, heads);
+            hld(j, rib, edge_counted, cur_chain, n, heads);
         }
     }
 }
 lseg_tree <int> x;
+LCA fasCA;
 void change(int u, int v, int val, int n, int heads[],int mm){
     int chain_u, chain_v = node[v].chain, ans = 0;
     for(;;){
@@ -286,68 +330,27 @@ void change(int u, int v, int val, int n, int heads[],int mm){
         }
     }
 }
-int LCA(int u, int v, int n){
-    int LCA_aux[n+5];
-    if (node[u].depth < node[v].depth)
-       swap(u, v);
-    memset(LCA_aux, -1, sizeof(LCA_aux));
-    while (u!=-1){
-        LCA_aux[u] = 1;
-        u = node[u].par;
-    }
-    while (v){
-        if (LCA_aux[v]==1)break;
-        v = node[v].par;
-    }
- 
-    return v;
-}
 
 int query(int qs, int qe, int n){
     return x.sum(qs,qe);
 }
-int helper(int u, int v, int n, int heads[]){
-    int chain_u, chain_v = node[v].chain, ans = 0;
-    for(;;){
-        chain_u = node[u].chain;
-        if (chain_u==chain_v){
-            if (u==v) {/*pass*/}
-            else ans +=query(node[v].pos_segbase+1, node[u].pos_segbase, n);
-            break;
-        }
-        else{
-            ans += query(node[heads[chain_u]].pos_segbase,node[u].pos_segbase, n);
-            u = node[heads[chain_u]].par;
-        }
-    }
- 
-    return ans;
-}
-int iscolored(int u, int v, int n, int heads[])
-{
-    int lca = LCA(u, v, n);
-    int ans = helper(u, lca, n, heads) + helper(v, lca, n, heads);
-    return ans;
-}
 void upd_color(int u, int v, int val, int n, int heads[]){
-    int lca = LCA(u, v, n);
+    int lca = fasCA.lca(u,v);
     change(u,lca,val,n,heads,0);
     change(v,lca,val,n,heads,0);
 }
- 
 
 void solve(){
-    // memset(tree, -1, sizeof(tree));
     
     int n;
     cin >> n;
-    vii rribs;
+    adj.resize(n);
     incr(i,1,n){
         int a, b;
         cin >> a>> b;
         addEdge(i, a, b, 0);
-        rribs.pb({a,b});
     }
+    fasCA.init(adj);
     int root = 0, parent_of_root=-1, depth_of_root=0;
     dfs(root, parent_of_root, depth_of_root, n);
     int heads[N];
@@ -355,7 +358,7 @@ void solve(){
     int edge_counted = 0;
     int cur_chain = 0;
     hld(root, n-1, &edge_counted, &cur_chain, n, heads);
-    x.init(s.base_array);
+    x.init(s.base_array,n);
     int m;
     cin >> m;
     while (m--){
@@ -364,9 +367,8 @@ void solve(){
         upd_color(u-1, v-1,1, n,heads);
     }
     int result = 0;
-    incr(i,0,n-1){
-        int u = rribs[i].first, v = rribs[i].second;
-        if(!iscolored(u-1, v-1, n, heads)){
+    incr(i,1,n){
+        if(!x.get(i)){
             result++;
         }
     }

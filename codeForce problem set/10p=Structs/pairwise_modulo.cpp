@@ -69,35 +69,67 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
-}
 
+template<int N> struct Fenw {
+    ll t[N + 1];
 
-inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
+    Fenw() {
+        fill(t + 1, t + N + 1, 0ll);
     }
-    cout << xorSum(xors,x) << nl;
+
+    void update(int p, ll x) {
+        for (; p <= N; p |= (p + 1)) {
+            t[p] += x;
+        }
+    }
+
+    ll get(int p) {
+        ll ret = 0;
+
+        for (; p > 0; --p) {
+            ret += t[p];
+            p &= (p + 1);
+        }
+
+        return ret;
+    }
+
+    ll get(int l, int r) {
+        return get(r) - get(l - 1);
+    }
+};
+int M  = (int)3e5;
+Fenw<(int)3e5> A, B;
+void solve() {
+    int n;
+    cin >> n;
+    
+    ll pref = 0, ans = 0;
+
+    for (int i = 1; i <= n; ++i) {
+        int x;
+        cin >> x;
+        ans += x * (i - 1ll);
+        ans += A.get(x);
+        ans += pref;
+        pref += x;
+        
+        for (int j = x; j <= M; j += x) {
+            int l = j, r = min(M, j + x - 1);
+            ans -= B.get(l, r) * j;
+            A.update(l, -x);
+        }
+
+        B.update(x, 1);
+        cout << ans << " ";
+    }
 }
+
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }
