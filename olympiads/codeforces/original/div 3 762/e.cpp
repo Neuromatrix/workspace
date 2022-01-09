@@ -1,27 +1,4 @@
-#include <iostream>
-#include <iomanip>
-#include <ostream>
-#include <fstream>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#include <bitset>
-#include <vector>
-#include <string>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <array>
-#include <algorithm>
-#include <functional>
-#include <cmath>
-#include <time.h>
-#include <random>
-#include <chrono>
-#include <cassert>
-#include <cstring>
-#include <climits>
+#include <bits\stdc++.h>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -92,36 +69,63 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    string s;
-    cin >> s;
-    reverse(all(s));
-    int n = s.size();
-    for(int i = 0; i < n; i++){
-        if(s.substr(i,6)=="tuptuo"){
-            i+=5;
-        } else if (s.substr(i,5)=="tupni"){
-            i+=4;
-        } else if (s.substr(i,5)=="notup"){
-            i+=4;
-        } else if (s.substr(i,3)=="tuo"){
-            i+=2;
-        } else if (s.substr(i,2)=="ni"){
-            i++;
-        } else if (s.substr(i,3)=="eno"){
-            i+=2;
-        } else {
-            cout << "NO" << endl;
-            return;
+vi dp;
+vi arr;
+int n;
+int c[10005];
+int countek(int key){
+    int left = 0;
+    int right = n - 1;
+ 
+    int count = 0;
+ 
+    while (left <= right) {
+        int mid = (right + left) / 2;
+ 
+        // Check if middle element is
+        // less than or equal to key
+        if (arr[mid] < key) {
+ 
+            // At least (mid + 1) elements are there
+            // whose values are less than
+            // or equal to key
+            count = mid + 1;
+            left = mid + 1;
         }
+ 
+        // If key is smaller, ignore right half
+        else
+            right = mid - 1;
     }
-    cout << "YES" << nl;
-    return;
+ 
+    return count;
 }
-signed main(){
+inline void solve(){
+    
+    cin >> n;
+    arr.clear();
+    seev(arr,n);
+    incr(i,0,n+1) c[i] = 0;
+    sort(all(arr));
+    incr(i,0,n){
+        c[arr[i]]++;
+    }
+    dp.reserve(n+100);
+    dp[0] = c[0];
+    cout << dp[0] << " ";
+    bool  bad = false;
+    incr(i,1,n+1){
+        
+        dp[i] = dp[i-1]+c[i];
+        if(dp[i]<0) bad = true;
+        if(bad) {cout << -1 << " "; continue;}
+        else cout << dp[i] << " ";
+    }
+    cout << nl;
+}
+signed main(){  
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
     cin >> tt;
     while(tt--) solve();

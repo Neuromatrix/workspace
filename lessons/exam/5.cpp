@@ -79,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T pow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -92,38 +92,40 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
+inline void soolve(){
+    int n;
+    cin >> n;
+    vc<ld> data;
+    seev(data,n);
+    sort(rall(data));
+    int mid = n/2;
+    ll ans = 0;
+    ld mx = -INF;
+    incr(i,mid,n){
+        mx = max(ceil(data[i]*1.3),mx);
+        ans+=ceil(data[i]*1.3);
+    }
+    cout << ans << nl;
+    cout << mx << nl;
+}
 inline void solve(){
-    string s;
-    cin >> s;
-    reverse(all(s));
-    int n = s.size();
-    for(int i = 0; i < n; i++){
-        if(s.substr(i,6)=="tuptuo"){
-            i+=5;
-        } else if (s.substr(i,5)=="tupni"){
-            i+=4;
-        } else if (s.substr(i,5)=="notup"){
-            i+=4;
-        } else if (s.substr(i,3)=="tuo"){
-            i+=2;
-        } else if (s.substr(i,2)=="ni"){
-            i++;
-        } else if (s.substr(i,3)=="eno"){
-            i+=2;
-        } else {
-            cout << "NO" << endl;
-            return;
+    vvi dp(16,vi(16));
+    vvi data(15);
+    incr(i,0,15){
+        seev(data[i],15);
+    }
+    dp[0][0] = data[0][0];
+    incr(i,0,15){
+        incr(j,0,15){
+
         }
     }
-    cout << "YES" << nl;
-    return;
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

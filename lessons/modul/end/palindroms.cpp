@@ -130,7 +130,7 @@ inline void solve(){
     string s;
     cin >> s;
     int len = len_longest_palindrome(s);
-    incr(i,0,sz(s)){
+    for(int i = 0; i <s.size(); i++){
         if(ispalindrome(s.substr(i,len))){
             cout << s.substr(i,len) << nl;
             return;

@@ -79,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T pow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -92,38 +92,59 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    string s;
-    cin >> s;
-    reverse(all(s));
-    int n = s.size();
-    for(int i = 0; i < n; i++){
-        if(s.substr(i,6)=="tuptuo"){
-            i+=5;
-        } else if (s.substr(i,5)=="tupni"){
-            i+=4;
-        } else if (s.substr(i,5)=="notup"){
-            i+=4;
-        } else if (s.substr(i,3)=="tuo"){
-            i+=2;
-        } else if (s.substr(i,2)=="ni"){
-            i++;
-        } else if (s.substr(i,3)=="eno"){
-            i+=2;
-        } else {
-            cout << "NO" << endl;
-            return;
-        }
+vector <int> counter;
+vector <vector <int>> G;
+inline void dfs(int cur, int prev){
+    counter[cur] = 1;
+    for(const auto & nex: G[cur]){
+        if(nex==prev) continue;
+        dfs(nex,cur);
+        counter[cur]+=counter[nex];
     }
-    cout << "YES" << nl;
-    return;
+}
+inline void solve(){
+    int n;
+    cin >> n;
+    set <string> names;
+    vector <pair <string,string>> oflin;
+    incr(i,0,n-1){
+        string par, chi;
+        cin >> chi >> par;
+        oflin.pb({par,chi});
+        names.insert(par);
+        names.insert(chi);
+    }
+    map <string, int> id;
+    map <int, string> reid;
+    int c = 0;
+    fca(it,names){
+        id[it] = c;
+        reid[c] = it;
+        c++;
+    }
+    
+    G.resize(n+1);
+    counter.resize(n+1);
+    fca(it,oflin){
+        G[id[it.first]].push_back(id[it.second]);
+    }
+    // incr(i,0,n){
+    //     cout << reid[i] << "- ";
+    //     fca(it,G[i]){
+    //         cout << reid[it] << " ";
+    //     }
+    //     cout << nl;
+    // }
+    dfs(6,0);
+    incr(i,0,counter.size()-1){
+        cout << reid[i] << " " << counter[i]-1 << nl;
+    }
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

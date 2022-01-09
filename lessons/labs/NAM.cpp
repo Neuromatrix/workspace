@@ -198,15 +198,10 @@ class NAM
 inline void solve(){
     NAM ts;
     string k;
+    cin >> k;
     ts.init(k);
-    incr(x,0,100){
-        incr(i,0,200+x){
-            k.pb('1');
-        }
-        ts.reinit(k);
-        ts.simulation();
-        k.clear();
-    }
+    ts.simulation();
+    k.clear();
     
     
 }

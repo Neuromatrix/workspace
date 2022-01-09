@@ -97,12 +97,12 @@ inline void solve(){
     map <char, int> mx;
     string s;
     cin >> s;
-    fca(it, s){
+    for (auto it : s){
         mx[it]++;
     }
     int mxc = 0;
     char ans;
-    fca(it,mx){
+    for (auto it : mx){
         if(it.second>mxc){
             ans = it.first;
             mxc = it.second;

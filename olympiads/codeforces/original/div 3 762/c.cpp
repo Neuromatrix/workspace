@@ -1,38 +1,15 @@
-#include <iostream>
-#include <iomanip>
-#include <ostream>
-#include <fstream>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#include <bitset>
-#include <vector>
-#include <string>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <array>
-#include <algorithm>
-#include <functional>
-#include <cmath>
-#include <time.h>
-#include <random>
-#include <chrono>
-#include <cassert>
-#include <cstring>
-#include <climits>
+#include <bits\stdc++.h>
 #include <ext/rope>
-#include <ext/pb_ds/detail/standard_policies.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/detail/standard_policies.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// #include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 using namespace __gnu_cxx;
 using ll = long long;   
 using ull = unsigned long long;
 using ld = long double;
-template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
+// template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
 constexpr int INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
 constexpr ll MOD = 1000000007;
@@ -94,32 +71,55 @@ inline void prepare(){
 }
 
 inline void solve(){
-    string s;
-    cin >> s;
-    reverse(all(s));
-    int n = s.size();
-    for(int i = 0; i < n; i++){
-        if(s.substr(i,6)=="tuptuo"){
-            i+=5;
-        } else if (s.substr(i,5)=="tupni"){
-            i+=4;
-        } else if (s.substr(i,5)=="notup"){
-            i+=4;
-        } else if (s.substr(i,3)=="tuo"){
-            i+=2;
-        } else if (s.substr(i,2)=="ni"){
-            i++;
-        } else if (s.substr(i,3)=="eno"){
-            i+=2;
+    string a, b, res;
+    cin >> a >> res;
+    if(res.size()<a.size()) {cout << -1 << nl; return;}
+    while (res.size()>0 && a.size()>0){
+        int e1 = res.back()-'0';
+        res.pop_back();
+        int e2 = a.back()-'0';
+        a.pop_back();
+        
+        if(e1==e2){
+            b.push_back('0');
+        } else if (e1<e2){
+            if(res.size()==0) {cout << -1 << nl; return;};
+            e1+=10*(res.back()-'0');
+            res.pop_back();
+            if(e1-e2>=10 || e1-e2<0){
+                cout << -1 << nl;
+                return;
+            }
+            string t = to_string(e1-e2);
+            reverse(all(t));
+            b+=t;
         } else {
-            cout << "NO" << endl;
-            return;
+            string t = to_string(e1-e2);
+            reverse(all(t));
+            b+=t;
         }
+        // cout << res << nl << a << nl;
     }
-    cout << "YES" << nl;
-    return;
+    if(a.size()>0){
+        cout << -1 << nl;
+                return;
+    }
+    while (!res.empty()){
+        b.push_back(res.back());
+        res.pop_back();
+    }
+    while (b.back()=='0'){
+        if(b.size()==1) break;
+        b.pop_back();
+        
+    }
+    
+    reverse(all(b));
+    cout << b << nl;
+    
+    
 }
-signed main(){
+signed main(){  
     IOS;
     // prepare();
     size_t tt = 1;
