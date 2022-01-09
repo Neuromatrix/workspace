@@ -10,7 +10,7 @@ using ll = long long;
 using ull = unsigned long long;
 using ld = long double;
 template <typename T> using ordered_set = tree<T,null_type,less<T>,rb_tree_tag,tree_order_statistics_node_update>;
-constexpr int INF = INT_MAX-1;
+constexpr ll INF = INT_MAX-1;
 constexpr ll LINF = LLONG_MAX-1;
 constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
@@ -40,7 +40,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -69,29 +69,43 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
-}
-
 
 inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
+    ll n;
+    cin >> n;
+    ll mn = INF, mx = -INF, seg = 0; 
+    vi cost;
+    vii optimal;
+    vc <tuple<ll, ll, ll>> data;
+    set<pair<pair <ll,ll>,ll>> s1,s2;
+    map <pii , int> ss;
+    incr(i,0,n){
+        ll a, b, c;
+        cin >> a >> b >> c;
+        mx = max(mx,b);
+        mn = min(mn,a);
+        data.push_back({a,b,c});
+        optimal.push_back({mn,mx});
     }
-    cout << xorSum(xors,x) << nl;
+    int a,a2,a3, b,b2,b3, c,c2,c3;
+    incr(i,0,n){
+        tie(a,b,c) = data[i];
+        ss[{a,b}] = ss[{a,b}]!=0 ? min(c,ss[{a,b}]) : c;
+        s1.insert({{a,c},i});
+        s2.insert({{b,-c},i});
+        ll a1 = optimal[i].first;
+        ll b1 = optimal[i].second;
+        auto it1 = s1.begin();
+        auto it2 = (--s2.end());
+        int cc = ss.find({a1,b1})!=ss.end() ? ss[{a1,b1}] : INF;
+        tie(a2,b2,c2) = data[it1->second];
+        tie(a3,b3,c3) = data[it2->second];
+        if(cc<it1->first.second-it2->first.second) cout << cc << nl;
+        else if(a2==a3 && b2==b3) cout << min(it1->first.second,-it2->first.second) << nl;
+        else if(a2==a3 && b2<b3) cout << -it2->first.second<< nl;
+        else if(b2==b3 && a2<a3)  cout << it1->first.second << nl;
+        else cout << it1->first.second-it2->first.second << nl;
+    }
 }
 signed main(){
     IOS;

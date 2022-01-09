@@ -137,7 +137,6 @@ inline void solve(){
         ll mn = tr.emin(data[i], n);
         if (mn <= 0){ cout << n - i - 1 << nl; return;}
     }
-
     return ;
 }
 

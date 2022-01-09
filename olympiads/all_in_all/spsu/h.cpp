@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -69,29 +92,20 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
-}
-
 
 inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
-    }
-    cout << xorSum(xors,x) << nl;
+    size_t n;
+	cin >> n;
+	vector <ll> base(n);
+	incr(i,0,n)
+		cin >> base[i];
+	ll best=LINF,sum=0,index_r,index_l;
+	incr(i,0,n){
+		sum=min(sum+base[i],base[i]);
+		best=min(best,sum);
+	}
+	cout << best <<endl;
+	return;
 }
 signed main(){
     IOS;

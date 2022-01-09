@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -69,33 +92,81 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-ll nn,m;
-ll xorSum(vector <ll> arr, ll n){
-    ll bits = 0;
-    // Finding bitwise OR of all elements
-    for (int i=0; i < n; ++i)
-        bits |= arr[i];
- 
-    ll ans = (bits * pow(2LL, nn-1,MOD));
-    return ans%MOD;
+
+bool check(int mid, vi array, int n, int K)
+{
+    int count = 0;
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+
+        // If individual element is greater
+        // maximum possible sum
+        if (array[i] > mid)
+            return false;
+
+        // Increase sum of current sub - array
+        sum += array[i];
+
+        // If the sum is greater than
+        // mid increase count
+        if (sum > mid) {
+            count++;
+            sum = array[i];
+        }
+    }
+    count++;
+
+    // Check condition
+    if (count <= K)
+        return true;
+    return false;
 }
 
+// Function to find maximum subarray sum
+// which is minimum
+int solve(vi array, int n, int K)
+{
+    auto max = max_element(all(array));
+    int start = *max; //Max subarray sum, considering subarray of length 1
+    int end = 0;
 
-inline void solve(){
-    
-    cin >> nn >> m;
-    int x = m;
-    vector <ll> xors;   
-    while (m--){
-        ll a, b, w;
-        cin >> a >> b >> w;
-        xors.push_back(w);   
+    for (int i = 0; i < n; i++) {
+        end += array[i]; //Max subarray sum, considering subarray of length n
     }
-    cout << xorSum(xors,x) << nl;
+
+    // Answer stores possible
+    // maximum sub array sum
+    int answer = 0;
+    while (start <= end) {
+        int mid = (start + end) / 2;
+
+        // If mid is possible solution
+        // Put answer = mid;
+        if (check(mid, array, n, K)) {
+            answer = mid;
+            end = mid - 1;
+        }
+        else {
+            start = mid + 1;
+        }
+    }
+
+    return answer;
+}
+
+// Driver Code
+inline void solve()
+{
+    int n;
+    cin >> n;
+    vi array;
+    seev(array,n);
+    incr(i,0,n) array[i]*=-1;
+    cout << -solve(array, n, n+1) << nl;
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
     cin >> tt;
     while(tt--) solve();

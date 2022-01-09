@@ -131,7 +131,7 @@ inline void solve(){
     cout << tree.minimum(0,7) << nl;
     tree.update(0,3,2);
     tree.print();
-    cout << tree.minimum(3,4) << nl;
+    cout << tree.minimum(3,3) << nl;
 }
 int main(){
     IOS;
