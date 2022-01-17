@@ -69,51 +69,28 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
-    }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+    string s;
+    cin >> s;
+    decr(i,sz(s)-1,0){
+        if(s[i]-'0'+(s[i-1]-'0')>=10){
+            int sums = s[i]-'0'+(s[i-1]-'0');
+            s[i] = sums%10+'0';
+            s[i-1] = sums/10 + '0';
+            cout << s << nl;
+            return;
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    s[1] = s[0]-'0'+s[1];
+    s.erase(s.begin());
+    cout << s << nl;
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();   
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }

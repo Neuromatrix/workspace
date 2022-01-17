@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -69,49 +92,55 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
-inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
-    }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+class Z_array
+{
+    private:
+        size_t size_it;
+        string inp;
+        vector <int> z_array;
+    public:
+        Z_array(string s){
+            init(s);
         }
-    }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+        Z_array();
+        size_t size(){
+            return size_it;
+        }
+        void init(string s){
+            inp = s;
+            size_it = s.length();
+            int n = (int) s.length();
+            z_array.resize(n);
+            for (int i=1, l=0, r=0; i<n; ++i) {
+                if (i <= r)
+                    z_array[i] = min (r-i+1, z_array[i-l]);
+                while (i+z_array[i] < n && s[z_array[i]] == s[i+z_array[i]])
+                    ++z_array[i];
+                if (i+z_array[i]-1 > r)
+                    l = i,  r = i+z_array[i]-1;
+            }
+            return;
+        }
+        int operator[](size_t ind){
+            return z_array[ind];
+        }
+        void print(string sep = " "){
+            for(size_t i = 0; i < size_it; i++) {
+                cout << z_array[i] << sep; 
+            }
+            cout << endl;
+        }
+};
+inline void solve(){
+    string s;
+    cin >> s;
+    Z_array data(s);
+    cout << sz(s) << " ";
+    incr(i,1,sz(s)) cout << data[i] << " ";
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();

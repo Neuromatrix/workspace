@@ -73,8 +73,8 @@ class lseg_tree
                 mod[v * 2] = mod[v * 2 + 1] = mod[v];
                 mod[v] = 0;
                 int tm = (tl + tr) / 2;
-                tree[v * 2] += (tm - tl + 1) * mod[v * 2];
-                tree[v * 2 + 1] += (tr - tm) * mod[v * 2 + 1];
+                tree[v * 2] = (tm - tl + 1) * mod[v * 2];
+                tree[v * 2 + 1] = (tr - tm) * mod[v * 2 + 1];
             }
         }
         void build (const vector <T> &a, int v, int tl, int tr) {
@@ -89,7 +89,7 @@ class lseg_tree
         }
         void update (int v, int tl, int tr, int l, int r, int val) {
             if (l <= tl && tr <= r) {
-                tree[v] += val * (tr - tl + 1);
+                tree[v] = val * (tr - tl + 1);
                 mod[v] = val;
                 return;
             }
@@ -135,7 +135,7 @@ class lseg_tree
         }
         lseg_tree(){}
         void print(){
-            incr(i,0,tree.sz){
+            incr(i,0,tree.size()){
                 cout << tree[i] << " ";
             }
             cout << nl;

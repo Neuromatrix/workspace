@@ -69,45 +69,31 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
-    }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
+    ull n = 5000000001ULL;
+    ull cnt = 0;
+    while (cnt<5){
+        vc <ull> divisors;
+        for(ull i = 2ULL; i*i<=n;i++){
+            if(n%i==0) divisors.pb(i);
+        }
+        if(sz(divisors)<5){
+            ++n;
         } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+            ull ans = 1ULL;
+            incr(i,0,5) ans*=divisors[i];
+            if(ans < n) {cnt++; cout << ans << nl;}
+            ++n;
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    /*
+            1296
+        95095
+        7434368
+        1800
+        21952
+    */
 }
 signed main(){
     IOS;

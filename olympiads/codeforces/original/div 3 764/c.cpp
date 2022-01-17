@@ -69,51 +69,43 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+bool cmp(list <int> &v1, list <int> &v2) {return v1.size()<v2.size();}
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
-    }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+    int n;
+    cin >> n;
+    vi data;
+    seev(data,n);
+    vc<list <int>> a(n+5);
+    incr(i,0,n){
+        while (data[i]>0){
+            if(data[i]<=n)a[data[i]].push_back(i);
+            data[i]>>=1;
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    int nsets = 0,sets  = 0;
+    // sort(all(a),cmp);
+    incr(i,1,n+1) {fca(it,a[i]) cout << it << " "; cout << nl;}
+    incr(i,0,n){
+        incr(j,1,n+1){
+            if(a[j].size()==0) continue;
+            if(a[j].front()==i) a[j].pop_front();
+            if(a[j].size()==0) nsets++;
+        }
+        if(nsets-sets>=2){
+            cout << "NO" << nl << nl;
+            return;
+        }
+        sets = nsets;
+
+    }
+    
+    cout << "YES" << nl << nl;
 }
 signed main(){
     IOS;
     prepare();
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }

@@ -92,212 +92,113 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class BEATS{
-    public:
-    static const int T = (40004);
-    static const int INF = 1e9 + 7;
- 
-    struct Node {
-        int max;
-        long long sum;
-    } tree[T];
- 
-    int n;
- 
-    inline void push(int v) {
-        tree[v].sum = tree[2 * v].sum + tree[2 * v + 1].sum;
-        tree[v].max = max(tree[2 * v].max, tree[2 * v + 1].max);
-    }
- 
-    inline void init(int v, int l, int r, const vector<int>& inputArray) {
-        if (l + 1 == r) {
-            tree[v].max = tree[v].sum = inputArray[l];
-        } else {
-            int mid = (r + l) / 2;
-            init(2 * v, l, mid, inputArray);
-            init(2 * v + 1, mid, r, inputArray);
-            push(v);
+int  q;
+template <typename T>
+class prefix_sum
+{
+private:
+    vector <T> pre_sum;
+    size_t size_it;
+public:
+    void init(vector <T> pool){
+        size_it = pool.size();
+        pre_sum.resize(size_it);
+        pre_sum[0] = pool[0];
+        for (size_t i = 1; i < size_it; i++){
+            pre_sum[i] = pre_sum[i-1] + pool[i];
         }
     }
- 
-    inline void init(const vector<int>& inputArray) {
-        n = inputArray.size();
-        init(1, 0, n, inputArray);
+    T sum(ssize_t l, ssize_t r){
+        assert(!(l < 0  || r < 0 || l > size_it || r > size_it));
+        if (min(l,r) > 0) return pre_sum[max(l,r)]-pre_sum[min(l,r)-1];
+        else return pre_sum[max(l,r)];
     }
- 
-    inline void upd_seg(int v, int l, int r, int ql, int qr, int val) {
-        if (qr <= l || r <= ql || tree[v].max < val) {
-            return;
-        }
-        if (l + 1 == r) {
-            tree[v].max %= val;
-            tree[v].sum = tree[v].max;
-            return;
-        }
-        int mid = (r + l) / 2;
-        upd_seg(2 * v, l, mid, ql, qr, val);
-        upd_seg(2 * v + 1, mid, r, ql, qr, val);
-        push(v);
+    size_t size(){
+        return size_it;
     }
- 
-    inline void upd_seg(int ql, int qr, int val) {
-        upd_seg(1, 0, n, ql, qr, val);
+    prefix_sum(vector <T> pool){
+        init(pool);
     }
- 
-    inline void upd_o(int v, int l, int r, int qi, int val) {
-        if (l + 1 == r) {
-            tree[v].max = tree[v].sum = val;
-            return;
-        }
-        int mid = (l + r) / 2;
-        if (qi < mid) {
-            upd_o(2 * v, l, mid, qi, val);
-        } else {
-            upd_o(2 * v + 1, mid, r, qi, val);
-        }
-        push(v);
+    prefix_sum(){
+        size_it = 0;
     }
- 
-    inline void upd_o(int qi, int val) {
-        upd_o(1, 0, n, qi, val);
-    }
- 
-    inline long long findSum(int v, int l, int r, int ql, int qr) {
-        if (qr <= l || r <= ql) {
-            return 0;
-        }
-        if (ql <= l && r <= qr) {
-            return tree[v].sum;
-        }
-        int mid = (r + l) / 2;
-        return findSum(2 * v, l, mid, ql, qr) + findSum(2 * v + 1, mid, r, ql, qr);
-    }
- 
-    inline long long findSum(int ql, int qr) {
-        return findSum(1, 0, n, ql, qr);
+    void print(){
+        fca(it, pre_sum) cout << it << " "; cout << nl;
     }
 };
-struct JiDriverSegmentTree {
-    static const int T = (400004);
-    static const int INF = 1e9 + 7;
- 
-    struct Node {
-        int max;
-        long long sum;
-    } tree[T];
- 
-    int n;
- 
-    inline void updateFromChildren(int v) {
-        tree[v].sum = tree[2 * v].sum + tree[2 * v + 1].sum;
-        tree[v].max = max(tree[2 * v].max, tree[2 * v + 1].max);
-    }
- 
-    inline void build(int v, int l, int r, const vector<int>& inputArray) {
-        if (l + 1 == r) {
-            tree[v].max = tree[v].sum = inputArray[l];
-        } else {
-            int mid = (r + l) / 2;
-            build(2 * v, l, mid, inputArray);
-            build(2 * v + 1, mid, r, inputArray);
-            updateFromChildren(v);
-        }
-    }
- 
-    inline void build(const vector<int>& inputArray) {
-        n = inputArray.size();
-        build(1, 0, n, inputArray);
-    }
- 
-    inline int updateModEq(int v, int l, int r, int ql, int qr, int val) {
-        if (qr <= l || r <= ql) {
-            return 0;
-        }
-        if (ql <= l && r <= qr && tree[v].max < val) {
-            return tree[v].sum;
-        }
-        if (l + 1 == r) {
-            return tree[v].sum % val;
-        }
-        int mid = (r + l) / 2;
-        updateFromChildren(v);
-        return  updateModEq(2 * v, l, mid, ql, qr, val)+
-        updateModEq(2 * v + 1, mid, r, ql, qr, val);
-    }
- 
-    inline int updateModEq(int ql, int qr, int val) {
-        return updateModEq(1, 0, n, ql, qr, val);
-    }
-} segTree;
-int n, q;
-map <tuple<int, int, int> ,int> answers;
-unordered_map <int, vii> questions;
-inline void solvemod(BEATS data, int x){
-    vii qu = questions[x];
-    data.upd_seg(0,n,x);
-    fca(it,qu){
-        answers[{it.first,it.second,x}] = data.findSum(it.first-1,it.second);
-    }
-    return;
-}
-BEATS datab;
+constexpr int n = 2e5+1;
+const int nblocks = 224;
+int len = 893;
+int b[nblocks][n];
 
-inline void solve(int io){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    
-    
-    cin >> n >> q;
-    vector<int> inputArray(n);
-    for (int &val : inputArray) {
-        cin >> val;
-    }
-    vc <tuple<int, int, int>> inp;
-    incr(i,0,q){
-        int a, b,w;
-        cin >> a>> b >>w;
-        inp.push_back({a,b,w});
-        questions[w].push_back({a,b});
-    }
-    if(/*pw(questions.size())<=n*4*/ io){
-        
-        datab.init(inputArray);
-        fca(it,questions){
-            solvemod(datab,it.first);
+void prep(vc<ll> &data){
+    prefix_sum <ll> pr(data);
+    ll h[n+1];
+    incr(i,0,nblocks){
+        int l = len*i, r = min(len*(i+1),(ll)n);
+        vi cnt(n,0);
+        incr(j,l,r){
+            cnt[data[j]]++;
         }
-        fca(it,inp){
-            // cout << answers[it] << nl;
+        h[0] = 0;
+        h[1] = 0;
+        for (size_t j = 1; j < n; j++){
+            h[j+1] = h[j] + cnt[j];
         }
-    } else {
-        segTree.build(inputArray);
-        fca(it,inp){
-            int ql, qr, x;
-            tie(ql,qr,x) = it;
-            ql--;
-            // cout << segTree.updateModEq(ql, qr, x)<< nl;
+        incr(x,1,n){
+            b[i][x]=pr.sum(l,r-1);
+            for(int m = 0; m < n; m+=x){
+                b[i][x] -= m*(h[min((ll)n,m+x)]-h[m]);
+            }
         }
     }
-    
 }
-void pp(int && rand){
-    clock_t start = clock();
-    int n = 1e8;
-    ll x = 0;
-    incr(i,1,n){
-        //for(int j = 0; j < n; j+=i){
-            x++;
-        //}
+inline void solve(){
+    int iyy;
+    cin >> iyy >> q;
+    vector<ll> a(n);
+    incr(i,0,iyy){
+        cin >> a[i];
     }
-    cout << x << nl;
-    clock_t end = clock();
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-    cout << seconds << nl;
+    prep(a);
+    while (q--){
+        int l , r, x;
+        cin >> l >> r >> x;
+        l--; r--;
+        ll sum = 0;
+        int c_l = l / len,   c_r = r / len;
+        if (c_l == c_r)
+            for (int i=l; i<=r; ++i)
+                sum += a[i]%x;
+        else {
+            for (int i=l, end=(c_l+1)*len; i<end; ++i)
+                sum += a[i]%x;
+            for (int i=c_l+1; i<c_r; ++i)
+                sum += b[i][x];
+            for (int i=c_r*len; i<=r; ++i)
+                sum += a[i]%x;
+        }
+        cout << sum << nl; 
+    }
+
+    return;
+
+}
+void yt(){
+    cout << 3000 << " " << 100 << nl;
+    incr(i,0,3000){
+        cout << 2 << " ";
+    }
+    cout << nl;
+    incr(i,0,100){
+        cout << 1 << " " << 2890 << " " << " 2" << nl;
+    }
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
     // cin >> tt;
-    while(tt--) pp(1);
+    while(tt--) solve();
     return 0;
 }

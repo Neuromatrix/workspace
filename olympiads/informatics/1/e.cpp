@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -69,49 +92,45 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
-    }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+    int n;
+    cin >> n;
+    vi dp(n+1);
+    vi par(n+1);
+    dp[0] = INF;
+    dp[1] = 0;
+    par[1] = 1;
+    incr(i,2,n+1){
+        dp[i] = dp[i-1] + 1;
+        par[i] = 1;
+        if(i%2==0 and dp[i/2]+1<dp[i]){
+            dp[i] = dp[i/2]+1;
+            par[i] = 2;
+        }
+        if(i%3==0 and dp[i/3]+1<dp[i]){
+            dp[i] = dp[i/3]+1;
+            par[i] = 3;
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    // cout << par << nl << dp << nl;
+    // cout << dp[n] << nl;
+    vi o;
+    int i = n;
+    while (i!=1){
+        o.pb(par[i]);
+        if(par[i]==1) i--;
+        else if(par[i]==2) i/=2;
+        else if(par[i]==3) i/=3;
+    }
+    reverse(all(o));
+    fca(it,o) cout << it;
+    cout << nl;
+    
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();

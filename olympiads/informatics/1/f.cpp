@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -69,49 +92,55 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
-inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
+vector <ll> Deikstra(vector <vector <pair <int, int>>> &G, int start){
+    int gsize = G.size();
+    priority_queue <pair<int, int>> q;
+    vector <ll> distance(G.size());
+    vector <bool> processed(G.size());
+    for (size_t i = 1; i < G.size(); i++){
+        distance[i] = INF;
+        processed[i] = false;
     }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+    distance[start] = 0;
+    q.push({0,start});
+    while (!q.empty()){
+        int a = q.top().second;
+        q.pop();
+        if(processed[a]) continue;
+        processed[a] = true;
+        for(const auto & u : G[a]){
+            int b =  u.first, w = u.second;
+            if (distance[a]+w < distance[b]){
+                distance[b] = distance[a] + w;
+                q.push({-distance[b],b});
+            }
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    return distance;
+}
+inline void solve(){
+    int n;
+    cin >> n;
+    vi cost(n+1);
+    incr(i,1,n+1){
+        cin >> cost[i];
+    }
+    vc<vii> G(n+1);
+    int m;
+    cin >> m;
+    while (m--){
+        int a, b;
+        cin >> a >> b;
+        G[a].push_back({b,cost[a]});
+        G[b].push_back({a,cost[b]});
+    }
+    vc <ll> ans = Deikstra(G,1);
+    cout << (ans[n]==INF ? -1 : ans[n]) << nl;
+    
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();

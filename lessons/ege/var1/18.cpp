@@ -69,45 +69,26 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
+    int n = 15;
+    vvi data(n);
+    incr(i,0,n) seev(data[i],n);
+    vvi dp(n,vi(n,0));
+    dp[0][0] = data[0][0];
+    incr(i,1,n){
+        dp[i][0] = dp[i-1][0] + (data[i][0]<=data[i-1][0] ? data[i][0] : -data[i][0]);
     }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
-        } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+    incr(i,1,n){
+        dp[0][i] = dp[0][i-1] + (data[0][i]<=data[0][i-1] ? data[0][i] : -data[0][i]);
+    } 
+    incr(i,1,n){
+        incr(j,1,n){
+            dp[i][j] = dp[i-1][j] + (data[i][j]<data[i-1][j] ? data[i][j] : -data[i][j]);
+            dp[i][j] = max(dp[i][j-1] + (data[i][j-1]<data[i][j-1] ? data[i][j] : -data[i][j]),dp[i][j]);
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    cout << dp[n-1][n-1] << nl;
 }
 signed main(){
     IOS;

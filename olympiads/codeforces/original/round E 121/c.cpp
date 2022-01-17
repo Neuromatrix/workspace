@@ -69,51 +69,47 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int target = 100;
-int f1(int x){
-    return x+1;
-}
-int f2(int x){
-    return x*3;
-}
-int f3(int x){
-    return x;
-}
+
 inline void solve(){
-    cin >> target;
-    vector <int> dp(target+1,0);
-    for(int i = target-1; i>=0; i--){
-        if(f1(i)>=target) dp[i] = 1;
-        if(f2(i)>=target) dp[i] = 1;
-        // if(f3(i)>=target) dp[i] = 1;
+    int n;
+    cin >> n;
+    vii monst(n);
+    incr(i,0,n){
+        cin >> monst[i].first;
     }
-    int j = 0;
-    for(int i = 0; i < target; i++) if(dp[i]==0) j = i;
-    cout <<j << nl;
-    for(int i = j; i>=0; i--){
-        int e1 = f1(i), e2 = f2(i);
-        if(dp[e1]>=0 and dp[e2]>=0){
-            int mn = min({dp[e1], dp[e2]});
-            dp[i] = -1*(mn+1);
+    incr(i,0,n){
+        cin >> monst[i].second;
+    }
+    stack <pii> t;
+    vii data;
+    incr(i,0,n){
+        data.pb({monst[i].first-monst[i].second+1,0});
+        data.pb({monst[i].first,1});
+    }
+    ll ans = 0ll;
+    sort(all(data));
+    fca(it,data){
+        pii tmp = it;
+        if(tmp.second==1){
+            if(t.size()==1){
+                ll x = ((tmp.first-t.top().first+1ll)*(tmp.first-t.top().first+2ll))/2;
+                ans+=x;
+                t.pop();
+            } else {
+                t.pop();
+            }
         } else {
-            dp[i] = INF;
-            if(dp[e1]<0){
-                dp[i] = -dp[e1]+1;
-            } if(dp[e2] < 0){
-                dp[i] = min(dp[i],-dp[e2]+1);
-            }  
+            t.push(it);
         }
     }
-    //!ге dp[i] - кол-во ходов ВСЕГО до победы, напрмиер
-    // если у нас ходит 1 и он проигрывает через 1 ход
-    //(при любом ходе) 1-ого -- второй побеждает -  то ответ будет -2
-    cout << dp[7] << nl;
+    cout << ans << nl;
+
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }

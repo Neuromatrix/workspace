@@ -92,8 +92,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-bool check(int mid, vi array, int n, int K)
+bool check(int mid, int array[], int n, int K)
 {
     int count = 0;
     int sum = 0;
@@ -101,8 +100,6 @@ bool check(int mid, vi array, int n, int K)
 
         // If individual element is greater
         // maximum possible sum
-        if (array[i] > mid)
-            return false;
 
         // Increase sum of current sub - array
         sum += array[i];
@@ -124,9 +121,9 @@ bool check(int mid, vi array, int n, int K)
 
 // Function to find maximum subarray sum
 // which is minimum
-int solve(vi array, int n, int K)
+int solve(int array[], int n, int K)
 {
-    auto max = max_element(all(array));
+    int* max = min_element(array, array + n);
     int start = *max; //Max subarray sum, considering subarray of length 1
     int end = 0;
 
@@ -153,16 +150,12 @@ int solve(vi array, int n, int K)
 
     return answer;
 }
+inline void solve(){
+    int array[] = { -1, -2, -3, -4 };
+    int n = sizeof(array) / sizeof(array[0]);
+    int K = 2;
+    cout << solve(array, n, K);
 
-// Driver Code
-inline void solve()
-{
-    int n;
-    cin >> n;
-    vi array;
-    seev(array,n);
-    incr(i,0,n) array[i]*=-1;
-    cout << -solve(array, n, n+1) << nl;
 }
 signed main(){
     IOS;
