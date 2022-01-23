@@ -47,26 +47,37 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
+template<typename T>
+vector<T> constructPrintLIS(vector<T> a, int n)
+{
+    vector<T> d(n+5,INF);
+    d[0] = -INF;
+    set <T> in;
+    fca(it, a){
+        in.insert(it);
+    }
+    for (int i=0; i<n; i++) {
+        int j = int (upper_bound (d.begin(), d.end(), a[i]) - d.begin());
+        if (d[j-1] < a[i] && a[i] < d[j])   
+            d[j] = a[i];
+    }
+    vector <T> ans;
+    for(const auto & it : d){
+        if(in.find(it)!=in.end()) ans.push_back(it);
+    }
+    return ans;
+}
 inline void solve(){
-    int n; cin >> n;
-    vi data;
-    seev(data,n);
-    vi dp(n);
-    incr(i,0,n){
-        if(!i) dp[i]=-INF;
-        else dp[i]=INF;
-    }
-    incr(i,0,n){
-        int j = int(upper_bound (all(dp),data[i]) - dp.begin());
-        if (dp[j-1] < data[i] && data[i] < dp[j])
-            dp[j] = data[i];
-    }
-    fca(a,dp) cout << a << " "; cout << nl;
+    int n;
+    cin >> n;
+    vi a;
+    seev(a,n);
+    vi pre = constructPrintLIS(a,n);
+    cout << pre.size() << nl;
 }
 int main(){
     IOS;
-    //prepare();
+    // prepare();
     solve();
     return 0;
 }

@@ -92,7 +92,7 @@ vector <int> find_substring(string data, string pat){
     int m = pat.size();
     vector <int> ans = {};
     for (size_t i = 0; i < arr.size(); i++){
-        if(arr[i]==m) ans.push_back(i-m);
+        if(arr[i]==m) ans.push_back(i-m-1);
     }
     return ans;
     
