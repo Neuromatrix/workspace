@@ -1,0 +1,13 @@
+acacacbabbabacaaac
+1
+b -> c
+0
+
+res 
+
+
+acacaccabbabacaaac
+acacaccacbabacaaac
+acacaccaccabacaaac
+acacaccaccacacaaac
+acacaccaccacacaaac

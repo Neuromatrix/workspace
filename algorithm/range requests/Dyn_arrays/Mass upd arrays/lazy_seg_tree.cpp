@@ -56,11 +56,12 @@ class lseg_tree
         int size_it = 0;
         void push(int v, int tl, int tr) {
             if (mod[v] != 0 && v * 2 + 1 < 4*size_it){
-                mod[v * 2] = mod[v * 2 + 1] = mod[v];
-                mod[v] = 0;
+                mod[v * 2] += mod[v];
+                mod[v * 2 + 1] += mod[v];
                 int tm = (tl + tr) / 2;
-                tree[v * 2] += (tm - tl + 1) * mod[v * 2];
-                tree[v * 2 + 1] += (tr - tm) * mod[v * 2 + 1];
+                tree[v * 2] += (tm - tl + 1) * mod[v];
+                tree[v * 2 + 1] += (tr - tm) * mod[v];
+                mod[v] = 0;
             }
         }
         void build (const vector <T> &a, int v, int tl, int tr) {
@@ -73,10 +74,10 @@ class lseg_tree
                 tree[v] = tree[v * 2] + tree[v * 2 + 1];
             }
         }
-        void update (int v, int tl, int tr, int l, int r, int val) {
+        void update (int v, int tl, int tr, int l, int r, T val) {
             if (l <= tl && tr <= r) {
                 tree[v] += val * (tr - tl + 1);
-                mod[v] = val;
+                mod[v] += val;
                 return;
             }
             if (tr < l || r < tl) {
