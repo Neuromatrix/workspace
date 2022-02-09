@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,34 +92,70 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    ull k, ans = 0;
-    cin >> k;
-    int llen = log10(k)+1,len = log10(k)+1;
-    int to[11];
-    to[0] = 0;
-    to[1] = 4;
-    to[2] = 9;
-    to[3] = 11;
-    to[4] = 14;
-    to[5] = 17;
-    to[6] = 18;
-    to[7] = 23;
-    to[8] = 27;
-    to[9] = 28;
-    while (llen--){
-        ans+=to[k%10];
-        k/=10LL;
-        ans+=30LL*k;
+template <typename T>
+class prefix_sum
+{
+private:
+    vector <T> pre_sum;
+    size_t size_it;
+public:
+    void init(vector <T> pool){
+        size_it = pool.size();
+        pre_sum.resize(size_it);
+        pre_sum[0] = pool[0];
+        for (size_t i = 1; i < size_it; i++){
+            pre_sum[i] = pre_sum[i-1] + pool[i];
+        }
     }
-    cout << ans-2*(len-1) << nl;
+    T sum(ssize_t l, ssize_t r){
+        assert(!(l < 0  || r < 0 || l > size_it || r > size_it));
+        if (min(l,r) > 0) return pre_sum[max(l,r)]-pre_sum[min(l,r)-1];
+        else return pre_sum[max(l,r)];
+    }
+    size_t size(){
+        return size_it;
+    }
+    prefix_sum(vector <T> pool){
+        init(pool);
+    }
+    prefix_sum(){
+        size_it = 0;
+    }
+};
+inline void solve(){
+    ll n, k;
+    cin >> n >> k;
+    vc <ll> data;
+    seev(data,n);
+    prefix_sum <ll> h(data);
+    ll s = accumulate(all(data),0LL);
+    ll mx = s;
+    incr(i,0,n){
+        ll left = 0, right = 0;
+        if(i) left = h.sum(max(i-k,0ll),i-1);
+        if(i<n-1) right = h.sum(i+1,min(i+k,n-1));
+        // cout << left << " " << right << nl;
+        mx = max(s-left-right-data[i]+data[i]*(min(n-i-1,k)+min(i,k)+1),mx);
+        // cout << mx << nl;
+    }    
+    cout << mx << nl;
+}
+void solve(int && x){
+    int n, k;
+    cin >> n >> k;
+    vc <ll> data;
+    seev(data,n);
+    prefix_sum <ll> h(data);
+    int i = 5;
+    ll left = h.sum(i-k,i);
+    ll right = h.sum(i,i+k);
+    cout <<  left << " " << right << nl;
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

@@ -1,27 +1,4 @@
-#include <iostream>
-#include <iomanip>
-#include <ostream>
-#include <fstream>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-#include <bitset>
-#include <vector>
-#include <string>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <array>
-#include <algorithm>
-#include <functional>
-#include <cmath>
-#include <time.h>
-#include <random>
-#include <chrono>
-#include <cassert>
-#include <cstring>
-#include <climits>
+#include <bits\stdc++.h>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -79,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-inline T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -92,40 +69,34 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-inline void soolve(){
+
+inline void solve(){
     int n;
     cin >> n;
-    vc<ld> data;
+    vi data;
     seev(data,n);
-    sort(rall(data));
-    int mid = n/2;
-    ll ans = 0;
-    ld mx = -INF;
-    incr(i,mid,n){
-        mx = max(ceil(data[i]*1.3),mx);
-        ans+=ceil(data[i]*1.3);
-    }
-    cout << ans << nl;
-    cout << mx << nl;
-}
-inline void solve(){
-    vvi dp(16,vi(16));
-    vvi data(15);
-    incr(i,0,15){
-        seev(data[i],15);
-    }
-    dp[0][0] = data[0][0];
-    incr(i,0,15){
-        incr(j,0,15){
-
+    int ans = 0;
+    int cur = 1;
+    for(int i = n - 2;i >= 0;i--){
+        if(data[i] != data.back()){
+            ans++;
+            i -= cur;
+            cur *= 2;
+            i++;
+        } else {
+            cur++;
         }
     }
+    cout << ans << nl;
+    
+    
+    
 }
 signed main(){
-    IOS;
-    prepare();
+    // IOS;
+    // prepare();
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }

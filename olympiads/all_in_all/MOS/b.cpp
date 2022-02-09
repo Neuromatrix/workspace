@@ -40,7 +40,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -71,26 +71,13 @@ inline void prepare(){
 }
 
 inline void solve(){
-    ull k, ans = 0;
-    cin >> k;
-    int llen = log10(k)+1,len = log10(k)+1;
-    int to[11];
-    to[0] = 0;
-    to[1] = 4;
-    to[2] = 9;
-    to[3] = 11;
-    to[4] = 14;
-    to[5] = 17;
-    to[6] = 18;
-    to[7] = 23;
-    to[8] = 27;
-    to[9] = 28;
-    while (llen--){
-        ans+=to[k%10];
-        k/=10LL;
-        ans+=30LL*k;
+    ll a, b, c;
+    cin >> a >> b >> c;
+    if(a<c){
+        cout << a+b << nl;
+    } else{
+        cout << max(c-1+b,a) << nl;
     }
-    cout << ans-2*(len-1) << nl;
 }
 signed main(){
     IOS;

@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,34 +92,83 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
+// обновление на дереве и запрос о разьединение
+vi lt(1e5+5,0);
+vvi G1(1e5+5);
+vvi G(1e5+5);
+void dfs2(int v,int x,int p = -1){
+    lt[v] = x;
+    // fca(it, G1[v]){
+    //     if(it!=p)
+    //         dfs2(it,x,v);
+    // }
+}
+int l = 0;
+void dfs(int t,int tt, int &s, int v, int p = 0){
+    s+=(tt-lt[v]);
+    // cout << v << nl;
+    // cout << s<< nl;
+    if(v==t) l = s;
+    fca(it, G[v]){
+        if(it!=p){
+            dfs(t,tt,s,it,v);
+        }
+    }
+    
+    s-=(tt-lt[v]);
+}
+void disconnect(int v, int tt){
+    dfs2(v,-INF);
+}
+void connect(int v,int tt){
+    dfs2(v,tt);
+}
+
+int query(int a, int b,int tt){
+    if(lt[a]==-1 or lt[b]==-1) return -1;
+    int s = 0;
+    dfs(a,tt,s,b);
+    ll ans = l;
+    return ans;
+}
+
 
 inline void solve(){
-    ull k, ans = 0;
-    cin >> k;
-    int llen = log10(k)+1,len = log10(k)+1;
-    int to[11];
-    to[0] = 0;
-    to[1] = 4;
-    to[2] = 9;
-    to[3] = 11;
-    to[4] = 14;
-    to[5] = 17;
-    to[6] = 18;
-    to[7] = 23;
-    to[8] = 27;
-    to[9] = 28;
-    while (llen--){
-        ans+=to[k%10];
-        k/=10LL;
-        ans+=30LL*k;
+    int n,m;
+    cin >> n >> m;
+    
+    incr(i,1,m+1){
+        // cout << lt << endl;
+        char c;
+        cin >> c;
+        if(c=='!'){
+            int a, b;
+            cin >> a >> b;
+            lt[b] = i;
+            G[a].push_back(b);
+            G[b].push_back(a);
+            G1[a].push_back(b);
+        } else if (c=='-'){
+            int a;
+            cin >> a;
+            disconnect(a,i);
+        } else if (c=='+'){
+            int a;
+            cin >> a;
+            connect(a,i);
+        } else {
+            int a, b;
+            cin >> a >> b;
+            cout << (query(a,b,i)<0 ? -1 :  query(a,b,i))<< endl;
+        }
     }
-    cout << ans-2*(len-1) << nl;
+
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

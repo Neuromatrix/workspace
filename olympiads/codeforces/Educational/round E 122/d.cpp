@@ -40,7 +40,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,28 +69,53 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    ull k, ans = 0;
-    cin >> k;
-    int llen = log10(k)+1,len = log10(k)+1;
-    int to[11];
-    to[0] = 0;
-    to[1] = 4;
-    to[2] = 9;
-    to[3] = 11;
-    to[4] = 14;
-    to[5] = 17;
-    to[6] = 18;
-    to[7] = 23;
-    to[8] = 27;
-    to[9] = 28;
-    while (llen--){
-        ans+=to[k%10];
-        k/=10LL;
-        ans+=30LL*k;
+int change(int target){
+    int ans = 0;
+    while(target>0){
+        if(target&1) target--;
+        else target/=2;
+        ans++;
     }
-    cout << ans-2*(len-1) << nl;
+    return ans-1    ;
+}
+inline void solve(){
+    size_t n, k;
+    cin >> n >> k;
+    n++;
+    k++;
+    vector <int> c(n);
+    vector <int> mod(n);
+    incr(i,1,n) cin >> mod[i];
+    vc <ll> cnt;
+    incr(i,1,n){
+        int h  = change(mod[i]);
+        mod[i] = h;
+    }
+    incr(i,1,n) cin >> c[i];
+    vector <vector <int>> dp(n,vector <int>(k));
+    incr(i,0,k) dp[0][i]=0;
+    incr(i,1,n){
+        if(mod[i]==0) cnt.push_back(c[i]);
+    }
+    sort(rall(cnt));
+    ll s = 0;
+    incr(i,1,n){
+        if(i-1<cnt.size())s+=cnt[i-1];
+        dp[i][0]=s;
+    }
+    incr(i,1,n){
+        incr(j,1,k){
+            if (j < mod[i]){
+                dp[i][j]=dp[i-1][j];
+            }
+            else {
+                dp[i][j]=max(dp[i-1][j],dp[i-1][j-mod[i]]+c[i]);
+            }
+        }
+    }
+    // fca(it,dp) cout << it << nl;
+    cout << dp[n-1][k-1] <<nl;
+
 }
 signed main(){
     IOS;

@@ -16,8 +16,6 @@ constexpr ll MOD = 1000000007;
 constexpr char nl = '\n';
 constexpr long double eps = 1e-9;
 #define pb push_back
-#define F first
-#define S second
 #define pii pair<int,int>
 #define tiii tuple<int,int,int>
 #define vi vector<int>
@@ -69,20 +67,85 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-class Stage{
+struct Stage{
+    
+   
+        const ld pi = acos(-1);
+        ld to_rad(double angle){ return (pi*angle)/180.0;}
+        ld ax = 0, ay = 0,  vx = 0, vy = 0, x = 0, y = 0,  t, ang,density,m; 
+        double xtarget,ytarget,SZ;
+        double C,S, g;
     private:
-        inline void step(vector <Stage> &data, ld time){
-            
+        inline void step(vector <Stage> &data, ld time,const float &delta){
+            if(data.size()>1000) return;
+            Stage back = data.back();
+            if (abs(back.x-xtarget)<=SZ and abs(back.y-ytarget)<=SZ and false){
+                //?__END_SIMULATION//
+                return;
+            } else if(/*back.x>xtarget+SZ || back.y<=0 || back.y<ytarget-SZ*/ false){
+                //?__END_SIMULATION//
+                //! FAIL
+                return;
+            } else {
+                Stage new_stage(back.x, back.y,
+                back.vx, back.vy,
+                back.xtarget, back.ytarget,
+                delta, back.m, back.density, 
+                back.C, back.S, back.g);
+                data.push_back(new_stage);
+                step(data,time+delta,delta);
+            }
         }
     public:
-        void start(vector <Stage> &data){
-            
+        vector <Stage> start(const float &delta){
+            vector <Stage> data;
+            data.push_back(*this);
+            step(data,0,delta);
+            return data;
         }
-    
+        Stage(double x1,double y1,double Vx1,double Vy1, 
+            double xtarget, double ytarget,
+           double delta_t, const double m, 
+           const double density, 
+           const double C, const double S, ld angle,
+           const double g=9.81){ 
+               //TODO: __FULL_ACC//
+            ax = (-density * Vx1 * abs(Vx1) * C * S)/(2 * m);
+            ay = (-density * Vy1 * abs(Vy1) * C * S)/(2 * m) - g;
+            vx = Vx1 + ax*delta_t;
+            vy = Vy1 + ay*delta_t;
+            x = x1 + Vx1 * delta_t + (ax * delta_t * delta_t)/2;
+            y = y1 + Vy1 * delta_t + (ay * delta_t * delta_t)/2;
+            this->C = C;
+            this->g = g;
+            this->m = m;
+            this->S = S;
+            this->xtarget = xtarget;
+            this->ytarget = ytarget;
+            this->ang = to_rad(angle);
+        }
 };
 inline void solve(){
+    float m = 1;
+    float density = 1.2;
+    float C = 0.4;
+    float S = 0.1;
+    double g = 9.81;
+    float dt = 0.001;
+    double tx = 500;
+    double ty = 100;
+    double V0 = 100;
+    Stage x = Stage(
+        Stage(0, 0, V0 * cos(3.14*45/180), 
+        V0 * sin(3.14*45/180), tx, ty, 
+        dt, m, density, 
+        C, S, 45)
+    );
+    vector <Stage> h = x.start(dt);
+    incr(i,0,1001){
+        cout << h[i].vy << nl;
+    }
     
-
 }
 signed main(){
     IOS;
