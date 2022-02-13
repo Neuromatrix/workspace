@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -71,24 +94,16 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
-    }
-    return;
+    int n;
+    cin >> n;vi data;
+    seev(data,n);
+    cout << max(2ll*(*max_element(all(data))), accumulate(all(data),0ll)) << nl;
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

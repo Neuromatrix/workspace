@@ -69,26 +69,79 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+constexpr int N = 2e5+5;
+int color[N];
+vi visited(N,0);
+vi h(N,0),dp(N,0);
+vi g[N],g1[N];
+void dfs1(int v, int col, int cmp)
+{
+    if (visited[v]) return;
+    if (color[v] != col) return;
+    visited[v] = true;
+    h[v] = cmp;
+    for (int i = 0; i < g[v].size(); i++)
+    {
+        int to = g[v][i];
+        dfs1(to, col, cmp);
     }
-    return;
+}
+int ans = 0;
+void dfs2(int v, int p = -1)
+{
+    int mx1 = 0, mx2 = 0;
+    for (int i = 0; i < g1[v].size(); i++)
+    {
+        int to = g1[v][i];
+        if (to == p) continue;
+        dfs2(to, v);
+        int val = dp[to] + 1;
+        mx2 = max(mx2, val);
+        if (mx1 < mx2) swap(mx1, mx2);
+    }
+    dp[v] = mx1;
+    ans = max(ans, mx1 + mx2);
+}
+inline void solve(){
+    int n;
+    cin >> n;
+    int ioio[2];
+    ioio[1] = 0;
+    ioio[0] = 0;
+    incr(i,1,n+1){
+        cin >> color[i];
+        ioio[color[i]]++;
+    }
+    incr(i,0,n-1){
+        int a, b;
+        cin >> a >> b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    if(ioio[1]*ioio[0]==0){
+        cout << 0 << nl;
+        return;
+    } else {
+        int x = 0;
+        incr(i,1,n+1)
+            if (!visited[i])
+                dfs1(i, color[i], x++);
+        for (int i = 1; i <= n; i++)
+            for (int j = 0; j < g[i].size(); j++)
+            {
+                int to = g[i][j];
+                if (h[i] != h[to])
+                    g1[h[i]].push_back(h[to]);
+            }
+            dfs2(0);
+        cout << (ans + 1) / 2 << nl;
+    }
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

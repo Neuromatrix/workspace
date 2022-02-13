@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-inline T bpow(T a, T poww,long long mod = LLONG_MAX){
+inline T pow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -71,24 +71,51 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+    int n;
+    cin >> n;
+    vi data;
+    seev(data,n);
+    if(n==1){
+        cout << data[0] << nl;
+        return;
     }
-    return;
+    if(n==2){
+        sort(all(data));
+        if(data[0]==0 || data[1]==0) cout << max(data[1],data[0]) << nl;
+        else if ((data[0]<0 and data[1]<0) ||  (data[0]>0 and data[1]>0)) cout << data[0] << " " << data[1] << nl;
+        else cout << data[1] << nl;
+        return;
+    }
+    int negc = 0;
+    int ngmax = -INF;
+    fca(it,data){
+        if(it<0){
+            negc++;
+            ngmax = max(ngmax,it);
+        }
+    }
+    if(negc&1){
+        bool b = true;
+        fca(it,data){
+            if(it==ngmax and b){
+                b = false;
+                continue;
+            }
+            if(it!=0) cout << it << " ";
+        }
+    } else {
+        int z = count(all(data),0);
+        if(z==n) {cout << 0 << nl; return;}
+        fca(it,data){
+            if(it!=0) cout << it << " ";
+        }
+    }
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

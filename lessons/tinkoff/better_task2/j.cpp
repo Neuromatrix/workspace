@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-inline T bpow(T a, T poww,long long mod = LLONG_MAX){
+inline T pow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -71,18 +71,13 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
-    }
-    return;
+    int hh, mm;
+	cin >> hh >> mm;
+	if (mm==0) 
+		cout << (24-hh)*60<<endl;
+	else	
+		cout << (24-hh-1)*60+(60-mm)<<endl;
+	return;
 }
 signed main(){
     IOS;

@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-inline T bpow(T a, T poww,long long mod = LLONG_MAX){
+inline T pow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,26 +69,41 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
-inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+int n, m;
+ll ans(vvi& data){
+    ll out = 0;
+    incr(i,0,data.size()){
+        int f = find(all(data[i]),1)-data[i].begin();
+        int s =data[i].rend() -find(rall(data[i]),1)-1;
+        if(f>=data[i].size() || s<0) continue;
+        incr(j,0,data[i].size()){
+            if(data[i][j]) continue;
+            if(j>f and j <s) out+=2;
+            else if(j<f || j>s) out++; 
+        }
     }
-    return;
+    return out;
+}
+inline void solve(){
+    cin >> n >> m;
+    vector <vector<int>> data(n,vi(m));
+    vvi redata(m,vi(n));
+    incr(i,0,n){
+        incr(j,0,m){
+            cin >> data[i][j];
+            redata[j][i] = data[i][j];
+        }
+    }
+    
+    ll res = ans(data);
+    res+=ans(redata);
+    cout << res << nl;
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

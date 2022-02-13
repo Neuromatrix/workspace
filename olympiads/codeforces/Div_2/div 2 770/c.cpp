@@ -71,14 +71,32 @@ inline void prepare(){
 }
 
 inline void solve(){
-    
-
+    ll n, k;
+    cin >> n >> k;
+    if(k==1 || n%2==0){
+        cout << "YES" << nl;
+        if(k==1) {
+            incr(i,0,n){
+                cout << i+1 << nl;
+            }
+        } else {
+            incr(i,1,n+1){
+                incr(j,0,k){
+                    cout << i+j*n << " ";
+                }
+                cout << nl;
+            }
+        }
+    } else {
+        cout << "NO" << nl;
+        return;
+    }
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }

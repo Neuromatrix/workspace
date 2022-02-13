@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second << nl;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -71,24 +94,50 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+    int n;
+    cin >> n;
+    vc <pair<pii,int>> dep;
+    int a, b;
+    incr(i,0,n){
+        cin >> a >> b;
+        dep.push_back({{a,b},i});
     }
-    return;
+    sort(all(dep));
+    int mx = 0, s = 0;
+    vi ans(n);
+    priority_queue<pii> q;
+    int cur = 0;
+    incr(i,0,n){
+        if(q.empty()){
+            cur++;
+            q.push({-dep[i].first.second, cur});
+			ans[dep[i].second] = cur;
+        } else {
+            pair<int, int> minimum = q.top();
+			if (-minimum.first < dep[i].first.first) {
+				q.pop();
+				q.push(make_pair(-dep[i].first.second, minimum.second));
+				ans[dep[i].second] = minimum.second;
+			}
+
+			else {
+				cur++;
+				q.push(make_pair(-dep[i].first.second, cur));
+				ans[dep[i].second] = cur;
+			}
+		
+
+            mx = max(mx, int(q.size()));
+        }
+    }
+    cout << mx << nl;
+    cout << ans << nl;
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

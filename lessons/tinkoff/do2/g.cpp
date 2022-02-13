@@ -93,38 +93,183 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 
-inline void solve(){
+template <typename T> 
+class lseg_tree{
+private:
+    struct node{
+        T sum;
+        T hye;
+        T increment;
+        bool colors;
+        node() : sum(0),colors(0),increment(0) { }
+        void Reset(){
+            colors = increment = 0;
+        }
+    };
+    int range;
+    vector<node> tree;
+    void compose(int par, int child){
+        if(tree[par].colors){
+            tree[child].colors = 1;
+            tree[child].hye = tree[par].hye;
+            tree[child].increment = tree[par].increment;
+        }
+        else tree[child].increment += tree[par].increment;
+    }
+ 
+    void push(int node, int l, int r){
+        if(tree[node].colors)
+            tree[node].sum = (r-l+1)*tree[node].hye;
+ 
+        tree[node].sum += (r-l+1)*tree[node].increment;
+ 
+        if(l != r){
+            compose(node, 2*node);
+            compose(node, 2*node+1);
+        }
+ 
+        tree[node].Reset();
+    }
+    void build(vector<T>& v, int l, int r, int node_no){
+        if(l == r){
+            if(l < v.size())
+                tree[node_no].sum = v[l];
+            else tree[node_no].sum = 0;
+            return;
+        }
+        int mid = (l+r)/2;
+        build(v, l, mid, 2*node_no);
+        build(v, mid + 1, r, 2*node_no+1);
+        tree[node_no].sum = tree[2*node_no].sum + tree[2*node_no+1].sum;
+    }
+    T sum(int node, int l, int r, int& L, int& R)
+    {
+        if(r < L || R < l || l >= range)
+            return 0;
+        push(node, l, r);
+        if(L <= l && R >= r)
+            return tree[node].sum;
+        int mid = (l+r)/2;
+        return sum(2*node, l, mid, L, R) + sum(2*node+1, mid+1, r, L, R);
+    }
+    void add(int node, int l, int r, int& L, int& R, int& X)
+    {
+        if(r < L || R < l || l >= range)
+            return;
+        if(L <= l && R >= r)
+        {
+            tree[node].increment += X;
+            return;
+        }
+        push(node,l,r);
+        int mid = (l+r)/2;
+        add(2*node,l,mid,L,R,X);
+        add(2*node+1,mid+1,r,L,R,X);
+        push(2*node, l, mid);
+        push(2*node+1, mid+1, r);
+        tree[node].sum = tree[2*node].sum + tree[2*node+1].sum;
+    }
+    void color(int node, int l, int r, int& L, int& R, int& X)
+    {
+        if(r < L || R < l || l >= range)
+            return;
+        if(L <= l && R >= r)
+        {
+            tree[node].colors = 1;
+            tree[node].hye = X;
+            tree[node].increment = 0;
+            return;
+        }
+        push(node,l,r);
+        int mid = (l+r)/2;
+        color(2*node,l,mid,L,R,X);
+        color(2*node+1,mid+1,r,L,R,X);
+        push(2*node, l, mid);
+        push(2*node+1, mid+1, r);
+        tree[node].sum = tree[2*node].sum + tree[2*node+1].sum;
+    }
+public:
+    void init(vector<T>& v){
+        range = v.size();
+        tree.assign(4*range, node());
+        build(v, 0, range-1, 1);
+    }
+    T get(int pos){
+        return sum(1,0,range-1,pos,pos);
+    }
+    void add(int l, int r, int x){
+        add(1,0,range-1,l,r,x);
+    }
+    void color(int l, int r, int x){
+        color(1,0,range-1,l,r,x);
+    }
+    T sum(int l, int r){
+        return sum(1,0,range-1,l,r);
+    }
+    lseg_tree(vector <T> a){
+        init(a);
+    }
+    lseg_tree(){}
+    void print(){
+        incr(i,0,tree.size()){
+            cout << tree[i].sum << " ";
+        }
+        cout << nl;
+    }
+};
+void ssolve(){
     int n, q;
-    cin >> n>> q;
-    crope data;
+    cin >> n >> q;
+    vector <lseg_tree<int>> letters(26);
+    string data;
+    cin >> data;
+    vvi cj(26,vi(n,0));
     incr(i,0,n){
-        char c;
-        cin >> c;
-        data.push_back(c);
+        cj[data[i]-'a'][i] = 1;
+    }
+    incr(i,0,26){
+        letters[i].init(cj[i]);
     }
     while (q--){
-        int i, j, rev;
-        cin >> i >> j >> rev;
-        crope x = data.substr(i-1,j-i+1);
-        string tmp;
-        fca(it,x) tmp.pb(it);
-        x.clear();
-        if(rev) sort(all(tmp));
-        else sort(rall(tmp));
-        fca(it,tmp) x.pb(it);
-        crope f = data.substr(0,i-1);
-        crope s = data.substr(j,n-j);
-        data = f+x+s;
-        // cout << data << nl;
+        int a, b, r;
+        cin >> a >> b >> r;
+        vi ch(26,0);
+        a--;
+        b--;
+        incr(i,0,26){
+            
+            ch[i] = letters[i].sum(a,b);
+            letters[i].color(a,b,0);
+        }
+        
+        if(r){
+            incr(i,0,26){
+                if(ch[i]==0) continue;
+                letters[i].color(a,a+ch[i]-1,1);
+                a+=ch[i];
+            }
+        } else {
+            decr(i,25,-1){
+                if(ch[i]==0) continue;
+                letters[i].color(a,a+ch[i]-1,1);
+                a+=ch[i];
+            }
+        }
     }
-    cout << data << nl;
-    
+    string an;
+    an.resize(n);
+    incr(h,0,26){
+        incr(i,0,n){
+            if(letters[h].get(i)) an[i] = 'a'+h;
+        }
+    }
+    cout << an << nl;
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
     // cin >> tt;
-    while(tt--) solve();
+    while(tt--) ssolve();
     return 0;
 }

@@ -71,24 +71,28 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+    int n;
+    cin >> n;
+    vc<ll> x(n), y(n);
+    incr(i,0,n){
+        cin >> x[i];
+        y[i] = x[i];
     }
-    return;
+    sort(all(x));
+    sort(rall(y));
+    ll m = 10007;
+    ll ans = 0;
+    incr(i,0,n){
+        ans+=x[i]*y[i];
+        ans%=m;
+    }
+    cout << ans <<nl;
 }
 signed main(){
     IOS;
     // prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

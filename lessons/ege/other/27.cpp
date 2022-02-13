@@ -71,24 +71,30 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n, k;
-    cin >> n >> k;
-    string s;
-    cin >> s;
-    string s1 = s;
-    reverse(all(s1));
-    if(s1==s or k==0){
-        cout << 1 << nl;
-    } else {
-        cout <<  2 << nl;
+    int n;
+    cin >> n;
+    vii data(n);
+    vii co(n);
+    ll s = 0;
+    incr(i,0,n){
+        cin >> data[i].first >> data[i].second;
+        co[i].first = !(abs(data[i].first-data[i].second)%3);
+        co[i].second =  abs(data[i].first-data[i].second);
+        s +=  min(data[i].first,data[i].second);
     }
-    return;
+    if(s%3==0){
+        sort(all(co));
+        s+=co.front().second;
+        cout << s<< nl;
+    } else {
+        cout << s << nl;
+    }
 }
 signed main(){
     IOS;
-    // prepare();
+    prepare();
     size_t tt = 1;
-    cin >> tt;
+    // cin >> tt;
     while(tt--) solve();
     return 0;
 }

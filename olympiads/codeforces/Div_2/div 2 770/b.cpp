@@ -69,16 +69,26 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-
+int odd(vi &a){
+    return accumulate(all(a),0ll)&1;
+}
 inline void solve(){
-    
-
+    ll x, y, n;
+    cin >> n >> x >> y;
+    vi data;
+    seev(data,n);
+    data.push_back(x);
+    if(odd(data)==(y&1)){
+        cout << "Alice" << nl;
+    } else {
+        cout << "Bob"<< nl;
+    }
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();
     size_t tt = 1;
-    // cin >> tt;
+    cin >> tt;
     while(tt--) solve();
     return 0;
 }
