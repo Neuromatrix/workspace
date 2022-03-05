@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,6 +92,7 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
+
 const ld pi = acos(-1);
 class point2d{
     public:
@@ -133,9 +157,6 @@ class vec2d{
             y+=a.y;
             return;
         }
-        ld distpoint(point2d n){
-
-        }
         vec2d operator+(vec2d b){
             return vec2d(x+b.x,y+b.y);
         }
@@ -164,30 +185,33 @@ ld operator^(vec2d a, vec2d b){//angle
 ld ang(ld rad){
     return (rad*180.0)/pi;
 }
-class line2d{
-    public:
-    ld a = 0, b = 0, c = 0;
-    ld dist(point2d f){
-        return abs(a*f.x+b*f.y+c)/sqrt(a*a+b*b);
-    }
-    void print(){
-        cout << a << " " << b << " " << c << nl;
-    }
-    line2d(point2d n, point2d m){
-        a = n.y - m.y;
-        b = m.x - n.x;
-        c = n.x*m.y - n.y*m.x;
-    }
-    line2d(){}
-
-};
 inline void solve(){
-    vec2d a(4,2), b(-1,2);
-    cout << a.vec_product(b) << nl;
+    point2d a,b, z;
+    cin >> a.x >> a.y >> b.x >> b.y >> z.x >> z.y;
+    vector<ld> line1 = {a.y-b.y,    b.x-a.x,  -b.x*a.y+b.y*a.x};
+    vector<ld> line2 = {a.y-z.y,    z.x-a.x,  -z.x*a.y+z.y*a.x};
+    ld gamm1 = sqrt(pw(line1[0])+pw(line1[1]));
+    ld gamm2 = sqrt(pw(line2[0])+pw(line2[1]));
+    vector <ld> biss1, biss2;
+    biss1 = {
+        line1[0]*gamm2-line2[0]*gamm1,
+        line1[1]*gamm2-line2[1]*gamm1,
+        line1[2]*gamm2-line2[2]*gamm1
+    };
+    biss2 = {
+        line1[0]*gamm2+line2[0]*gamm1,
+        line1[1]*gamm2+line2[1]*gamm1,
+        line1[2]*gamm2+line2[2]*gamm1
+    };
+    if((biss1[0]*b.x+biss1[1]*b.y+biss1[2])*(biss1[0]*z.x+biss1[1]*z.y+biss1[2])<=0){
+        cout << biss1 << nl;
+    } else {
+        cout << biss2 << nl;
+    }
 }
 signed main(){
     IOS;
-    prepare();
+    // prepare();   
     size_t tt = 1;
     // cin >> tt;
     while(tt--) solve();

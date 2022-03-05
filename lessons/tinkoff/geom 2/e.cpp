@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -133,9 +156,6 @@ class vec2d{
             y+=a.y;
             return;
         }
-        ld distpoint(point2d n){
-
-        }
         vec2d operator+(vec2d b){
             return vec2d(x+b.x,y+b.y);
         }
@@ -170,8 +190,21 @@ class line2d{
     ld dist(point2d f){
         return abs(a*f.x+b*f.y+c)/sqrt(a*a+b*b);
     }
+    ld det (ld a, ld b, ld c, ld d) {
+        return a * d - b * c;
+    }
     void print(){
         cout << a << " " << b << " " << c << nl;
+    }
+    bool intersec(line2d m,point2d &res){
+        line2d n = *this;
+        
+        ld zn = det(m.a, m.b, n.a, n.b);
+        if (abs (zn) < eps)
+            return false;
+        res.x = - det (m.c, m.b, n.c, n.b) / zn;
+        res.y = - det (m.a, m.c, n.a, n.c) / zn;
+        return true;
     }
     line2d(point2d n, point2d m){
         a = n.y - m.y;
@@ -182,8 +215,12 @@ class line2d{
 
 };
 inline void solve(){
-    vec2d a(4,2), b(-1,2);
-    cout << a.vec_product(b) << nl;
+    int n;
+    cin >> n;
+    vector <point2d> data(n);
+    incr(i,0,n){
+        cin >> data[i].x >> data[i].y;
+    }
 }
 signed main(){
     IOS;

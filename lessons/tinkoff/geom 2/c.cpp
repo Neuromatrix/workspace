@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -36,11 +59,11 @@ constexpr long double eps = 1e-9;
 #define sees(s,n) for(int i=0;i<n;i++){int x; cin>>x; s.insert(x);}
 #define fca(a,s) for(const auto & a: s)
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2")
-#pragma GCC optimization ("O3")
-#pragma GCC optimization ("unroll-loops")
+#pragma GCC opoint2dimization ("O3")
+#pragma GCC opoint2dimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -66,8 +89,8 @@ T pow(T a, T poww,long long mod = LLONG_MAX){
 	}
 }
 inline void prepare(){
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
-    freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
+    freopen("wall.in", "r", stdin);
+    freopen("wall.out", "w", stdout);
 }
 const ld pi = acos(-1);
 class point2d{
@@ -103,6 +126,10 @@ class point2d{
         point2d(){}
         point2d(int i, int j){x = i;y = j;}
         point2d(ld i, ld j){x = i;y = j;}
+        bool operator==(point2d b){
+            if (this->x == b.x && this->y== b.y) return true;
+            else return false;
+        }
         
 };
 ostream& operator<< (ostream& out, point2d F){ 
@@ -133,9 +160,6 @@ class vec2d{
             y+=a.y;
             return;
         }
-        ld distpoint(point2d n){
-
-        }
         vec2d operator+(vec2d b){
             return vec2d(x+b.x,y+b.y);
         }
@@ -164,26 +188,60 @@ ld operator^(vec2d a, vec2d b){//angle
 ld ang(ld rad){
     return (rad*180.0)/pi;
 }
-class line2d{
-    public:
-    ld a = 0, b = 0, c = 0;
-    ld dist(point2d f){
-        return abs(a*f.x+b*f.y+c)/sqrt(a*a+b*b);
-    }
-    void print(){
-        cout << a << " " << b << " " << c << nl;
-    }
-    line2d(point2d n, point2d m){
-        a = n.y - m.y;
-        b = m.x - n.x;
-        c = n.x*m.y - n.y*m.x;
-    }
-    line2d(){}
+bool cmp (point2d a, point2d b) {
+	return a.x < b.x || a.x == b.x && a.y < b.y;
+}
 
-};
+bool cw (point2d a, point2d b, point2d c) {
+	return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) < 0;
+}
+
+bool ccw (point2d a, point2d b, point2d c) {
+	return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) > 0;
+}
+
+void convex_hull (vector<point2d> & a) {
+	if (a.size() == 1)  return;
+	sort (a.begin(), a.end(), cmp);
+	point2d p1 = a[0],  p2 = a.back();
+	vector<point2d> up, down;
+	up.push_back (p1);
+	down.push_back (p1);
+	for (size_t i=1; i<a.size(); ++i) {
+		if (i==a.size()-1 || cw (p1, a[i], p2)) {
+			while (up.size()>=2 && !cw (up[up.size()-2], up[up.size()-1], a[i]))
+				up.pop_back();
+			up.push_back (a[i]);
+		}
+		if (i==a.size()-1 || ccw (p1, a[i], p2)) {
+			while (down.size()>=2 && !ccw (down[down.size()-2], down[down.size()-1], a[i]))
+				down.pop_back();
+			down.push_back (a[i]);
+		}
+	}
+	a.clear();
+	for (size_t i=0; i<up.size(); ++i)
+		a.push_back (up[i]);
+	for (size_t i=down.size()-2; i>0; --i)
+		a.push_back (down[i]);
+}
 inline void solve(){
-    vec2d a(4,2), b(-1,2);
-    cout << a.vec_product(b) << nl;
+    int n; ld r;
+    
+    setpr(10);
+    cin >> n >> r;
+    ld ans = 2.0*pi*r;
+    vector <point2d> d(n);
+    incr(i,0,n){
+        cin >> d[i].x >> d[i].y;
+    }
+    convex_hull(d);
+    incr(i,0,d.size()-1){
+        ans+=vec2d(d[i],d[i+1]).length();
+    }
+    ans+=vec2d(d.back(),d[0]).length();
+    cout << ans << nl;
+    
 }
 signed main(){
     IOS;

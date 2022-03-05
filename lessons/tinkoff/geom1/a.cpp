@@ -1,4 +1,27 @@
-#include <bits\stdc++.h>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+#include <fstream>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+#include <bitset>
+#include <vector>
+#include <string>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <array>
+#include <algorithm>
+#include <functional>
+#include <cmath>
+#include <time.h>
+#include <random>
+#include <chrono>
+#include <cassert>
+#include <cstring>
+#include <climits>
 #include <ext/rope>
 #include <ext/pb_ds/detail/standard_policies.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
@@ -40,7 +63,7 @@ constexpr long double eps = 1e-9;
 #pragma GCC optimization ("unroll-loops")
 template <typename T> inline T abs(T &x) {return(x<0 ? -x : x);}
 template <typename T> ostream& operator<<(ostream &out, const vector<T> &v) {for (auto &it : v) {out << it << " ";}return out;}
-template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.fi << " " << v.se;return out;}
+template <typename T1, typename T2> ostream& operator<<(ostream &out, const pair<T1, T2> &v) {out << v.first << " " << v.second;return out;}
 template <typename T> inline T pw(T x) {return x*x;}
 template <typename T> inline T pw2(T x){return 1LL<<x;}
 template <typename T> inline T gcd(T a, T b){
@@ -56,7 +79,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -181,9 +204,39 @@ class line2d{
     line2d(){}
 
 };
+
 inline void solve(){
-    vec2d a(4,2), b(-1,2);
-    cout << a.vec_product(b) << nl;
+    point2d a, b, c, d;
+    cin >> a.x >> a.y >> 
+    b.x >> b.y >>
+    c.x >> c.y >>
+    d.x >> d.y;
+    line2d cd(c,d);
+    setpr(6);
+    //!1
+    cout <<a.dist(c) << nl;
+    //2
+    
+    //3
+    //!4
+    cout << cd.dist(a) << nl;
+    //5
+    //6
+    //7
+    //8
+    //9
+    //10
+    //!11
+    cout << 0.0 << nl;
+    //!12
+    cout << 0.0 << nl;
+    //13
+    //14
+    //!15
+    cout << 0.0 << nl;
+    //!16
+    cout << 0.0 << nl;
+
 }
 signed main(){
     IOS;

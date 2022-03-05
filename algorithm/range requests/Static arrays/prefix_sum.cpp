@@ -61,7 +61,7 @@ public:
             pre_sum[i] = pre_sum[i-1] + pool[i];
         }
     }
-    T sum(ssize_t l, ssize_t r){
+    T sum(ssize_t l, ssize_t r){ //[l,r]
         assert(!(l < 0  || r < 0 || l > size_it || r > size_it));
         if (min(l,r) > 0) return pre_sum[max(l,r)]-pre_sum[min(l,r)-1];
         else return pre_sum[max(l,r)];

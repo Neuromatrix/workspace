@@ -106,7 +106,7 @@ inline void solve(){
  
 int main(){
     IOS;
-    //prepare();
+    prepare();
     size_t tt = 1;
     //cin >> tt;
     while (tt--) solve();

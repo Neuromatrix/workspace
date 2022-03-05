@@ -41,24 +41,19 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int numb_prime(ll n){
-    int ans = 0;
-    incr(i,1,n){
-        if(__gcd(i,n)==1){
-            ans++;
-        }
+bool numb_prime(ll n){
+    incr(i,2,n){
+        if(n%i==0) return false;
     }
-    return ans;
+    return true;
 }
 inline void solve(){
-    ll ans = 0;
-    incr(a,1,1000){
-        incr(b,2,1000){
-            if((a-1)%(b-1)==0 and (a+1)%(b+1)==0){
-                if(abs((a-1)/(b-1)-(a+1)/(b+1))==1){
-                    ans++;
-                }
-            }
+    int s = 3, e = 28;ll ans = 0;
+    incr(x,s,e){
+        incr(y,s,e){
+            int xx = numb_prime(x) ? x/4 : x;
+            int yy = numb_prime(y) ? y/4 : y;
+            if(yy>xx) ans++;
         }
     }
     cout << ans << nl;

@@ -69,121 +69,45 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-const ld pi = acos(-1);
-class point2d{
-    public:
-        ld x = 0, y = 0;
-        point2d operator+(point2d b){
-            return point2d(x+b.x,y+b.y);
-        }
-        point2d operator+(ld i){
-            return point2d(x+i,y+i);
-        }
-        point2d operator+(int i){
-            return point2d(x+i,y+i);
-        }
-        void operator+=(point2d a){
-            x+=a.x;
-            y+=a.y;
-            return;
-        }
-        void operator+=(ld i){
-            x+=i;y+=i;
-        }
-        void operator+=(int i){
-            x+=i;y+=i;
-        }
-        ld dist(point2d b){
-            return sqrt(pw(x-b.x)+pw(y-b.y));
-        }
-        ld dist(){
-            return dist(point2d(0,0));
-        }
-        friend ostream& operator<<(ostream &out, point2d a);
-        point2d(){}
-        point2d(int i, int j){x = i;y = j;}
-        point2d(ld i, ld j){x = i;y = j;}
-        
-};
-ostream& operator<< (ostream& out, point2d F){ 
-    out << F.x<< " " <<F.y;
-    return out; 
-}
-
-class vec2d{
-    public:
-        ld x, y;
-        ld vec_product(vec2d b){ // нужно чтобы опрделить располложение двух                      
-            return x*b.y-b.x*y;  // векторов относительно друг друга
-        }
-        ld length(){
-            return sqrt(pw(x)+pw(y));
-        }
-        ld operator*(vec2d b){
-            return x*b.x+b.y*y; 
-        }
-        void operator+=(ld i){
-            x+=i;y+=i;
-        }
-        void operator+=(int i){
-            x+=i;y+=i;
-        }
-        void operator+=(vec2d a){
-            x+=a.x;
-            y+=a.y;
-            return;
-        }
-        ld distpoint(point2d n){
-
-        }
-        vec2d operator+(vec2d b){
-            return vec2d(x+b.x,y+b.y);
-        }
-        vec2d(){}
-        vec2d(int i, int j){x = i;y = j;}
-        vec2d(ld i, ld j){x = i;y = j;}
-        vec2d(point2d from, point2d to){
-            x = to.x - from.x;
-            y = to.y - from.y;
-        }
-};
-ostream& operator<< (ostream& out, vec2d F){ 
-    out << F.x<< " " <<F.y;
-    return out; 
-}
-ld cos(vec2d a,vec2d b){
-    if(a*b/(a.length()*b.length())>1){
-        return 1;
-    } else if (a*b/(a.length()*b.length())<-1){
-        return -1;
-    } else return a*b/(a.length()*b.length());
-}
-ld operator^(vec2d a, vec2d b){//angle
-    return acos(cos(a,b));
-}
-ld ang(ld rad){
-    return (rad*180.0)/pi;
-}
-class line2d{
-    public:
-    ld a = 0, b = 0, c = 0;
-    ld dist(point2d f){
-        return abs(a*f.x+b*f.y+c)/sqrt(a*a+b*b);
+void ent_dfs(int v, vector <int> &period,vector <int> &visited,
+const vector <vector<int>> &g){
+    if(visited[v]) return;
+    visited[v] = true;
+    for(int i = 0; i<g[v].size();i++){
+        ent_dfs(i,period,visited,g);
     }
-    void print(){
-        cout << a << " " << b << " " << c << nl;
+    period.push_back(v);
+}
+void connected_dfs(int v,vector <vector<int>> &hard_connected,
+vector <int> &visited,const vector <vector<int>> &g){
+    if(visited[v]) return;
+    visited[v] = true;
+    for(int i = 0; i<g[v].size();i++){
+        connected_dfs(i,hard_connected,visited,g);
     }
-    line2d(point2d n, point2d m){
-        a = n.y - m.y;
-        b = m.x - n.x;
-        c = n.x*m.y - n.y*m.x;
+    hard_connected.back().push_back(v);
+}
+vector<vector<int>> hard_connectivity(const vector <vector<int>> &g,
+const vector <vector<int>> &rev_g){
+    int n = g.size();
+    vector<int> period(n);
+    vector <int> visited(n,0);
+    vector <vector<int>> hard_connected;
+    ent_dfs(1,period,visited,g);
+    reverse(period.begin(),period.end());
+    visited.assign(n,0);
+    for(int i = 1; i < n; i++){
+        if(visited[i]) continue;
+        else{
+            hard_connected.push_back({});
+            connected_dfs(i,hard_connected,visited,rev_g);
+        }
     }
-    line2d(){}
+    return hard_connected;
 
-};
+}
 inline void solve(){
-    vec2d a(4,2), b(-1,2);
-    cout << a.vec_product(b) << nl;
+
 }
 signed main(){
     IOS;

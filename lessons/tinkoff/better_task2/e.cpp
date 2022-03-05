@@ -56,7 +56,7 @@ template <typename T> inline T factorial(T n){
     else return n*factorial(n-1);
 }
 template <typename T> 
-inline T pow(T a, T poww,long long mod = LLONG_MAX){
+inline T bpow(T a, T poww,long long mod = LLONG_MAX){
 	if (a == 1 || poww == 0) return 1LL;
     else if (poww == 1) return a%=mod; 
     else {
@@ -69,35 +69,155 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\input.txt", "r", stdin);
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
-int n, m;
-ll ans(vvi& data){
-    ll out = 0;
-    incr(i,0,data.size()){
-        int f = find(all(data[i]),1)-data[i].begin();
-        int s =data[i].rend() -find(rall(data[i]),1)-1;
-        if(f>=data[i].size() || s<0) continue;
-        incr(j,0,data[i].size()){
-            if(data[i][j]) continue;
-            if(j>f and j <s) out+=2;
-            else if(j<f || j>s) out++; 
+
+const ld pi = acos(-1);
+class point2d{
+    public:
+        ld x = 0, y = 0;
+        point2d operator+(point2d b){
+            return point2d(x+b.x,y+b.y);
         }
+        point2d operator+(ld i){
+            return point2d(x+i,y+i);
+        }
+        point2d operator+(int i){
+            return point2d(x+i,y+i);
+        }
+        void operator+=(point2d a){
+            x+=a.x;
+            y+=a.y;
+            return;
+        }
+        void operator+=(ld i){
+            x+=i;y+=i;
+        }
+        void operator+=(int i){
+            x+=i;y+=i;
+        }
+        bool operator==(point2d hh){
+            return (hh.x==x and hh.y==y);
+        }
+        ld dist(point2d b){
+            return sqrt(pw(x-b.x)+pw(y-b.y));
+        }
+        ld dist(){
+            return dist(point2d(0,0));
+        }
+        friend ostream& operator<<(ostream &out, point2d a);
+        point2d(){}
+        point2d(int i, int j){x = i;y = j;}
+        point2d(ld i, ld j){x = i;y = j;}
+        
+};
+ostream& operator<< (ostream& out, point2d F){ 
+    out << F.x<< " " <<F.y;
+    return out; 
+}
+
+class vec2d{
+    public:
+        ld x, y;
+        ld vec_product(vec2d b){ // нужно чтобы опрделить располложение двух                      
+            return x*b.y-b.x*y;  // векторов относительно друг друга
+        }
+        ld length(){
+            return sqrt(pw(x)+pw(y));
+        }
+        ld operator*(vec2d b){
+            return x*b.x+b.y*y; 
+        }
+        void operator+=(ld i){
+            x+=i;y+=i;
+        }
+        void operator+=(int i){
+            x+=i;y+=i;
+        }
+        void operator+=(vec2d a){
+            x+=a.x;
+            y+=a.y;
+            return;
+        }
+        ld distpoint(point2d n){
+
+        }
+        vec2d operator+(vec2d b){
+            return vec2d(x+b.x,y+b.y);
+        }
+        vec2d(){}
+        vec2d(int i, int j){x = i;y = j;}
+        vec2d(ld i, ld j){x = i;y = j;}
+        vec2d(point2d from, point2d to){
+            x = to.x - from.x;
+            y = to.y - from.y;
+        }
+};
+ostream& operator<< (ostream& out, vec2d F){ 
+    out << F.x<< " " <<F.y;
+    return out; 
+}
+ld cos(vec2d a,vec2d b){
+    if(a*b/(a.length()*b.length())>1){
+        return 1;
+    } else if (a*b/(a.length()*b.length())<-1){
+        return -1;
+    } else return a*b/(a.length()*b.length());
+}
+ld operator^(vec2d a, vec2d b){//angle
+    return acos(cos(a,b));
+}
+ld ang(ld rad){
+    return (rad*180.0)/pi;
+}
+class line2d{
+    public:
+    ld a = 0, b = 0, c = 0;
+    ld dist(point2d f){
+        return abs(a*f.x+b*f.y+c)/sqrt(a*a+b*b);
     }
-    return out;
+    void print(){
+        cout << a << " " << b << " " << c << nl;
+    }
+    line2d(point2d n, point2d m){
+        a = n.y - m.y;
+        b = m.x - n.x;
+        c = n.x*m.y - n.y*m.x;
+    }
+    line2d(){}
+
+};
+bool cmp( pair<point2d,int> &a,   pair<point2d,int> &b){
+    if(a.first.x==b.first.x) 
+        if(a.first.y==b.first.y)
+            return a.second<b.second;
+        else return a.first.y<b.first.y;
+    else return a.first.x<b.first.x;
+}
+ld polygonarea(vector <point2d> &data){
+    ld ans_sum = 0; 
+    incr(i,0,sz(data)){
+        int j = i + 1;
+        if (j >= sz(data)) j = 0;
+        ans_sum += (data[i].x * data[j].y) - (data[j].x * data[i].y);
+    }
+    ans_sum = ans_sum < 0 ? -ans_sum : ans_sum;
+    return ans_sum;
 }
 inline void solve(){
-    cin >> n >> m;
-    vector <vector<int>> data(n,vi(m));
-    vvi redata(m,vi(n));
+    int n;
+    cin >> n;
+    vector <pair<point2d,int>> data(n);
     incr(i,0,n){
-        incr(j,0,m){
-            cin >> data[i][j];
-            redata[j][i] = data[i][j];
-        }
+        cin >> data[i].first.x >> data[i].first.y;
+        data[i].second = i+1;
+    }  
+    sort(all(data),cmp);
+    point2d f = data[0].first;
+    point2d s = data[1].first;
+    incr(i,2,n){
+        point2d r = data[i].first;
+        vec2d h(s,f),g(s,r);
+        if(g.vec_product(h)!=0){cout << data[0].second << " " << data[1].second << " " << data[i].second << nl; return;}
     }
-    
-    ll res = ans(data);
-    res+=ans(redata);
-    cout << res << nl;
 }
 signed main(){
     IOS;
