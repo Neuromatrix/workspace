@@ -47,9 +47,9 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 // O(sqrt(n)), быстрее, но подсчет степени медленнее
-vector <int> factoriz(int N){ 
-    vector <int> f;
-    for(int i = 2; i * i <= N; i++){
+vector <long long> factoriz(long long N){ 
+    vector <long long> f;
+    for(long long i = 2; i * i <= N; i++){
         while(N%i == 0){
             f.push_back(N);
             N/=i;
@@ -60,9 +60,9 @@ vector <int> factoriz(int N){
 }
 //O(sqrt(nlogn)) 
 // чуть медленнее, но если нужна быстро узанть  /alpha_i(степень делителя), то это лучше 
-map <int,int> factoriz_with_map(int N){ 
-    map <int,int> f;
-    for(int i = 2; i * i <= N; i++){
+map <long long,long long> factoriz_with_map(long long N){ 
+    map <long long,long long> f;
+    for(long long i = 2; i * i <= N; i++){
         while(N%i == 0){
             f[i]++;
             N/=i;

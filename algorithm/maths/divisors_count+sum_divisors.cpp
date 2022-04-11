@@ -94,14 +94,15 @@ ll sum_of_divisors(ll N){
 }
 inline void solve(){
     ll n;
-    cin >> n;
-    cout << divisors_count(n) << " " << sum_of_divisors(n) << endl;
+    incr(i,2,10000){
+        if(sum_of_divisors(i)/3==i) cout << i << nl;
+    }
     return;
 }
 
 int main(){
     IOS;
-    //prepare();
+    prepare();
     solve();
     return 0;
 }
