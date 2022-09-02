@@ -29,7 +29,34 @@ inline void prepare(){
 }
 
 inline void solve(){
-     
+    int n, m;
+    cin >> n >> m;
+    deque <pair<int,int>> dates;
+    for (size_t i = 0; i < m; i++){
+        int l, r, x;
+        cin >> l >> r >> x;
+        dates.push_back({l,x});
+        dates.push_back({r+1,-x});
+    }
+    sort(dates.begin(), dates.end());
+    multiset <int, greater<int>> cost;
+    long long sum = 0;
+    cost.insert(0);
+    int pday = dates.front().first;
+    while (dates.size()){
+        pair<int,int> s = dates.front();
+        sum += (s.first-pday)*(*cost.begin());
+        if(s.second < 0){
+            cost.erase(cost.find(-s.second));
+        } else {
+            cost.insert(s.second);
+        }
+        pday = s.first;
+        dates.pop_front();
+    }
+    cout << sum << endl;
+    
+    
 }
 signed main(){
     ios_base::sync_with_stdio(false);

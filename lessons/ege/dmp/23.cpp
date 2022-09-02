@@ -34,9 +34,13 @@ void f(int len, int cur){
     f(len+1,cur+3);
     f(len+1,cur+2);
 }
+int r(int cur, int target){
+    if(cur>target) return 0;
+    else if(cur==target) return 1;
+    else return r(cur+2,target)+r(cur*2,target);
+}
 inline void solve(){
-    f(0,10);
-    cout << ans.size() << nl;
+    cout << r(1,24)*r(24,50) << nl;
 }
 signed main(){
     ios_base::sync_with_stdio(false);

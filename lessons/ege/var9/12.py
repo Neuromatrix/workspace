@@ -1,0 +1,14 @@
+import sys
+
+sys.stdin = open(r"C:\\Users\\grivi\\vscodes\\.vscode\\input.txt","r") #!REMOVE
+sys.stdout = open(r"C:\\Users\\grivi\\vscodes\\.vscode\\output.txt","w") #!REMOVE
+
+
+if __name__ == "__main__":
+    s = "8"*86
+    while "1111" in s or "8888" in s:
+        if "1111" in s:
+            s = s.replace("1111","8",1)
+        else:
+            s = s.replace("8888", "11",1)
+    print(s)

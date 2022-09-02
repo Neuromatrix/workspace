@@ -22,19 +22,16 @@ def binn(numb):
 
 
 #main
-u = 137 #board
+u = 19 #board
 ans = 10000
-for i in range(10,1000):
-    n = str(i)
-    mx = 0
-    mn = 1000
-    for a in range(0,len(n)-1):
-        tmp = n[a]+n[a+1]
-        y = int(tmp[0])*10+int(tmp[1])
-        mx = max(mx, y)
-        mn = min(mn, y)
-    res = mx + mn
-    if res == u:
+for i in range(0,1000):
+    n = binn(i)
+    if i%2==0:
+        res = "10" + n
+    else :
+        res = "1" + n + "01"
+    ress = dec(res)
+    if ress >= u:
         ans = min(ans, i)
 
 

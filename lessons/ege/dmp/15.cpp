@@ -31,6 +31,24 @@ bool cnt(pair<int,int> x, int n){
     if(n>=x.first and n<=x.second) return true;
     return false;
 }
+bool del(int n, int m){
+    if(n%m) return false;
+    else return true;
+}
+inline void solve(int && y){
+    int a = 0;
+    for (int  a = 1; a < 10000; a++)
+    {
+        bool ok = true;
+        for (int x = 1; x <10000; x++){
+            if(((del(x,2) <= ! del(x,5)) or (x+a>=90))==false) ok = false;
+        }
+        if (ok){
+            cout << a << nl;
+            return;
+        }
+    }
+}
 inline void solve(){
     pair<int,int> d = {17,58};
     pair<int,int> c = {29,80};
@@ -56,6 +74,6 @@ signed main(){
     prepare();
     size_t tt = 1;
     // cin >> tt;
-    while(tt--) solve();
+    while(tt--) solve(1);
     return 0;
 }

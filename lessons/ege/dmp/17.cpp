@@ -29,20 +29,20 @@ inline void prepare(){
 }
 
 inline void solve(){
-    int n =50; // predefined ops 
+    int n =10000; // predefined ops 
     vector<int> data;
-    int mxcse = 0;
+    int mxcse = INF;
     for (int i = 0; i < n; i++){
         int x;
         cin >> x;
         data.push_back(x);
-        if(true) mxcse = max(mxcse,x);// task condition
+        if(x%6==0) mxcse = min(mxcse,x);// task condition
     }
     int mx = 0;
     int cnt = 0;   
     for (int i = 0; i < n-1; i++){
         int a = data[i], b = data[i+1];
-        if(a%10==7 or b%10==7 or (-a)%10==7 or (-b)%10==7){
+        if(a%mxcse==0 and b%mxcse==0){
             mx = max(mx,a+b);
             cnt++;
         }

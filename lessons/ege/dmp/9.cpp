@@ -40,7 +40,7 @@ inline void solve(){
         int a = it[0], b = it[1], c = it[2];
         // conditions
         // examaple
-        if(true){
+        if(pw(c)>2*a*b){
             cnt++;
         }
     }

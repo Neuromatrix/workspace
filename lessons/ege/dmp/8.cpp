@@ -38,7 +38,7 @@ inline void __with__permutation(){
     cout <<cnt.size()<<nl;
 }
 inline void __withany__combinate(){
-    string s = "slon";
+    string s = "abcdef";
     sort(s.begin(), s.end());
     set<string> cnt;
     for (const auto & e1 : s) {
@@ -48,14 +48,21 @@ inline void __withany__combinate(){
                     for (const auto & e5 : s) {
                         string tmp = "";
                         tmp+=e1; tmp+=e2; tmp+=e3;tmp+=e4; tmp+=e5;
-                        // if 
-                        if(true) cnt.insert(tmp); 
+                        
+                        cnt.insert(tmp); 
+                        
                     }
                 }
             }
         }
     }
-    cout << cnt.size() << nl;
+    int c = 1;
+    for (const auto & it : cnt){
+        int a = count(it.begin(), it.end(),'a');
+        int l = count(it.begin(), it.end(),'b');
+        if(a<=1 and l==0) cout << c << nl << it << nl;
+        c++;
+    }
 }
 signed main(){
     ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);

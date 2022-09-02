@@ -28,9 +28,9 @@ inline void prepare(){
     freopen("C:\\Users\\grivi\\vscodes\\.vscode\\output.txt", "w", stdout);
 }
 int f(int x){
-    if(x==1) return 1;
-    if(x&1) return 2*f(x-2);
-    else return f(x-1)+x;
+    if(x<3) return 1;
+    if(x&1==0) return f(x-1)+x-1;
+    else return f(x-2)+2*x-2;
 }
 vector<int> mem(1e5+5,0);
 int hard(int n, bool &bad){
@@ -42,7 +42,7 @@ int hard(int n, bool &bad){
     else return (f(n-1)+n)*((bad+1)%2);
 }
 inline void solve(){
-    
+    cout << f(31) << nl;
 }
 signed main(){
     ios_base::sync_with_stdio(false);

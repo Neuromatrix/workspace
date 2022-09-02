@@ -29,15 +29,19 @@ inline void prepare(){
 }
 
 inline void solve(){
-    for (int i = 10000; i >=0 ; i--){
-        /*
-            code
-        */
-        int s = i, n;
-        s = s / 10;
+    for (int i =10000000; i >= 0 ; i--){
+        int n, s;
+        s = i;
         n = 1;
-        while (s < 51) {s = s + 5; n = n * 2;}
-        if(n==64) {cout << i << nl; return;}
+        s = (s -21) / 10 ;
+        while(s > 0) {
+            n = n * 2;
+            s = s - n;
+        }
+        if(n==16){
+            cout << i << nl;
+            return;
+        }
     }
     
 

@@ -31,13 +31,13 @@ inline void prepare(){
 inline void solve(){
     // for 4 variables;
     //implication (x->y) is x<=y or !x || y 
-    bool F = true;// or false;
+    bool F = false;
     for (int x = 0; x < 2; x++){
         for (int y = 0; y < 2; y++){
             for (int z = 0; z < 2; z++){
                 for (int w = 0; w < 2; w++){
-                    if((/*equation*/true)==F){
-                        cout << x << " " << y << " " << z << " " << w << endl;
+                    if((!(y<=w) or (x==z) or x)==F){
+                        cout << z << " " << y << " " << w << " " << x << endl;
                     }
                 }
             }

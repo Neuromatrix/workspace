@@ -30,18 +30,26 @@ inline void prepare(){
 
 inline void solve(){
     int cnt = 0;
-    for (int i = 0; i < 100000; i++)
-    {
-        int x= i, a, b;
-        a = 0; 
-        while (x > 0) {
-            a += 1;
-            b = x%9;
-            x = x / 9;
+    for (int i =  100000 ; i > 0; i--){
+        int x, k1, k2, q, p , l , m;
+        x = i;
+        q = 7;
+        p = 10;
+        k1 = 0;
+        k2 = 0;
+        while (x<=100){
+            k1++;
+            x+=p;
         }
-        if(a==5 and b==7) cnt++;
+        while (x>=q)
+        {
+            k2++;
+            x-=q;
+        }
+        l = x+k1;
+        m = x+k2;
+        if(l==11 and m == 20) cout << i << endl;
     }
-    cout << cnt << nl;
     
 
 }
