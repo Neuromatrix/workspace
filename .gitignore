@@ -1,6 +1,6 @@
 #folders
-**/olympiads/
-**/lessons/
+workspace/lessons
+workspace/olympiads
 # Prerequisites
 *.d
 
