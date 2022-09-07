@@ -1,6 +1,6 @@
 #folders
-lessons/
-olympiads/
+#lessons/
+#olympiads/
 # Prerequisites
 *.d
 
