@@ -15,12 +15,11 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
-
+*.zip
 # Fortran module files
 *.mod
 *.smod
-
+*.docx
 # Compiled Static libraries
 *.lai
 *.la
